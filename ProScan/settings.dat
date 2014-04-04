@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preferences xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DoInitialization>true</DoInitialization>
+  <ActiveProfileIndex>0</ActiveProfileIndex>
+  <BaudRateIndex>0</BaudRateIndex>
+  <ProtocolIndex>0</ProtocolIndex>
+  <HardwareIndex>1</HardwareIndex>
+  <ComPort>14</ComPort>
+  <AutoDetect>true</AutoDetect>
+</Preferences>

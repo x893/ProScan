@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <!--Project was exported from assembly: C:\Tools\OBD\ProScan\ProScan.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A29C07FE-3FF2-4CF0-8F09-DF69E2724B6B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>ProScan</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>6.0.3797.34057</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DundasWinGauge">
+      <HintPath>lib\DundasWinGauge.dll</HintPath>
+    </Reference>
+    <Reference Include="RichTextBoxPrintCtrl">
+      <HintPath>lib\RichTextBoxPrintCtrl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Gauge">
+      <HintPath>lib\Gauge.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="O2TestResults">
+      <HintPath>lib\O2TestResults.dll</HintPath>
+    </Reference>
+    <Reference Include="O2Waveform">
+      <HintPath>lib\O2Waveform.dll</HintPath>
+    </Reference>
+    <Reference Include="SensorDisplay">
+      <HintPath>lib\SensorDisplay.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="FreezeFrameData">
+      <HintPath>lib\FreezeFrameData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommBase\CommBase.cs" />
+    <Compile Include="CommBase\CommLine.cs" />
+    <Compile Include="CommBase\CommPingPong.cs" />
+    <Compile Include="CommBase\CommPortException.cs" />
+    <Compile Include="CommBase\Win32Com.cs" />
+    <Compile Include="Controls\DGChartControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DiagnosticReportControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DynoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OBD2\OBD2Response.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SensorValue.cs" />
+    <Compile Include="OBD2\OBD2.cs" />
+    <Compile Include="OBD2\OBD2Request.cs" />
+    <Compile Include="OBD2\OBD2Interface.cs" />
+    <Compile Include="OBD2\OBD2Comm.cs" />
+    <Compile Include="CommLog.cs" />
+    <Compile Include="CommLogEvent.cs" />
+    <Compile Include="SerialNumber.cs" />
+    <Compile Include="OBD\OBDInterface.cs" />
+    <Compile Include="OBD\OBDInterpretter.cs" />
+    <Compile Include="Preferences.cs" />
+    <Compile Include="VehicleProfile.cs" />
+    <Compile Include="WheelStruc.cs" />
+    <Compile Include="UserPreferences.cs" />
+    <Compile Include="DTC.cs" />
+    <Compile Include="DatedValue.cs" />
+    <Compile Include="DynoRecord.cs" />
+    <Compile Include="DataList.cs" />
+    <Compile Include="Timeslip.cs" />
+    <Compile Include="SensorLogItem.cs" />
+    <Compile Include="TestStatus.cs" />
+    <Compile Include="OBD\OBDCommELM.cs" />
+    <Compile Include="OBD\OBDCommLog.cs" />
+    <Compile Include="OBD\OBDCommLogItem.cs" />
+    <Compile Include="OBD\OBDDevice.cs" />
+    <Compile Include="OBD\OBDDeviceELM320.cs" />
+    <Compile Include="OBD\OBDDeviceELM322.cs" />
+    <Compile Include="OBD\OBDDeviceELM323.cs" />
+    <Compile Include="OBD\OBDDeviceELM327.cs" />
+    <Compile Include="OBD\OBDParameter.cs" />
+    <Compile Include="OBD\OBDParameterValue.cs" />
+    <Compile Include="OBD\OBDParser.cs" />
+    <Compile Include="OBD\OBDParser_ISO14230_4_KWP.cs" />
+    <Compile Include="OBD\OBDParser_ISO15765_4_CAN11.cs" />
+    <Compile Include="OBD\OBDParser_ISO15765_4_CAN29.cs" />
+    <Compile Include="OBD\OBDParser_ISO9141_2.cs" />
+    <Compile Include="OBD\OBDParser_J1850_PWM.cs" />
+    <Compile Include="OBD\OBDParser_J1850_VPW.cs" />
+    <Compile Include="OBD\OBDResponse.cs" />
+    <Compile Include="OBD\OBDResponseList.cs" />
+    <Compile Include="Sensor.cs" />
+    <Compile Include="EventType.cs" />
+    <Compile Include="DataItem.cs" />
+    <Compile Include="DataNode.cs" />
+    <Compile Include="ProScan\DashForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\DiagnosticReportHeader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\DriveRatioCalcForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\CommLogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\TerminalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\OxygenSensorsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\FuelEconomyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\ScopeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\SensorMonitorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\CommForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\VehicleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\SpeedFactorCalcForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\UserPreferencesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\DynoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\TrackForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\DTCForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\ReportGeneratorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\FreezeFramesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProScan\OxygenSensorDisplay.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProScan\WelcomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\DGChartControl.resx">
+      <DependentUpon>DGChartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DiagnosticReportControl.resx">
+      <DependentUpon>DiagnosticReportControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\CommForm.resx">
+      <DependentUpon>CommForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\CommLogForm.resx">
+      <DependentUpon>CommLogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\DashForm.resx">
+      <DependentUpon>DashForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\DiagnosticReportHeader.resx">
+      <DependentUpon>DiagnosticReportHeader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\DriveRatioCalcForm.resx">
+      <DependentUpon>DriveRatioCalcForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\DTCForm.resx">
+      <DependentUpon>DTCForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\DynoForm.resx">
+      <DependentUpon>DynoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\FreezeFramesForm.resx">
+      <DependentUpon>FreezeFramesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\FuelEconomyForm.resx">
+      <DependentUpon>FuelEconomyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\OxygenSensorsForm.resx">
+      <DependentUpon>OxygenSensorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\ReportGeneratorForm.resx">
+      <DependentUpon>ReportGeneratorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\ScopeForm.resx">
+      <DependentUpon>ScopeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\SensorMonitorForm.resx">
+      <DependentUpon>SensorMonitorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\SpeedFactorCalcForm.resx">
+      <DependentUpon>SpeedFactorCalcForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\TerminalForm.resx">
+      <DependentUpon>TerminalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\TestForm.resx">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\TrackForm.resx">
+      <DependentUpon>TrackForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\UserPreferencesForm.resx">
+      <DependentUpon>UserPreferencesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\VehicleForm.resx">
+      <DependentUpon>VehicleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProScan\WelcomeForm.resx">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dtc.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="generic.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="preferences.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="settings.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

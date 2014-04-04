@@ -1,0 +1,169 @@
+SAE.MIL,Malfunction Indicator Lamp (MIL) Status,0101,1,1,0,DTC,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.DTC_COUNT,Number of Emission-Related DTCs,0101,1,1,1,DTC,Generic,SAE,3,,,0,128,0,128,1,0,0,0
+SAE.STORED_DTCS,List of Stored DTCs,03,3,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1
+SAE.PENDING_DTCS,List of Pending DTCs,07,7,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1
+SAE.PERMANENT_DTCS,List of Permanent DTCs,0A,10,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1
+SAE.MISFIRE_SUPPORT,Misfire Monitoring Support,0101,1,1,2,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.FUEL_SUPPORT,Fuel System Monitoring Support,0101,1,1,3,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CCM_SUPPORT,Comprehensive Component Monitoring Support,0101,1,1,4,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.MISFIRE_STATUS,Misfire Monitoring Completed,0101,1,1,5,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.FUEL_STATUS,Fuel System Monitoring Completed,0101,1,1,6,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CCM_STATUS,Comprehensive Component Monitoring Completed,0101,1,1,7,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CAT_SUPPORT,Catalyst Monitoring Support,0101,1,1,8,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.HCAT_SUPPORT,Heated Catalyst Monitoring Support,0101,1,1,9,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EVAP_SUPPORT,Evaporative System Monitoring Support,0101,1,1,10,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AIR_SUPPORT,Secondary Air System Monitoring Support,0101,1,1,11,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AC_SUPPORT,A/C System Refrigerant Monitoring Support,0101,1,1,12,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2_SUPPORT,Oxygen Sensor Monitoring Support,0101,1,1,13,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2HTR_SUPPORT,Oxygen Sensor Heater Monitoring Support,0101,1,1,14,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EGR_SUPPORT,EGR System Monitoring Support,0101,1,1,15,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CAT_STATUS,Catalyst Monitoring Completed,0101,1,1,16,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.HCAT_STATUS,Heated Catalyst Monitoring Completed,0101,1,1,17,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EVAP_STATUS,Evaporative System Monitoring Completed,0101,1,1,18,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AIR_STATUS,Secondary Air System Monitoring Completed,0101,1,1,19,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AC_STATUS,A/C System Refrigerant Monitoring Completed,0101,1,1,20,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2_STATUS,Oxygen Sensor Monitoring Completed,0101,1,1,21,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2HTR_STATUS,Oxygen Sensor Heater Monitoring Completed,0101,1,1,22,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EGR_STATUS,EGR System Monitoring Completed,0101,1,1,23,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.FF_DTC,DTC that caused Freeze Frame Storage,0202,2,2,0,DTC,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.FUEL1_STATUS,Fuel System 1 Status,0103,1,3,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.FUEL2_STATUS,Fuel System 2 Status,0103,1,3,1,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.LOAD_CALC,Calculated Engine Load,0104,1,4,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.ECT,Engine Coolant Temperature,0105,1,5,0,Temperature,Generic,SAE,2,F,C,-40,419,-40,215,1,0,0,0
+SAE.STFT1,Short Term Fuel Trim - Bank 1,0106,1,6,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STFT2,Short Term Fuel Trim - Bank 2,0108,1,8,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STFT3,Short Term Fuel Trim - Bank 3,0106,1,6,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STFT4,Short Term Fuel Trim - Bank 4,0108,1,8,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT1,Long Term Fuel Trim - Bank 1,0107,1,7,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT2,Long Term Fuel Trim - Bank 2,0109,1,9,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT3,Long Term Fuel Trim - Bank 3,0107,1,7,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT4,Long Term Fuel Trim - Bank 4,0109,1,9,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.FUEL_PRES,Fuel Rail Pressure,010A,1,10,0,Fuel,Generic,SAE,1,psi,kPa,0,111,0,765,1,0,0,0
+SAE.MAP,Intake Manifold Absolute Pressure,010B,1,11,0,Fuel,Generic,SAE,1,psi,kPa,0,37,0,255,1,0,0,0
+SAE.RPM,Engine RPM,010C,1,12,0,Speed,Generic,SAE,1,rpm,rpm,0,16384,0,16384,1,0,0,0
+SAE.VSS,Vehicle Speed Sensor,010D,1,13,0,Speed,Generic,SAE,1,mph,km/h,0,159,0,255,1,0,0,0
+SAE.SPARKADV,Ignition Timing Advance for #1 Cylinder,010E,1,14,0,Spark,Generic,SAE,1,,,-64,64.5,-64,63.5,1,0,0,0
+SAE.IAT,Intake Air Temperature,010F,1,15,0,Temperature,Generic,SAE,1,F,C,-40,419,-40,215,1,0,0,0
+SAE.MAF,Mass Air Flow Rate,0110,1,16,0,Airflow,Generic,SAE,1,lb/min,g/s,0,86.69,0,655.35,1,0,0,0
+SAE.TP,Throttle Position,0111,1,17,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.SECAIR_STATUS,Commanded Secondary Air Status,0112,1,18,0,O2,Generic,SAE,1,,,,,,,0,0,1,0
+SAE.O2B1S1A_PRESENT,Oxygen Sensor Present (Bank 1 Sensor 1),0113,1,19,0,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S2A_PRESENT,Oxygen Sensor Present (Bank 1 Sensor 2),0113,1,19,1,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S3A_PRESENT,Oxygen Sensor Present (Bank 1 Sensor 3),0113,1,19,2,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S4A_PRESENT,Oxygen Sensor Present (Bank 1 Sensor 4),0113,1,19,3,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S1A_PRESENT,Oxygen Sensor Present (Bank 2 Sensor 1),0113,1,19,4,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S2A_PRESENT,Oxygen Sensor Present (Bank 2 Sensor 2),0113,1,19,5,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S3A_PRESENT,Oxygen Sensor Present (Bank 2 Sensor 3),0113,1,19,6,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S4A_PRESENT,Oxygen Sensor Present (Bank 2 Sensor 4),0113,1,19,7,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S1_VOLTS,Oxygen Sensor Voltage (Bank 1 Sensor 1),0114,1,20,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S1_STFT,O2 Sensor Short Term Fuel Trim (Bank 1 Sensor 1),0114,1,20,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B1S2_VOLTS,Oxygen Sensor Voltage (Bank 1 Sensor 2),0115,1,21,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S2_STFT,O2 Sensor Short Term Fuel Trim  (Bank 1 Sensor 2),0115,1,21,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B1S3_VOLTS,Oxygen Sensor Voltage (Bank 1 Sensor 3),0116,1,22,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S3_STFT,O2 Sensor Short Term Fuel Trim (Bank 1 Sensor 3),0116,1,22,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B1S4_VOLTS,Oxygen Sensor Voltage (Bank 1 Sensor 4),0117,1,23,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S4_STFT,O2 Sensor Short Term Fuel Trim (Bank 1 Sensor 4),0117,1,23,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S1_VOLTS,Oxygen Sensor Voltage (Bank 2 Sensor 1),0118,1,24,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S1_STFT,O2 Sensor Short Term Fuel Trim (Bank 2 Sensor 1),0118,1,24,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S2_VOLTS,Oxygen Sensor Voltage (Bank 2 Sensor 2),0119,1,25,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S2_STFT,O2 Sensor Short Term Fuel Trim (Bank 2 Sensor 2),0119,1,25,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S3_VOLTS,Oxygen Sensor Voltage (Bank 2 Sensor 3),011A,1,26,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S3_STFT,O2 Sensor Short Term Fuel Trim (Bank 2 Sensor 3),011A,1,26,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S4_VOLTS,Oxygen Sensor Voltage (Bank 2 Sensor 4),011B,1,27,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S4_STFT,O2 Sensor Short Term Fuel Trim (Bank 2 Sensor 4),011B,1,27,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.OBD_TYPE,OBD Standard Vehicle Complies With,011C,1,28,0,Emissions,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.O2B1S1B_PRESENT,Oxygen Sensor Present (Bank 1 Sensor 1),011D,1,29,0,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S2B_PRESENT,Oxygen Sensor Present (Bank 1 Sensor 2),011D,1,29,1,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S1B_PRESENT,Oxygen Sensor Present (Bank 2 Sensor 1),011D,1,29,2,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S2B_PRESENT,Oxygen Sensor Present (Bank 2 Sensor 2),011D,1,29,3,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B3S1B_PRESENT,Oxygen Sensor Present (Bank 3 Sensor 1),011D,1,29,4,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B3S2B_PRESENT,Oxygen Sensor Present (Bank 3 Sensor 2),011D,1,29,5,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B4S1B_PRESENT,Oxygen Sensor Present (Bank 4 Sensor 1),011D,1,29,6,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B4S2B_PRESENT,Oxygen Sensor Present (Bank 4 Sensor 2),011D,1,29,7,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.PTO_STATUS,Power Take Off (PTO) Status,011E,1,30,0,General,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.RUN_TIME,Run Time Since Engine Start,011F,1,31,0,General,Generic,SAE,3,sec,sec,0,65535,0,65535,1,0,0,0
+SAE.MIL_DISTANCE,Distance Traveled With MIL Active,0121,1,33,0,DTC,Generic,SAE,3,miles,km,0,65535,0,65535,1,0,0,0
+SAE.FRP_VAC,Fuel Rail Pressure (Relative to Manifold Vacuum),0122,1,34,0,Fuel,Generic,SAE,1,psi,kPa,0,751,0,5177.265,1,0,0,0
+SAE.FRP_DIESEL,Fuel Rail Pressure (Diesel),0123,1,35,0,Fuel,Generic,SAE,1,psi,kPa,0,95050.5,0,655350,1,0,0,0
+SAE.O2B1S1A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 1),0124,1,36,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S2A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 2),0125,1,37,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S3A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 3),0126,1,38,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S4A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 4),0127,1,39,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S1A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 1),0128,1,40,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S2A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 2),0129,1,41,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S3A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 3),012A,1,42,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S4A_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 4),012B,1,43,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S1_VOLTS,Wideband Oxygen Sensor Voltage (Bank 1 Sensor 1),0124,1,36,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B1S2_VOLTS,Wideband Oxygen Sensor Voltage (Bank 1 Sensor 2),0125,1,37,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B1S3_VOLTS,Wideband Oxygen Sensor Voltage (Bank 1 Sensor 3),0126,1,38,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B1S4_VOLTS,Wideband Oxygen Sensor Voltage (Bank 1 Sensor 4),0127,1,39,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S1_VOLTS,Wideband Oxygen Sensor Voltage (Bank 2 Sensor 1),0128,1,40,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S2_VOLTS,Wideband Oxygen Sensor Voltage (Bank 2 Sensor 2),0129,1,41,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S3_VOLTS,Wideband Oxygen Sensor Voltage (Bank 2 Sensor 3),012A,1,42,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S4_VOLTS,Wideband Oxygen Sensor Voltage (Bank 2 Sensor 4),012B,1,43,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.EGR_CMDED,Commanded EGR,012C,1,44,0,Emissions,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.EGR_ERROR,EGR Error,012D,1,45,0,Emissions,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.EVAP_PURGE,Commanded Evaporative Purge,012E,1,46,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.FUEL_LEVEL,Fuel Level Input,012F,1,47,0,Fuel,Generic,SAE,2,%,%,0,100,0,100,1,0,0,0
+SAE.WARM_UPS,Number of Warm-Ups Since DTCs Cleared,0130,1,48,0,DTC,Generic,SAE,3,,,,,,,1,0,0,0
+SAE.CLEAR_DIST,Distance Traveled Since DTCs Cleared,0131,1,49,0,DTC,Generic,SAE,3,miles,km,0,40722,0,65535,1,0,0,0
+SAE.EVAP_PRESSURE,Evaporative System Vapor Pressure,0132,1,50,0,General,Generic,SAE,1,psi,Pa,-1.2,1.2,-8192,8192,1,0,0,0
+SAE.BARO,Barometric Pressure,0133,1,51,0,General,Generic,SAE,2,psi,kPa,0,37,0,255,1,0,0,0
+SAE.O2B1S1B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 1),0134,1,52,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S2B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 2),0135,1,53,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S3B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 3),0136,1,54,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S4B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 1 Sensor 4),0137,1,55,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S1B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 1),0138,1,56,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S2B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 2),0139,1,57,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S3B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 3),013A,1,58,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S4B_LAMBDA,Wideband Oxygen Sensor Equivalence Ratio (Bank 2 Sensor 4),013B,1,59,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S1_CURRENT,Wideband Oxygen Sensor Current (Bank 1 Sensor 1),0134,1,52,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B1S2_CURRENT,Wideband Oxygen Sensor Current (Bank 1 Sensor 2),0135,1,53,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B1S3_CURRENT,Wideband Oxygen Sensor Current (Bank 1 Sensor 3),0136,1,54,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B1S4_CURRENT,Wideband Oxygen Sensor Current (Bank 1 Sensor 4),0137,1,55,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S1_CURRENT,Wideband Oxygen Sensor Current (Bank 2 Sensor 1),0138,1,56,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S2_CURRENT,Wideband Oxygen Sensor Current (Bank 2 Sensor 2),0139,1,57,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S3_CURRENT,Wideband Oxygen Sensor Current (Bank 2 Sensor 3),013A,1,58,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S4_CURRENT,Wideband Oxygen Sensor Current (Bank 2 Sensor 4),013B,1,59,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.CATB1S1_TEMP,Catalyst Temperature (Bank 1 Sensor 1),013C,1,60,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.CATB1S2_TEMP,Catalyst Temperature (Bank 1 Sensor 2),013D,1,61,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.CATB2S1_TEMP,Catalyst Temperature (Bank 2 Sensor 1),013E,1,62,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.CATB2S2_TEMP,Catalyst Temperature (Bank 2 Sensor 2),013F,1,63,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.MISFIRE_ENABLED,Misfire Monitoring Enabled (This Drive Cycle),0141,1,65,0,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.FUEL_ENABLED,Fuel System Monitoring Enabled (This Drive Cycle),0141,1,65,1,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CCM_ENABLED,Comprehensive Component Monitoring Enabled (This Drive Cycle),0141,1,65,2,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.MISFIRE_COMPL,Misfire Monitoring Completed (This Drive Cycle),0141,1,65,3,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.FUEL_COMPL,Fuel System Monitoring Completed (This Drive Cycle),0141,1,65,4,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CCM_COMPL,Comprehensive Component Monitoring Completed (This Drive Cycle),0141,1,65,5,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CAT_ENABLED,Catalyst Monitoring Enabled (This Drive Cycle),0141,1,65,6,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.HCAT_ENABLED,Heated Catalyst Monitoring Enabled (This Drive Cycle),0141,1,65,7,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EVAP_ENABLED,Evaporative System Monitoring Enabled (This Drive Cycle),0141,1,65,8,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AIR_ENABLED,Secondary Air System Monitoring Enabled (This Drive Cycle),0141,1,65,9,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AC_ENABLED,A/C System Refrigerant Monitoring Enabled (This Drive Cycle),0141,1,65,10,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2_ENABLED,Oxygen Sensor Monitoring Enabled (This Drive Cycle),0141,1,65,11,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2HTR_ENABLED,Oxygen Sensor Heater Monitoring Enabled (This Drive Cycle),0141,1,65,12,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EGR_ENABLED,EGR System Monitoring Enabled (This Drive Cycle),0141,1,65,13,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CAT_COMPL,Catalyst Monitoring Completed (This Drive Cycle),0141,1,65,14,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.HCAT_COMPL,Heated Catalyst Monitoring Completed (This Drive Cycle),0141,1,65,15,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EVAP_COMPL,Evaporative System Monitoring Completed (This Drive Cycle),0141,1,65,16,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AIR_COMPL,Secondary Air System Monitoring Completed (This Drive Cycle),0141,1,65,17,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AC_COMPL,A/C System Refrigerant Monitoring Enabled (This Drive Cycle),0141,1,65,18,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2_COMPL,Oxygen Sensor Monitoring Completed (This Drive Cycle),0141,1,65,19,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2HTR_COMPL,Oxygen Sensor Heater Monitoring Completed (This Drive Cycle),0141,1,65,20,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EGR_COMPL,EGR System Monitoring Completed (This Drive Cycle),0141,1,65,21,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.ECM_VOLTS,Control Module Voltage,0142,1,66,0,General,Generic,SAE,2,V,V,0,65.535,0,65.535,1,0,0,0
+SAE.LOAD_ABS,Absolute Load,0143,1,67,0,General,Generic,SAE,1,%,%,0,25700,0,25700,1,0,0,0
+SAE.LAMBDA,Commanded Equivalence Ratio,0144,1,68,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.TPS_RELATIVE,Relative Throttle Position,0145,1,69,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.AAT,Ambient Air Temperature,0146,1,70,0,Temperature,Generic,SAE,1,F,C,-40,419,-40,215,1,0,0,0
+SAE.TPS_B,Absolute Throttle Position B,0147,1,71,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.TPS_C,Absolute Throttle Position C,0148,1,72,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.APP_D,Accelerator Pedal Position D,0149,1,73,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.APP_E,Accelerator Pedal Position E,014A,1,74,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.APP_F,Accelerator Pedal Position F,014B,1,75,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.CTA,Commanded Throttle Actuator,014C,1,76,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.MIL_TIME,Time Engine Has Run With MIL Activated,014D,1,77,0,General,Generic,SAE,3,min,min,0,65535,0,65535,1,0,0,0
+SAE.CLEAR_TIME,Time Engine Has Run Since DTCs Cleared,014E,1,78,0,General,Generic,SAE,3,min,min,0,65535,0,65535,1,0,0,0
+SAE.FUEL_TYPE,Fuel Type,0151,1,81,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.ETHANOL_PCT,Ethanol Fuel Percentage,0152,1,82,0,Fuel,Generic,SAE,3,%,%,0,100,0,100,1,0,0,0
+ELM.BATTERY_VOLTAGE,Battery Voltage,ATRV,0,0,0,General,Generic,ELM,3,V,V,0,100,0,100,1,0,0,0

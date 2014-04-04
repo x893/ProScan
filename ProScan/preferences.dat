@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserPreferences xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Telephone>123-4567</Telephone>
+  <Address2>City</Address2>
+  <Address1>Address</Address1>
+  <Name>Name</Name>
+</UserPreferences>
