@@ -592,7 +592,7 @@ namespace DGChart
 			base.Dispose(disposing);
 		}
 
-		private unsafe void InitializeComponent()
+		private void InitializeComponent()
 		{
 			colorGrid = Color.LightGray;
 			colorBg = Color.White;

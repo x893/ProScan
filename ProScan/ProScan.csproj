@@ -53,31 +53,14 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DundasWinGauge">
+    <Reference Include="DundasWinGauge, Version=2.1.1.100, Culture=neutral, PublicKeyToken=6f9077f931adcf97">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\DundasWinGauge.dll</HintPath>
     </Reference>
-    <Reference Include="RichTextBoxPrintCtrl">
-      <HintPath>lib\RichTextBoxPrintCtrl.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="Gauge">
-      <HintPath>lib\Gauge.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="O2TestResults">
-      <HintPath>lib\O2TestResults.dll</HintPath>
-    </Reference>
-    <Reference Include="O2Waveform">
-      <HintPath>lib\O2Waveform.dll</HintPath>
-    </Reference>
-    <Reference Include="SensorDisplay">
-      <HintPath>lib\SensorDisplay.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="FreezeFrameData">
-      <HintPath>lib\FreezeFrameData.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommBase\CommBase.cs" />
@@ -94,34 +77,51 @@
     <Compile Include="Controls\DynoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OBD2\OBD2Response.cs" />
+    <Compile Include="Controls\FreezeFrameDataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Gauge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\O2TestResultsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\O2WaveformControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RichTextBoxPrintCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SensorDisplayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OBD\OBD2Response.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SensorValue.cs" />
-    <Compile Include="OBD2\OBD2.cs" />
-    <Compile Include="OBD2\OBD2Request.cs" />
-    <Compile Include="OBD2\OBD2Interface.cs" />
-    <Compile Include="OBD2\OBD2Comm.cs" />
-    <Compile Include="CommLog.cs" />
-    <Compile Include="CommLogEvent.cs" />
-    <Compile Include="SerialNumber.cs" />
+    <Compile Include="Classes\SensorValue.cs" />
+    <Compile Include="OBD\OBD2.cs" />
+    <Compile Include="OBD\OBD2Request.cs" />
+    <Compile Include="OBD\OBD2Interface.cs" />
+    <Compile Include="OBD\OBD2Comm.cs" />
+    <Compile Include="Classes\CommLog.cs" />
+    <Compile Include="Classes\CommLogEvent.cs" />
     <Compile Include="OBD\OBDInterface.cs" />
     <Compile Include="OBD\OBDInterpretter.cs" />
-    <Compile Include="Preferences.cs" />
-    <Compile Include="VehicleProfile.cs" />
-    <Compile Include="WheelStruc.cs" />
-    <Compile Include="UserPreferences.cs" />
-    <Compile Include="DTC.cs" />
-    <Compile Include="DatedValue.cs" />
-    <Compile Include="DynoRecord.cs" />
-    <Compile Include="DataList.cs" />
-    <Compile Include="Timeslip.cs" />
-    <Compile Include="SensorLogItem.cs" />
-    <Compile Include="TestStatus.cs" />
+    <Compile Include="Classes\Preferences.cs" />
+    <Compile Include="Classes\VehicleProfile.cs" />
+    <Compile Include="Classes\WheelStruc.cs" />
+    <Compile Include="Classes\UserPreferences.cs" />
+    <Compile Include="Classes\DTC.cs" />
+    <Compile Include="Classes\DatedValue.cs" />
+    <Compile Include="Classes\DynoRecord.cs" />
+    <Compile Include="Classes\DataList.cs" />
+    <Compile Include="Classes\Timeslip.cs" />
+    <Compile Include="Classes\SensorLogItem.cs" />
+    <Compile Include="Classes\TestStatus.cs" />
     <Compile Include="OBD\OBDCommELM.cs" />
     <Compile Include="OBD\OBDCommLog.cs" />
     <Compile Include="OBD\OBDCommLogItem.cs" />
@@ -141,10 +141,10 @@
     <Compile Include="OBD\OBDParser_J1850_VPW.cs" />
     <Compile Include="OBD\OBDResponse.cs" />
     <Compile Include="OBD\OBDResponseList.cs" />
-    <Compile Include="Sensor.cs" />
-    <Compile Include="EventType.cs" />
-    <Compile Include="DataItem.cs" />
-    <Compile Include="DataNode.cs" />
+    <Compile Include="Classes\Sensor.cs" />
+    <Compile Include="Classes\EventType.cs" />
+    <Compile Include="Classes\DataItem.cs" />
+    <Compile Include="Classes\DataNode.cs" />
     <Compile Include="ProScan\DashForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,9 +226,28 @@
     <EmbeddedResource Include="Controls\DiagnosticReportControl.resx">
       <DependentUpon>DiagnosticReportControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FreezeFrameDataControl.resx">
+      <DependentUpon>FreezeFrameDataControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Gauge.resx">
+      <DependentUpon>Gauge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\O2TestResultsControl.resx">
+      <DependentUpon>O2TestResultsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\O2WaveformControl.resx">
+      <DependentUpon>O2WaveformControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RichTextBoxPrintCtrl.resx">
+      <DependentUpon>RichTextBoxPrintCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SensorDisplayControl.resx">
+      <DependentUpon>SensorDisplayControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProScan\CommForm.resx">
       <DependentUpon>CommForm.cs</DependentUpon>
@@ -259,6 +278,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProScan\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProScan\OxygenSensorsForm.resx">
       <DependentUpon>OxygenSensorsForm.cs</DependentUpon>

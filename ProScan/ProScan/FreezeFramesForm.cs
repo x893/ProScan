@@ -1,5 +1,4 @@
-﻿using FreezeFrameData;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -43,7 +42,7 @@ namespace ProScan
 			numFrame = new System.Windows.Forms.NumericUpDown();
 			lblFrameNumber = new System.Windows.Forms.Label();
 			btnRefresh = new System.Windows.Forms.Button();
-			freezeFrame = new FreezeFrameData.FreezeFrameDataControl();
+			freezeFrame = new FreezeFrameDataControl();
 			progressBar = new System.Windows.Forms.ProgressBar();
 			panel = new System.Windows.Forms.Panel();
 			btnCancel = new System.Windows.Forms.Button();

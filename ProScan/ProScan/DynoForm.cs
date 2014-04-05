@@ -55,7 +55,9 @@ namespace ProScan
 		{
 			m_obdInterface = obd2;
 			m_profile = obd2.GetActiveProfile();
+
 			InitializeComponent();
+
 			Data = new DataList();
 			m_bCapture = false;
 			m_dtDynoTime = DateTime.Now;

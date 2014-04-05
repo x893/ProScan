@@ -1,5 +1,4 @@
-﻿using O2TestResults;
-using O2Waveform;
+﻿using O2Waveform;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -41,7 +40,7 @@ namespace ProScan
 
 		private void InitializeComponent()
 		{
-			o2TestResultsControl1 = new O2TestResults.O2TestResultsControl();
+			o2TestResultsControl1 = new O2TestResultsControl();
 			o2WaveformControl1 = new O2Waveform.O2WaveformControl();
 			lblOxygenSensor = new System.Windows.Forms.Label();
 			comboOxygenSensor = new System.Windows.Forms.ComboBox();

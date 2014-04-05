@@ -1,5 +1,4 @@
-﻿using SensorDisplay;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -12,12 +11,13 @@ namespace ProScan
 	{
 		private FuelEconomyForm m_FuelEconomyForm;
 		private OBDInterface m_obdInterface;
-		private DateTime dtStartTime;
-		private DateTime dtPrevTime;
 		private double dTotalFuelConsumption;
 		private double dTotalDistance;
 		public bool bRunThread;
 		public bool m_isWorking;
+		private DateTime dtStartTime;
+		private DateTime dtPrevTime;
+
 		private RadioButton radioMetricUnits;
 		private Label label1;
 		private NumericUpDown numericFuelCost;
@@ -66,65 +66,65 @@ namespace ProScan
 
 		private void InitializeComponent()
 		{
-			groupSetup = new System.Windows.Forms.GroupBox();
-			labelFuelUnit = new System.Windows.Forms.Label();
-			numericFuelCost = new System.Windows.Forms.NumericUpDown();
-			label1 = new System.Windows.Forms.Label();
-			radioMetricUnits = new System.Windows.Forms.RadioButton();
-			radioEnglishUnits = new System.Windows.Forms.RadioButton();
-			btnStart = new System.Windows.Forms.Button();
-			btnStop = new System.Windows.Forms.Button();
-			groupControl = new System.Windows.Forms.GroupBox();
-			sensorInstantFuelConsumption = new SensorDisplay.SensorDisplayControl();
-			sensorAvgFuelConsumption = new SensorDisplay.SensorDisplayControl();
-			sensorAvgFuelEconomy = new SensorDisplay.SensorDisplayControl();
-			sensorInstantFuelEconomy = new SensorDisplay.SensorDisplayControl();
-			sensorTotalConsumed = new SensorDisplay.SensorDisplayControl();
-			sensorDistance = new SensorDisplay.SensorDisplayControl();
-			sensorTotalCost = new SensorDisplay.SensorDisplayControl();
-			sensorCostPerMile = new SensorDisplay.SensorDisplayControl();
-			panel1 = new System.Windows.Forms.Panel();
-			groupSetup.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(numericFuelCost)).BeginInit();
-			groupControl.SuspendLayout();
-			panel1.SuspendLayout();
-			SuspendLayout();
+			this.groupSetup = new System.Windows.Forms.GroupBox();
+			this.labelFuelUnit = new System.Windows.Forms.Label();
+			this.numericFuelCost = new System.Windows.Forms.NumericUpDown();
+			this.label1 = new System.Windows.Forms.Label();
+			this.radioMetricUnits = new System.Windows.Forms.RadioButton();
+			this.radioEnglishUnits = new System.Windows.Forms.RadioButton();
+			this.btnStart = new System.Windows.Forms.Button();
+			this.btnStop = new System.Windows.Forms.Button();
+			this.groupControl = new System.Windows.Forms.GroupBox();
+			this.sensorInstantFuelConsumption = new ProScan.SensorDisplayControl();
+			this.sensorAvgFuelConsumption = new ProScan.SensorDisplayControl();
+			this.sensorAvgFuelEconomy = new ProScan.SensorDisplayControl();
+			this.sensorInstantFuelEconomy = new ProScan.SensorDisplayControl();
+			this.sensorTotalConsumed = new ProScan.SensorDisplayControl();
+			this.sensorDistance = new ProScan.SensorDisplayControl();
+			this.sensorTotalCost = new ProScan.SensorDisplayControl();
+			this.sensorCostPerMile = new ProScan.SensorDisplayControl();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.groupSetup.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericFuelCost)).BeginInit();
+			this.groupControl.SuspendLayout();
+			this.panel1.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// groupSetup
 			// 
-			groupSetup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupSetup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			groupSetup.Controls.Add(labelFuelUnit);
-			groupSetup.Controls.Add(numericFuelCost);
-			groupSetup.Controls.Add(label1);
-			groupSetup.Controls.Add(radioMetricUnits);
-			groupSetup.Controls.Add(radioEnglishUnits);
-			groupSetup.Location = new System.Drawing.Point(8, 8);
-			groupSetup.Name = "groupSetup";
-			groupSetup.Size = new System.Drawing.Size(531, 82);
-			groupSetup.TabIndex = 0;
-			groupSetup.TabStop = false;
-			groupSetup.Text = "Setup";
+			this.groupSetup.Controls.Add(this.labelFuelUnit);
+			this.groupSetup.Controls.Add(this.numericFuelCost);
+			this.groupSetup.Controls.Add(this.label1);
+			this.groupSetup.Controls.Add(this.radioMetricUnits);
+			this.groupSetup.Controls.Add(this.radioEnglishUnits);
+			this.groupSetup.Location = new System.Drawing.Point(8, 8);
+			this.groupSetup.Name = "groupSetup";
+			this.groupSetup.Size = new System.Drawing.Size(531, 82);
+			this.groupSetup.TabIndex = 0;
+			this.groupSetup.TabStop = false;
+			this.groupSetup.Text = "Setup";
 			// 
 			// labelFuelUnit
 			// 
-			labelFuelUnit.Anchor = System.Windows.Forms.AnchorStyles.None;
-			labelFuelUnit.Location = new System.Drawing.Point(340, 48);
-			labelFuelUnit.Name = "labelFuelUnit";
-			labelFuelUnit.Size = new System.Drawing.Size(48, 24);
-			labelFuelUnit.TabIndex = 5;
-			labelFuelUnit.Text = "/ Gallon";
-			labelFuelUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelFuelUnit.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.labelFuelUnit.Location = new System.Drawing.Point(340, 48);
+			this.labelFuelUnit.Name = "labelFuelUnit";
+			this.labelFuelUnit.Size = new System.Drawing.Size(48, 24);
+			this.labelFuelUnit.TabIndex = 5;
+			this.labelFuelUnit.Text = "/ Gallon";
+			this.labelFuelUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// numericFuelCost
 			// 
-			numericFuelCost.Anchor = System.Windows.Forms.AnchorStyles.None;
-			numericFuelCost.DecimalPlaces = 2;
-			numericFuelCost.Location = new System.Drawing.Point(276, 48);
-			numericFuelCost.Name = "numericFuelCost";
-			numericFuelCost.Size = new System.Drawing.Size(64, 20);
-			numericFuelCost.TabIndex = 4;
-			numericFuelCost.Value = new decimal(new int[] {
+			this.numericFuelCost.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.numericFuelCost.DecimalPlaces = 2;
+			this.numericFuelCost.Location = new System.Drawing.Point(276, 48);
+			this.numericFuelCost.Name = "numericFuelCost";
+			this.numericFuelCost.Size = new System.Drawing.Size(64, 20);
+			this.numericFuelCost.TabIndex = 4;
+			this.numericFuelCost.Value = new decimal(new int[] {
             350,
             0,
             0,
@@ -132,194 +132,194 @@ namespace ProScan
 			// 
 			// label1
 			// 
-			label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-			label1.Location = new System.Drawing.Point(276, 16);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(56, 24);
-			label1.TabIndex = 3;
-			label1.Text = "Fuel &Cost:";
-			label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.label1.Location = new System.Drawing.Point(276, 16);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(56, 24);
+			this.label1.TabIndex = 3;
+			this.label1.Text = "Fuel &Cost:";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// radioMetricUnits
 			// 
-			radioMetricUnits.Anchor = System.Windows.Forms.AnchorStyles.None;
-			radioMetricUnits.Location = new System.Drawing.Point(148, 48);
-			radioMetricUnits.Name = "radioMetricUnits";
-			radioMetricUnits.Size = new System.Drawing.Size(104, 24);
-			radioMetricUnits.TabIndex = 2;
-			radioMetricUnits.Text = "&Metric Units";
-			radioMetricUnits.CheckedChanged += new System.EventHandler(radioEnglishUnits_CheckedChanged);
+			this.radioMetricUnits.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.radioMetricUnits.Location = new System.Drawing.Point(148, 48);
+			this.radioMetricUnits.Name = "radioMetricUnits";
+			this.radioMetricUnits.Size = new System.Drawing.Size(104, 24);
+			this.radioMetricUnits.TabIndex = 2;
+			this.radioMetricUnits.Text = "&Metric Units";
+			this.radioMetricUnits.CheckedChanged += new System.EventHandler(this.radioEnglishUnits_CheckedChanged);
 			// 
 			// radioEnglishUnits
 			// 
-			radioEnglishUnits.Anchor = System.Windows.Forms.AnchorStyles.None;
-			radioEnglishUnits.Checked = true;
-			radioEnglishUnits.Location = new System.Drawing.Point(148, 16);
-			radioEnglishUnits.Name = "radioEnglishUnits";
-			radioEnglishUnits.Size = new System.Drawing.Size(104, 24);
-			radioEnglishUnits.TabIndex = 1;
-			radioEnglishUnits.TabStop = true;
-			radioEnglishUnits.Text = "&English Units";
-			radioEnglishUnits.CheckedChanged += new System.EventHandler(radioEnglishUnits_CheckedChanged);
+			this.radioEnglishUnits.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.radioEnglishUnits.Checked = true;
+			this.radioEnglishUnits.Location = new System.Drawing.Point(148, 16);
+			this.radioEnglishUnits.Name = "radioEnglishUnits";
+			this.radioEnglishUnits.Size = new System.Drawing.Size(104, 24);
+			this.radioEnglishUnits.TabIndex = 1;
+			this.radioEnglishUnits.TabStop = true;
+			this.radioEnglishUnits.Text = "&English Units";
+			this.radioEnglishUnits.CheckedChanged += new System.EventHandler(this.radioEnglishUnits_CheckedChanged);
 			// 
 			// btnStart
 			// 
-			btnStart.Location = new System.Drawing.Point(48, 16);
-			btnStart.Name = "btnStart";
-			btnStart.Size = new System.Drawing.Size(80, 23);
-			btnStart.TabIndex = 6;
-			btnStart.Text = "&Start Trip";
-			btnStart.Click += new System.EventHandler(btnStart_Click);
+			this.btnStart.Location = new System.Drawing.Point(48, 16);
+			this.btnStart.Name = "btnStart";
+			this.btnStart.Size = new System.Drawing.Size(80, 23);
+			this.btnStart.TabIndex = 6;
+			this.btnStart.Text = "&Start Trip";
+			this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
 			// 
 			// btnStop
 			// 
-			btnStop.Location = new System.Drawing.Point(48, 48);
-			btnStop.Name = "btnStop";
-			btnStop.Size = new System.Drawing.Size(80, 23);
-			btnStop.TabIndex = 7;
-			btnStop.Text = "S&top Trip";
-			btnStop.Click += new System.EventHandler(btnStop_Click);
+			this.btnStop.Location = new System.Drawing.Point(48, 48);
+			this.btnStop.Name = "btnStop";
+			this.btnStop.Size = new System.Drawing.Size(80, 23);
+			this.btnStop.TabIndex = 7;
+			this.btnStop.Text = "S&top Trip";
+			this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
 			// 
 			// groupControl
 			// 
-			groupControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			groupControl.Controls.Add(btnStop);
-			groupControl.Controls.Add(btnStart);
-			groupControl.Location = new System.Drawing.Point(546, 8);
-			groupControl.Name = "groupControl";
-			groupControl.Size = new System.Drawing.Size(176, 82);
-			groupControl.TabIndex = 8;
-			groupControl.TabStop = false;
-			groupControl.Text = "Control";
+			this.groupControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupControl.Controls.Add(this.btnStop);
+			this.groupControl.Controls.Add(this.btnStart);
+			this.groupControl.Location = new System.Drawing.Point(546, 8);
+			this.groupControl.Name = "groupControl";
+			this.groupControl.Size = new System.Drawing.Size(176, 82);
+			this.groupControl.TabIndex = 8;
+			this.groupControl.TabStop = false;
+			this.groupControl.Text = "Control";
 			// 
 			// sensorInstantFuelConsumption
 			// 
-			sensorInstantFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorInstantFuelConsumption.EnglishDisplay = "";
-			sensorInstantFuelConsumption.Location = new System.Drawing.Point(49, 20);
-			sensorInstantFuelConsumption.MetricDisplay = "";
-			sensorInstantFuelConsumption.Name = "sensorInstantFuelConsumption";
-			sensorInstantFuelConsumption.Size = new System.Drawing.Size(309, 71);
-			sensorInstantFuelConsumption.TabIndex = 10;
-			sensorInstantFuelConsumption.Title = "Instantaneous Fuel Consumption";
+			this.sensorInstantFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorInstantFuelConsumption.EnglishDisplay = "";
+			this.sensorInstantFuelConsumption.Location = new System.Drawing.Point(49, 20);
+			this.sensorInstantFuelConsumption.MetricDisplay = "";
+			this.sensorInstantFuelConsumption.Name = "sensorInstantFuelConsumption";
+			this.sensorInstantFuelConsumption.Size = new System.Drawing.Size(309, 71);
+			this.sensorInstantFuelConsumption.TabIndex = 10;
+			this.sensorInstantFuelConsumption.Title = "Instantaneous Fuel Consumption";
 			// 
 			// sensorAvgFuelConsumption
 			// 
-			sensorAvgFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorAvgFuelConsumption.EnglishDisplay = "";
-			sensorAvgFuelConsumption.Location = new System.Drawing.Point(49, 96);
-			sensorAvgFuelConsumption.MetricDisplay = "";
-			sensorAvgFuelConsumption.Name = "sensorAvgFuelConsumption";
-			sensorAvgFuelConsumption.Size = new System.Drawing.Size(309, 71);
-			sensorAvgFuelConsumption.TabIndex = 11;
-			sensorAvgFuelConsumption.Title = "Average Fuel Consumption";
+			this.sensorAvgFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorAvgFuelConsumption.EnglishDisplay = "";
+			this.sensorAvgFuelConsumption.Location = new System.Drawing.Point(49, 96);
+			this.sensorAvgFuelConsumption.MetricDisplay = "";
+			this.sensorAvgFuelConsumption.Name = "sensorAvgFuelConsumption";
+			this.sensorAvgFuelConsumption.Size = new System.Drawing.Size(309, 71);
+			this.sensorAvgFuelConsumption.TabIndex = 11;
+			this.sensorAvgFuelConsumption.Title = "Average Fuel Consumption";
 			// 
 			// sensorAvgFuelEconomy
 			// 
-			sensorAvgFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorAvgFuelEconomy.EnglishDisplay = "";
-			sensorAvgFuelEconomy.Location = new System.Drawing.Point(364, 96);
-			sensorAvgFuelEconomy.MetricDisplay = "";
-			sensorAvgFuelEconomy.Name = "sensorAvgFuelEconomy";
-			sensorAvgFuelEconomy.Size = new System.Drawing.Size(309, 71);
-			sensorAvgFuelEconomy.TabIndex = 13;
-			sensorAvgFuelEconomy.Title = "Average Fuel Economy";
+			this.sensorAvgFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorAvgFuelEconomy.EnglishDisplay = "";
+			this.sensorAvgFuelEconomy.Location = new System.Drawing.Point(364, 96);
+			this.sensorAvgFuelEconomy.MetricDisplay = "";
+			this.sensorAvgFuelEconomy.Name = "sensorAvgFuelEconomy";
+			this.sensorAvgFuelEconomy.Size = new System.Drawing.Size(309, 71);
+			this.sensorAvgFuelEconomy.TabIndex = 13;
+			this.sensorAvgFuelEconomy.Title = "Average Fuel Economy";
 			// 
 			// sensorInstantFuelEconomy
 			// 
-			sensorInstantFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorInstantFuelEconomy.EnglishDisplay = "";
-			sensorInstantFuelEconomy.Location = new System.Drawing.Point(364, 20);
-			sensorInstantFuelEconomy.MetricDisplay = "";
-			sensorInstantFuelEconomy.Name = "sensorInstantFuelEconomy";
-			sensorInstantFuelEconomy.Size = new System.Drawing.Size(309, 71);
-			sensorInstantFuelEconomy.TabIndex = 12;
-			sensorInstantFuelEconomy.Title = "Instantaneous Fuel Economy";
+			this.sensorInstantFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorInstantFuelEconomy.EnglishDisplay = "";
+			this.sensorInstantFuelEconomy.Location = new System.Drawing.Point(364, 20);
+			this.sensorInstantFuelEconomy.MetricDisplay = "";
+			this.sensorInstantFuelEconomy.Name = "sensorInstantFuelEconomy";
+			this.sensorInstantFuelEconomy.Size = new System.Drawing.Size(309, 71);
+			this.sensorInstantFuelEconomy.TabIndex = 12;
+			this.sensorInstantFuelEconomy.Title = "Instantaneous Fuel Economy";
 			// 
 			// sensorTotalConsumed
 			// 
-			sensorTotalConsumed.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorTotalConsumed.EnglishDisplay = "";
-			sensorTotalConsumed.Location = new System.Drawing.Point(49, 248);
-			sensorTotalConsumed.MetricDisplay = "";
-			sensorTotalConsumed.Name = "sensorTotalConsumed";
-			sensorTotalConsumed.Size = new System.Drawing.Size(309, 71);
-			sensorTotalConsumed.TabIndex = 15;
-			sensorTotalConsumed.Title = "Total Fuel Consumed";
+			this.sensorTotalConsumed.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorTotalConsumed.EnglishDisplay = "";
+			this.sensorTotalConsumed.Location = new System.Drawing.Point(49, 248);
+			this.sensorTotalConsumed.MetricDisplay = "";
+			this.sensorTotalConsumed.Name = "sensorTotalConsumed";
+			this.sensorTotalConsumed.Size = new System.Drawing.Size(309, 71);
+			this.sensorTotalConsumed.TabIndex = 15;
+			this.sensorTotalConsumed.Title = "Total Fuel Consumed";
 			// 
 			// sensorDistance
 			// 
-			sensorDistance.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorDistance.EnglishDisplay = "";
-			sensorDistance.Location = new System.Drawing.Point(49, 172);
-			sensorDistance.MetricDisplay = "";
-			sensorDistance.Name = "sensorDistance";
-			sensorDistance.Size = new System.Drawing.Size(309, 71);
-			sensorDistance.TabIndex = 14;
-			sensorDistance.Title = "Distance Traveled";
+			this.sensorDistance.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorDistance.EnglishDisplay = "";
+			this.sensorDistance.Location = new System.Drawing.Point(49, 172);
+			this.sensorDistance.MetricDisplay = "";
+			this.sensorDistance.Name = "sensorDistance";
+			this.sensorDistance.Size = new System.Drawing.Size(309, 71);
+			this.sensorDistance.TabIndex = 14;
+			this.sensorDistance.Title = "Distance Traveled";
 			// 
 			// sensorTotalCost
 			// 
-			sensorTotalCost.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorTotalCost.EnglishDisplay = "";
-			sensorTotalCost.Location = new System.Drawing.Point(364, 248);
-			sensorTotalCost.MetricDisplay = "";
-			sensorTotalCost.Name = "sensorTotalCost";
-			sensorTotalCost.Size = new System.Drawing.Size(309, 71);
-			sensorTotalCost.TabIndex = 17;
-			sensorTotalCost.Title = "Total Trip Cost";
+			this.sensorTotalCost.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorTotalCost.EnglishDisplay = "";
+			this.sensorTotalCost.Location = new System.Drawing.Point(364, 248);
+			this.sensorTotalCost.MetricDisplay = "";
+			this.sensorTotalCost.Name = "sensorTotalCost";
+			this.sensorTotalCost.Size = new System.Drawing.Size(309, 71);
+			this.sensorTotalCost.TabIndex = 17;
+			this.sensorTotalCost.Title = "Total Trip Cost";
 			// 
 			// sensorCostPerMile
 			// 
-			sensorCostPerMile.Anchor = System.Windows.Forms.AnchorStyles.None;
-			sensorCostPerMile.EnglishDisplay = "";
-			sensorCostPerMile.Location = new System.Drawing.Point(364, 172);
-			sensorCostPerMile.MetricDisplay = "";
-			sensorCostPerMile.Name = "sensorCostPerMile";
-			sensorCostPerMile.Size = new System.Drawing.Size(309, 71);
-			sensorCostPerMile.TabIndex = 16;
-			sensorCostPerMile.Title = "Average Cost Per Mile";
+			this.sensorCostPerMile.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.sensorCostPerMile.EnglishDisplay = "";
+			this.sensorCostPerMile.Location = new System.Drawing.Point(364, 172);
+			this.sensorCostPerMile.MetricDisplay = "";
+			this.sensorCostPerMile.Name = "sensorCostPerMile";
+			this.sensorCostPerMile.Size = new System.Drawing.Size(309, 71);
+			this.sensorCostPerMile.TabIndex = 16;
+			this.sensorCostPerMile.Title = "Average Cost Per Mile";
 			// 
 			// panel1
 			// 
-			panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			panel1.AutoScroll = true;
-			panel1.BackColor = System.Drawing.Color.Black;
-			panel1.Controls.Add(sensorInstantFuelEconomy);
-			panel1.Controls.Add(sensorTotalConsumed);
-			panel1.Controls.Add(sensorAvgFuelEconomy);
-			panel1.Controls.Add(sensorAvgFuelConsumption);
-			panel1.Controls.Add(sensorInstantFuelConsumption);
-			panel1.Controls.Add(sensorCostPerMile);
-			panel1.Controls.Add(sensorTotalCost);
-			panel1.Controls.Add(sensorDistance);
-			panel1.Location = new System.Drawing.Point(10, 98);
-			panel1.Name = "panel1";
-			panel1.Size = new System.Drawing.Size(712, 338);
-			panel1.TabIndex = 18;
+			this.panel1.AutoScroll = true;
+			this.panel1.BackColor = System.Drawing.Color.Black;
+			this.panel1.Controls.Add(this.sensorInstantFuelEconomy);
+			this.panel1.Controls.Add(this.sensorTotalConsumed);
+			this.panel1.Controls.Add(this.sensorAvgFuelEconomy);
+			this.panel1.Controls.Add(this.sensorAvgFuelConsumption);
+			this.panel1.Controls.Add(this.sensorInstantFuelConsumption);
+			this.panel1.Controls.Add(this.sensorCostPerMile);
+			this.panel1.Controls.Add(this.sensorTotalCost);
+			this.panel1.Controls.Add(this.sensorDistance);
+			this.panel1.Location = new System.Drawing.Point(10, 98);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(712, 338);
+			this.panel1.TabIndex = 18;
 			// 
 			// FuelEconomyForm
 			// 
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			ClientSize = new System.Drawing.Size(732, 445);
-			ControlBox = false;
-			Controls.Add(groupControl);
-			Controls.Add(groupSetup);
-			Controls.Add(panel1);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			MaximizeBox = false;
-			MinimizeBox = false;
-			Name = "FuelEconomyForm";
-			ShowInTaskbar = false;
-			Text = "Fuel Economy Analysis";
-			Load += new System.EventHandler(FuelEconomyForm_Load);
-			groupSetup.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(numericFuelCost)).EndInit();
-			groupControl.ResumeLayout(false);
-			panel1.ResumeLayout(false);
-			ResumeLayout(false);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(732, 445);
+			this.ControlBox = false;
+			this.Controls.Add(this.groupControl);
+			this.Controls.Add(this.groupSetup);
+			this.Controls.Add(this.panel1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "FuelEconomyForm";
+			this.ShowInTaskbar = false;
+			this.Text = "Fuel Economy Analysis";
+			this.Load += new System.EventHandler(this.FuelEconomyForm_Load);
+			this.groupSetup.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.numericFuelCost)).EndInit();
+			this.groupControl.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
+			this.ResumeLayout(false);
 
 		}
 

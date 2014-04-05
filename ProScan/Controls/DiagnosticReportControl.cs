@@ -966,7 +966,7 @@ namespace DiagnosticReport
 			PaintControl(e.Graphics);
 		}
 
-		private unsafe void PaintControl(Graphics g)
+		private void PaintControl(Graphics g)
 		{
 			Brush brush1 = (Brush)new SolidBrush(Color.Blue);
 			Brush brush2 = (Brush)new SolidBrush(Color.Green);

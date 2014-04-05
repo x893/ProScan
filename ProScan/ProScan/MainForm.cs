@@ -755,7 +755,7 @@ namespace ProScan
 				return;
 			if (m_formActive != null)
 				m_formActive.Hide();
-			form.MdiParent = (Form)this;
+			form.MdiParent = this;
 			form.WindowState = FormWindowState.Maximized;
 			form.Show();
 			Focus();
@@ -995,7 +995,7 @@ namespace ProScan
 						return;
 					}
 				}
-				if ((m_formActive == m_formSensorChart) && m_formSensorChart.m_isPlotting)
+				if (m_formActive == m_formSensorChart && m_formSensorChart.m_isPlotting)
 				{
 					if (DialogResult.Yes == MessageBox.Show("This action will stop the current oscilloscope session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
 						m_formSensorChart.StopLogging();

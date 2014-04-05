@@ -1,5 +1,4 @@
-﻿using Gauge;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -8,8 +7,8 @@ namespace ProScan
 {
 	public class DashForm : Form
 	{
-		private Gauge.Gauge gauge1;
-		private Gauge.Gauge gauge2;
+		private Gauge gauge1;
+		private Gauge gauge2;
 		private Container components;
 
 		public DashForm()
@@ -26,8 +25,8 @@ namespace ProScan
 
 		private void InitializeComponent()
 		{
-			gauge1 = new Gauge.Gauge();
-			gauge2 = new Gauge.Gauge();
+			gauge1 = new Gauge();
+			gauge2 = new Gauge();
 			SuspendLayout();
 			// 
 			// gauge1

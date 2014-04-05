@@ -61,10 +61,7 @@ namespace DGChart
 		[Category("Chart")]
 		public Image Logo
 		{
-			get
-			{
-				return m_imgLogo;
-			}
+			get { return m_imgLogo; }
 			set
 			{
 				m_imgLogo = value;
@@ -76,10 +73,7 @@ namespace DGChart
 		[Description("The y values for the fifth data set.")]
 		public double[] YData5
 		{
-			get
-			{
-				return yData5;
-			}
+			get { return yData5; }
 			set
 			{
 				yData5 = value;
@@ -91,10 +85,7 @@ namespace DGChart
 		[Description("The x values for the fifth data set.")]
 		public double[] XData5
 		{
-			get
-			{
-				return xData5;
-			}
+			get { return xData5; }
 			set
 			{
 				xData5 = value;
@@ -106,10 +97,7 @@ namespace DGChart
 		[Description("The y values for the fourth data set.")]
 		public double[] YData4
 		{
-			get
-			{
-				return yData4;
-			}
+			get { return yData4; }
 			set
 			{
 				yData4 = value;
@@ -121,10 +109,7 @@ namespace DGChart
 		[Category("Chart")]
 		public double[] XData4
 		{
-			get
-			{
-				return xData4;
-			}
+			get { return xData4; }
 			set
 			{
 				xData4 = value;
@@ -136,10 +121,7 @@ namespace DGChart
 		[Category("Chart")]
 		public double[] YData3
 		{
-			get
-			{
-				return yData3;
-			}
+			get { return yData3; }
 			set
 			{
 				yData3 = value;
@@ -151,10 +133,7 @@ namespace DGChart
 		[Description("The x values for the third data set.")]
 		public double[] XData3
 		{
-			get
-			{
-				return xData3;
-			}
+			get { return xData3; }
 			set
 			{
 				xData3 = value;
@@ -166,10 +145,7 @@ namespace DGChart
 		[Description("The y values for the second data set.")]
 		public double[] YData2
 		{
-			get
-			{
-				return yData2;
-			}
+			get { return yData2; }
 			set
 			{
 				yData2 = value;
@@ -181,10 +157,7 @@ namespace DGChart
 		[Description("The x values for the second data set.")]
 		public double[] XData2
 		{
-			get
-			{
-				return xData2;
-			}
+			get { return xData2; }
 			set
 			{
 				xData2 = value;
@@ -196,10 +169,7 @@ namespace DGChart
 		[Description("The y values for the first data set.")]
 		public double[] YData1
 		{
-			get
-			{
-				return yData1;
-			}
+			get { return yData1; }
 			set
 			{
 				yData1 = value;
@@ -211,10 +181,7 @@ namespace DGChart
 		[Description("The x values for the first data set.")]
 		public double[] XData1
 		{
-			get
-			{
-				return xData1;
-			}
+			get { return xData1; }
 			set
 			{
 				xData1 = value;
@@ -227,10 +194,7 @@ namespace DGChart
 		[Category("Chart")]
 		public Color ColorSet5
 		{
-			get
-			{
-				return colorSet5;
-			}
+			get { return colorSet5; }
 			set
 			{
 				colorSet5 = value;
@@ -243,10 +207,7 @@ namespace DGChart
 		[Description("The color to represent the fourth data set.")]
 		public Color ColorSet4
 		{
-			get
-			{
-				return colorSet4;
-			}
+			get { return colorSet4; }
 			set
 			{
 				colorSet4 = value;
@@ -259,10 +220,7 @@ namespace DGChart
 		[Description("The color to represent the third data set.")]
 		public Color ColorSet3
 		{
-			get
-			{
-				return colorSet3;
-			}
+			get { return colorSet3; }
 			set
 			{
 				colorSet3 = value;
@@ -275,10 +233,7 @@ namespace DGChart
 		[Category("Chart")]
 		public Color ColorSet2
 		{
-			get
-			{
-				return colorSet2;
-			}
+			get { return colorSet2; }
 			set
 			{
 				colorSet2 = value;
@@ -291,10 +246,7 @@ namespace DGChart
 		[Category("Chart")]
 		public Color ColorSet1
 		{
-			get
-			{
-				return colorSet1;
-			}
+			get { return colorSet1; }
 			set
 			{
 				colorSet1 = value;
@@ -307,10 +259,7 @@ namespace DGChart
 		[Category("Chart")]
 		public bool ShowData5
 		{
-			get
-			{
-				return showData5;
-			}
+			get { return showData5; }
 			set
 			{
 				showData5 = value;
@@ -323,10 +272,7 @@ namespace DGChart
 		[DefaultValue(0)]
 		public bool ShowData4
 		{
-			get
-			{
-				return showData4;
-			}
+			get { return showData4; }
 			set
 			{
 				showData4 = value;
@@ -339,10 +285,7 @@ namespace DGChart
 		[DefaultValue(0)]
 		public bool ShowData3
 		{
-			get
-			{
-				return showData3;
-			}
+			get { return showData3; }
 			set
 			{
 				showData3 = value;
@@ -355,10 +298,7 @@ namespace DGChart
 		[DefaultValue(0)]
 		public bool ShowData2
 		{
-			get
-			{
-				return showData2;
-			}
+			get { return showData2; }
 			set
 			{
 				showData2 = value;
@@ -371,10 +311,7 @@ namespace DGChart
 		[Description("Display the first data set?")]
 		public bool ShowData1
 		{
-			get
-			{
-				return showData1;
-			}
+			get { return showData1; }
 			set
 			{
 				showData1 = value;
@@ -387,10 +324,7 @@ namespace DGChart
 		[Category("Chart")]
 		public int YLogBase
 		{
-			get
-			{
-				return yLogBase;
-			}
+			get { return yLogBase; }
 			set
 			{
 				yLogBase = value;
@@ -403,10 +337,7 @@ namespace DGChart
 		[DefaultValue(0)]
 		public int XLogBase
 		{
-			get
-			{
-				return xLogBase;
-			}
+			get { return xLogBase; }
 			set
 			{
 				xLogBase = value;
@@ -419,10 +350,7 @@ namespace DGChart
 		[Category("Chart")]
 		public double YGrid
 		{
-			get
-			{
-				return yGrid;
-			}
+			get { return yGrid; }
 			set
 			{
 				yGrid = value;
@@ -435,10 +363,7 @@ namespace DGChart
 		[Category("Chart")]
 		public double XGrid
 		{
-			get
-			{
-				return xGrid;
-			}
+			get { return xGrid; }
 			set
 			{
 				xGrid = value;
@@ -451,10 +376,7 @@ namespace DGChart
 		[DefaultValue(100)]
 		public double YRangeEnd
 		{
-			get
-			{
-				return yRangeEnd;
-			}
+			get { return yRangeEnd; }
 			set
 			{
 				yRangeEnd = value;
@@ -467,10 +389,7 @@ namespace DGChart
 		[Category("Chart")]
 		public double YRangeStart
 		{
-			get
-			{
-				return yRangeStart;
-			}
+			get { return yRangeStart; }
 			set
 			{
 				yRangeStart = value;
@@ -483,10 +402,7 @@ namespace DGChart
 		[Description("The end of the data range on the x axis")]
 		public double XRangeEnd
 		{
-			get
-			{
-				return xRangeEnd;
-			}
+			get { return xRangeEnd; }
 			set
 			{
 				xRangeEnd = value;
@@ -499,10 +415,7 @@ namespace DGChart
 		[Description("The start of the data range on the x axis")]
 		public double XRangeStart
 		{
-			get
-			{
-				return xRangeStart;
-			}
+			get { return xRangeStart; }
 			set
 			{
 				xRangeStart = value;
@@ -515,10 +428,7 @@ namespace DGChart
 		[Category("Chart")]
 		public int BorderRight
 		{
-			get
-			{
-				return borderRight;
-			}
+			get { return borderRight; }
 			set
 			{
 				borderRight = value;
@@ -531,10 +441,7 @@ namespace DGChart
 		[Category("Chart")]
 		public int BorderBottom
 		{
-			get
-			{
-				return borderBottom;
-			}
+			get { return borderBottom; }
 			set
 			{
 				borderBottom = value;
@@ -547,10 +454,7 @@ namespace DGChart
 		[Description("The internal border at the left")]
 		public int BorderLeft
 		{
-			get
-			{
-				return borderLeft;
-			}
+			get { return borderLeft; }
 			set
 			{
 				borderLeft = value;
@@ -563,10 +467,7 @@ namespace DGChart
 		[Category("Chart")]
 		public int BorderTop
 		{
-			get
-			{
-				return borderTop;
-			}
+			get { return borderTop; }
 			set
 			{
 				borderTop = value;
@@ -579,10 +480,7 @@ namespace DGChart
 		[Category("Chart")]
 		public DynoControl.DrawModeType DrawMode
 		{
-			get
-			{
-				return drawMode;
-			}
+			get { return drawMode; }
 			set
 			{
 				drawMode = value;
@@ -595,10 +493,7 @@ namespace DGChart
 		[Category("Chart")]
 		public int PenWidth
 		{
-			get
-			{
-				return penWidth;
-			}
+			get { return penWidth; }
 			set
 			{
 				penWidth = value;
@@ -611,10 +506,7 @@ namespace DGChart
 		[Description("The font for the text")]
 		public Font FontAxis
 		{
-			get
-			{
-				return fontAxis;
-			}
+			get { return fontAxis; }
 			set
 			{
 				fontAxis = value;
@@ -627,10 +519,7 @@ namespace DGChart
 		[DefaultValue("Black")]
 		public Color ColorAxis
 		{
-			get
-			{
-				return colorAxis;
-			}
+			get { return colorAxis; }
 			set
 			{
 				colorAxis = value;
@@ -643,10 +532,7 @@ namespace DGChart
 		[Description("The background color.")]
 		public Color ColorBg
 		{
-			get
-			{
-				return colorBg;
-			}
+			get { return colorBg; }
 			set
 			{
 				colorBg = value;
@@ -659,10 +545,7 @@ namespace DGChart
 		[Category("Chart")]
 		public Color ColorGrid
 		{
-			get
-			{
-				return colorGrid;
-			}
+			get { return colorGrid; }
 			set
 			{
 				colorGrid = value;
@@ -675,10 +558,7 @@ namespace DGChart
 		[Description("The information to display above the chart.")]
 		public string Label
 		{
-			get
-			{
-				return strName;
-			}
+			get { return strName; }
 			set
 			{
 				strName = value;
@@ -706,7 +586,7 @@ namespace DGChart
 			base.Dispose(disposing);
 		}
 
-		private unsafe void InitializeComponent()
+		private void InitializeComponent()
 		{
 			colorGrid = Color.LightGray;
 			colorBg = Color.White;
@@ -771,13 +651,12 @@ namespace DGChart
 
 		private void PaintControl(Graphics g)
 		{
-			double[] numArray1 = (double[])null;
-			double[] numArray2 = (double[])null;
+			double[] numArray1 = null;
+			double[] numArray2 = null;
 			try
 			{
 				Rectangle clientRectangle = ClientRectangle;
-				Color color1 = colorBg;
-				g.FillRectangle((Brush)new SolidBrush(color1), clientRectangle);
+				g.FillRectangle(new SolidBrush(colorBg), clientRectangle);
 				Pen pen1 = new Pen(colorGrid, 1f);
 				Pen pen2 = new Pen(colorAxis, 1f);
 				SolidBrush solidBrush = new SolidBrush(colorAxis);
@@ -801,7 +680,7 @@ namespace DGChart
 						g.DrawLine(pen1, num6, num2, num6, num3);
 						string str = Convert.ToString((xRangeEnd - xRangeStart) * (double)index / (double)num4 + xRangeStart);
 						SizeF sizeF = g.MeasureString(str, fontAxis);
-						g.DrawString(str, fontAxis, (Brush)solidBrush, (float)num6 - sizeF.Width * 0.5f, sizeF.Height * 0.5f + (float)num3);
+						g.DrawString(str, fontAxis, solidBrush, (float)num6 - sizeF.Width * 0.5f, sizeF.Height * 0.5f + (float)num3);
 					}
 				}
 				else
@@ -824,7 +703,7 @@ namespace DGChart
 						}
 						string str = Convert.ToString(Math.Pow((double)xLogBase, Math.Log(xRangeStart, (double)xLogBase) + (double)index1));
 						SizeF sizeF = g.MeasureString(str, fontAxis);
-						g.DrawString(str, fontAxis, (Brush)solidBrush, (float)num6 - sizeF.Width * 0.5f, sizeF.Height * 0.5f + (float)num3);
+						g.DrawString(str, fontAxis, solidBrush, (float)num6 - sizeF.Width * 0.5f, sizeF.Height * 0.5f + (float)num3);
 					}
 				}
 				int num9 = num5 * num4;
@@ -842,7 +721,7 @@ namespace DGChart
 						g.DrawLine(pen1, num1, num6, x2, num6);
 						string str = Convert.ToString((yRangeEnd - yRangeStart) * (double)index / (double)num10 + yRangeStart);
 						SizeF sizeF = g.MeasureString(str, fontAxis);
-						g.DrawString(str, fontAxis, (Brush)solidBrush, (float)((double)num1 - (double)sizeF.Width - (double)sizeF.Height * 0.25), (float)num6 - sizeF.Height * 0.5f);
+						g.DrawString(str, fontAxis, solidBrush, (float)((double)num1 - (double)sizeF.Width - (double)sizeF.Height * 0.25), (float)num6 - sizeF.Height * 0.5f);
 					}
 				}
 				else
@@ -865,22 +744,24 @@ namespace DGChart
 						}
 						string str = Convert.ToString(Math.Pow((double)yLogBase, Math.Log(yRangeStart, (double)yLogBase) + (double)index1));
 						SizeF sizeF = g.MeasureString(str, fontAxis);
-						g.DrawString(str, fontAxis, (Brush)solidBrush, (float)((double)num1 - (double)sizeF.Width - (double)sizeF.Height * 0.25), (float)num6 - sizeF.Height * 0.5f);
+						g.DrawString(str, fontAxis, solidBrush, (float)((double)num1 - (double)sizeF.Width - (double)sizeF.Height * 0.25), (float)num6 - sizeF.Height * 0.5f);
 					}
 				}
 				int num12 = num11 * num10;
 				g.DrawRectangle(pen2, num1, num2, width, height);
 				SizeF sizeF1 = g.MeasureString("RPM (x 1000)", fontAxis);
-				g.DrawString("RPM (x 1000)", fontAxis, (Brush)solidBrush, (float)((x2 - num1) / 2 + num1) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + (float)num3);
+				g.DrawString("RPM (x 1000)", fontAxis, solidBrush, (float)((x2 - num1) / 2 + num1) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + (float)num3);
 				int num13 = num12;
 				int num14 = num9;
+
 				StringFormat format = new StringFormat();
 				format.Alignment = StringAlignment.Far;
 				format.LineAlignment = StringAlignment.Far;
-				RectangleF layoutRectangle1 = new RectangleF();
-				layoutRectangle1 = new RectangleF(235f, 10f, (float)(Width - (int)byte.MaxValue), 75f);
-				g.DrawString(strName, fontAxis, (Brush)solidBrush, layoutRectangle1, format);
-				g.DrawImage(Logo, 35, 10, 200, 75);
+				g.DrawString(strName, fontAxis, solidBrush, new RectangleF(235f, 10f, Width - 255, 75f), format);
+
+				if (Logo != null)
+					g.DrawImage(Logo, 35, 10, 200, 75);
+
 				for (int index1 = 0; index1 < 5; ++index1)
 				{
 					Color color2 = new Color();
@@ -925,9 +806,7 @@ namespace DGChart
 					if (flag && numArray1 != null && numArray2 != null && numArray1.Length == numArray2.Length)
 					{
 						Point[] pointArray = new Point[numArray1.Length];
-						Point point1 = new Point();
-						point1 = new Point(num1, num3);
-						Point point2 = point1;
+						Point point2 = new Point(num1, num3);
 						for (int index2 = 0; index2 < pointArray.Length; ++index2)
 						{
 							try
@@ -963,56 +842,52 @@ namespace DGChart
 									g.DrawEllipse(pen3, pointArray[index2].X - penWidth / 2, pointArray[index2].Y - penWidth / 2, penWidth, penWidth);
 									break;
 								case DynoControl.DrawModeType.Bar:
-									Point pt1 = new Point();
-									pt1 = new Point(pointArray[index2].X, num3);
-									g.DrawLine(pen3, pt1, pointArray[index2]);
+									g.DrawLine(pen3, new Point(pointArray[index2].X, num3), pointArray[index2]);
 									break;
 								default:
 									if (index2 > 0)
-									{
 										g.DrawLine(pen3, pointArray[index2 - 1], pointArray[index2]);
-										break;
-									}
-									else
-										break;
+									break;
 							}
 						}
 					}
 				}
+
 				string str1 = "Horsepower (HP)";
 				string str2 = "Torque (LB*FT)";
 				SizeF sizeF2 = g.MeasureString(str1, fontAxis);
 				SizeF sizeF3 = g.MeasureString(str2, fontAxis);
-				Rectangle rect1 = new Rectangle();
-				rect1 = new Rectangle(borderLeft + 5, -25 - (int)sizeF2.Height - borderBottom + Height, (int)((double)sizeF3.Width + (double)sizeF2.Width) + 80, (int)sizeF2.Height + 20);
+				Rectangle rect1 = new Rectangle(
+					borderLeft + 5,
+					-25 - (int)sizeF2.Height - borderBottom + Height,
+					(int)((double)sizeF3.Width + (double)sizeF2.Width) + 80,
+					(int)sizeF2.Height + 20
+					);
 				g.FillRectangle(Brushes.White, rect1);
 				g.DrawRectangle(new Pen(Brushes.Black), rect1);
 				Pen pen4 = new Pen(colorSet1);
 				Pen pen5 = new Pen(colorSet2);
-				g.DrawString(str1, fontAxis, pen4.Brush, (float)(rect1.Left + 35), (float)(rect1.Top + 10));
-				g.DrawString(str2, fontAxis, pen5.Brush, (float)(rect1.Left + 70) + sizeF2.Width, (float)(rect1.Top + 10));
-				Rectangle rect2 = new Rectangle();
-				rect2 = new Rectangle(rect1.Left + 10, rect1.Top + 10, 20, (int)sizeF2.Height);
-				Rectangle rect3 = new Rectangle();
-				rect3 = new Rectangle(rect1.Left + (int)sizeF2.Width + 45, rect1.Top + 10, 20, (int)sizeF3.Height);
-				g.FillRectangle(pen4.Brush, rect2);
-				g.FillRectangle(pen5.Brush, rect3);
+				g.DrawString(str1, fontAxis, pen4.Brush, rect1.Left + 35, rect1.Top + 10);
+				g.DrawString(str2, fontAxis, pen5.Brush, rect1.Left + 70 + sizeF2.Width, rect1.Top + 10);
+				g.FillRectangle(pen4.Brush, new Rectangle(rect1.Left + 10, rect1.Top + 10, 20, (int)sizeF2.Height));
+				g.FillRectangle(pen5.Brush, new Rectangle(rect1.Left + (int)sizeF2.Width + 45, rect1.Top + 10, 20, (int)sizeF3.Height));
 				string str3 = m_dMaxHpValue.ToString("####.##") + " RWHP @ " + (m_dMaxHpRpm * 1000.0).ToString("#####") + " RPM" + "\r\n\r\n" + m_dMaxTqValue.ToString("####.##")
 					+ " LB*FT @ " + (m_dMaxTqRpm * 1000.0).ToString("#####") + " RPM";
 				SizeF sizeF4 = g.MeasureString(str3, fontAxis);
-				Rectangle rect4 = new Rectangle();
-				rect4 = new Rectangle(-25 - (int)sizeF4.Width - borderRight + Width, -25 - (int)sizeF4.Height - borderBottom + Height, (int)sizeF4.Width + 20, (int)sizeF4.Height + 20);
+				Rectangle rect4 = new Rectangle(-25 - (int)sizeF4.Width - borderRight + Width, -25 - (int)sizeF4.Height - borderBottom + Height, (int)sizeF4.Width + 20, (int)sizeF4.Height + 20);
 				g.FillRectangle(Brushes.White, rect4);
 				g.DrawRectangle(new Pen(Brushes.Black), rect4);
-				RectangleF layoutRectangle2 = new RectangleF();
-				layoutRectangle2 = new RectangleF((float)((double)(Width - borderRight) - (double)sizeF4.Width - 25.0), (float)((double)(Height - borderBottom) - (double)sizeF4.Height - 25.0), sizeF4.Width + 20f, sizeF4.Height + 20f);
+				RectangleF layoutRectangle2 = new RectangleF(
+					(float)(Width - borderRight - sizeF4.Width - 25.0),
+					(float)(Height - borderBottom - sizeF4.Height - 25.0),
+					sizeF4.Width + 20f,
+					sizeF4.Height + 20f
+					);
 				format.Alignment = StringAlignment.Center;
 				format.LineAlignment = StringAlignment.Center;
 				g.DrawString(str3, fontAxis, (Brush)solidBrush, layoutRectangle2, format);
 			}
-			catch (Exception)
-			{
-			}
+			catch { }
 		}
 
 		public Image getImage()

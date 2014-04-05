@@ -5,6 +5,6 @@
   <BaudRateIndex>0</BaudRateIndex>
   <ProtocolIndex>0</ProtocolIndex>
   <HardwareIndex>1</HardwareIndex>
-  <ComPort>14</ComPort>
+  <ComPort>1</ComPort>
   <AutoDetect>true</AutoDetect>
 </Preferences>
