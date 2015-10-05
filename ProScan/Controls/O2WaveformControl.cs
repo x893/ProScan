@@ -17,7 +17,6 @@ namespace O2Waveform
 		private Color colorLabel;
 		private Font fontTitle;
 		private Font fontLabel;
-		private Container components;
 
 		public O2WaveformControl()
 		{
@@ -193,8 +192,6 @@ namespace O2Waveform
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 

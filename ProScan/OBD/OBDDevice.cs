@@ -1,26 +1,32 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-public abstract class OBDDevice
+namespace ProScan
 {
-	protected string m_strDeviceID;
-	protected OBDCommLog m_commLog;
-
-	public OBDDevice(OBDCommLog log)
+	public abstract class OBDDevice
 	{
-		m_commLog = log;
-	}
+		protected string m_DeviceID;
+		protected OBDCommLog m_commLog;
+		protected OBDParser m_Parser;
+		protected OBDCommELM m_CommELM;
 
-	public string getDeviceIDString()
-	{
-		return m_strDeviceID;
-	}
+		public OBDDevice(OBDCommLog log)
+		{
+			m_commLog = log;
+			m_CommELM = new OBDCommELM(log);
+		}
 
-	public abstract bool initialize(int iPort, int iBaud, int iProtocol);
-	public abstract bool initialize(int iPort, int iBaud);
-	public abstract bool initialize();
-	public abstract void disconnect();
-	public abstract bool connected();
-	public abstract OBDResponseList query(OBDParameter param);
-	public abstract string query(string cmd);
+		public string DeviceIDString()
+		{
+			return m_DeviceID;
+		}
+
+		public abstract bool Initialize(int iPort, int iBaud, ProtocolType iProtocol);
+		public abstract bool Initialize(int iPort, int iBaud);
+		public abstract bool Initialize();
+		public abstract void Disconnect();
+		public abstract bool Connected();
+		public abstract OBDResponseList Query(OBDParameter param);
+		public abstract string Query(string cmd);
+	}
 }

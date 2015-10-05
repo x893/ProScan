@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -115,7 +116,6 @@ namespace ProScan
 		private Label lblEnglishValue06b;
 		private Label lblDescription06b;
 		private Label lblPID06b;
-		private Container components;
 
 		[Description("Ignition Timing Advance (deg)")]
 		[Category("FreezeFrame")]
@@ -123,7 +123,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue0E.Text);
+				return Utility.Text2Double(lblEnglishValue0E.Text);
 			}
 			set
 			{
@@ -138,7 +138,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue0D.Text);
+				return Utility.Text2Double(lblEnglishValue0D.Text);
 			}
 			set
 			{
@@ -153,7 +153,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue0C.Text);
+				return Utility.Text2Double(lblEnglishValue0C.Text);
 			}
 			set
 			{
@@ -168,7 +168,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue0B.Text);
+				return Utility.Text2Double(lblEnglishValue0B.Text);
 			}
 			set
 			{
@@ -183,7 +183,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue09b.Text);
+				return Utility.Text2Double(lblEnglishValue09b.Text);
 			}
 			set
 			{
@@ -198,7 +198,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue07b.Text);
+				return Utility.Text2Double(lblEnglishValue07b.Text);
 			}
 			set
 			{
@@ -213,7 +213,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue09a.Text);
+				return Utility.Text2Double(lblEnglishValue09a.Text);
 			}
 			set
 			{
@@ -228,7 +228,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue07a.Text);
+				return Utility.Text2Double(lblEnglishValue07a.Text);
 			}
 			set
 			{
@@ -243,7 +243,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue08b.Text);
+				return Utility.Text2Double(lblEnglishValue08b.Text);
 			}
 			set
 			{
@@ -258,7 +258,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue06b.Text);
+				return Utility.Text2Double(lblEnglishValue06b.Text);
 			}
 			set
 			{
@@ -273,7 +273,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue08a.Text);
+				return Utility.Text2Double(lblEnglishValue08a.Text);
 			}
 			set
 			{
@@ -288,7 +288,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue06a.Text);
+				return Utility.Text2Double(lblEnglishValue06a.Text);
 			}
 			set
 			{
@@ -303,7 +303,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue05.Text);
+				return Utility.Text2Double(lblEnglishValue05.Text);
 			}
 			set
 			{
@@ -318,7 +318,7 @@ namespace ProScan
 		{
 			get
 			{
-				return double.Parse(lblEnglishValue04.Text);
+				return Utility.Text2Double(lblEnglishValue04.Text);
 			}
 			set
 			{
@@ -379,8 +379,6 @@ namespace ProScan
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 

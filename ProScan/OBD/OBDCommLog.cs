@@ -1,48 +1,52 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-public class OBDCommLog
+namespace ProScan
 {
-	private string m_strLogFile;
-	private bool m_bLogToFile;
-	private ArrayList m_arrItems = new ArrayList();
-
-	public OBDCommLog()
+	public class OBDCommLog
 	{
-		SetLogFile("commlog.txt");
-		SetLogFileStatus(false);
-	}
+		private string m_strLogFile;
+		private bool m_bLogToFile;
+		private List<OBDCommLogItem> m_arrItems = new List<OBDCommLogItem>();
 
-	public void AddItem(DateTime dt, string strItem)
-	{
-		OBDCommLogItem obdCommLogItem = new OBDCommLogItem(dt, strItem);
-		m_arrItems.Add((object)obdCommLogItem);
-		if (!m_bLogToFile)
-			return;
-		StreamWriter streamWriter = File.AppendText(m_strLogFile);
-		streamWriter.WriteLine(obdCommLogItem.ToString());
-		streamWriter.Close();
-	}
+		public OBDCommLog()
+		{
+			SetLogFile("commlog.txt");
+			SetLogFileStatus(false);
+		}
 
-	public void AddItem(string strItem)
-	{
-		AddItem(DateTime.Now, strItem);
-	}
+		public void AddItem(DateTime dt, string strItem)
+		{
+			OBDCommLogItem item = new OBDCommLogItem(dt, strItem);
+			m_arrItems.Add(item);
+			if (!m_bLogToFile)
+				return;
+			StreamWriter streamWriter = File.AppendText(m_strLogFile);
+			streamWriter.WriteLine(item.ToString());
+			streamWriter.Close();
+		}
 
-	public void SetLogFile(string strFile)
-	{
-		m_strLogFile = strFile;
-	}
+		public void AddItem(string strItem)
+		{
+			AddItem(DateTime.Now, strItem);
+		}
 
-	public void SetLogFileStatus(bool status)
-	{
-		m_bLogToFile = status;
-	}
+		public void SetLogFile(string strFile)
+		{
+			m_strLogFile = strFile;
+		}
 
-	public void Delete()
-	{
-		File.Delete(m_strLogFile);
+		public void SetLogFileStatus(bool status)
+		{
+			m_bLogToFile = status;
+		}
+
+		public void Delete()
+		{
+			File.Delete(m_strLogFile);
+		}
 	}
 }

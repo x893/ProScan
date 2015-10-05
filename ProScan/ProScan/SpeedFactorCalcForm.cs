@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -8,6 +9,345 @@ namespace ProScan
 {
 	public class SpeedFactorCalcForm : Form
 	{
+		private float m_fFactor;
+
+		public SpeedFactorCalcForm()
+		{
+			InitializeComponent();
+			CalculateFactor();
+		}
+
+		private new void TextChanged(object sender, EventArgs e)
+		{
+			CalculateFactor();
+		}
+
+		private void CalculateFactor()
+		{
+			try
+			{
+				float factor = (float)(
+					Convert.ToDouble(txtStockAspectRatio.Text, CultureInfo.InvariantCulture)
+					* 0.00999999977648258
+					* Convert.ToDouble(txtStockTireWidth.Text, CultureInfo.InvariantCulture)
+					* 0.508000016212463
+					) + Convert.ToSingle(txtStockRimDiameter.Text);
+				m_fFactor = (	(float)(
+						Convert.ToDouble(txtCurrentAspectRatio.Text, CultureInfo.InvariantCulture)
+						* 0.00999999977648258
+						* Convert.ToDouble(txtCurrentTireWidth.Text, CultureInfo.InvariantCulture)
+						* 0.508000016212463
+						)
+						+ Convert.ToSingle(txtCurrentRimDiameter.Text, CultureInfo.InvariantCulture)
+					)
+					/ factor;
+				txtFactor.Text = m_fFactor.ToString("0.000");
+				btnSave.Enabled = true;
+			}
+			catch (FormatException)
+			{
+				txtFactor.Text = "ERROR";
+				btnSave.Enabled = false;
+			}
+		}
+
+		public float SpeedFactor
+		{
+			get { return m_fFactor; }
+		}
+
+		#region InitializeComponent
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+		}
+
+		private void InitializeComponent()
+		{
+			this.groupWheels = new System.Windows.Forms.GroupBox();
+			this.lblRimDiameterUnits = new System.Windows.Forms.Label();
+			this.lblTireAspectUnits = new System.Windows.Forms.Label();
+			this.lblTireWidthUnits = new System.Windows.Forms.Label();
+			this.txtStockRimDiameter = new System.Windows.Forms.TextBox();
+			this.lblRimDiameter = new System.Windows.Forms.Label();
+			this.txtStockAspectRatio = new System.Windows.Forms.TextBox();
+			this.lblTireAspectRatio = new System.Windows.Forms.Label();
+			this.txtStockTireWidth = new System.Windows.Forms.TextBox();
+			this.lblTireWidth = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.txtCurrentRimDiameter = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.txtCurrentAspectRatio = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.txtCurrentTireWidth = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.lblFactor = new System.Windows.Forms.Label();
+			this.txtFactor = new System.Windows.Forms.TextBox();
+			this.btnSave = new System.Windows.Forms.Button();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.groupWheels.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// groupWheels
+			// 
+			this.groupWheels.Controls.Add(this.lblRimDiameterUnits);
+			this.groupWheels.Controls.Add(this.lblTireAspectUnits);
+			this.groupWheels.Controls.Add(this.lblTireWidthUnits);
+			this.groupWheels.Controls.Add(this.txtStockRimDiameter);
+			this.groupWheels.Controls.Add(this.lblRimDiameter);
+			this.groupWheels.Controls.Add(this.txtStockAspectRatio);
+			this.groupWheels.Controls.Add(this.lblTireAspectRatio);
+			this.groupWheels.Controls.Add(this.txtStockTireWidth);
+			this.groupWheels.Controls.Add(this.lblTireWidth);
+			this.groupWheels.Location = new System.Drawing.Point(10, 9);
+			this.groupWheels.Name = "groupWheels";
+			this.groupWheels.Size = new System.Drawing.Size(222, 120);
+			this.groupWheels.TabIndex = 5;
+			this.groupWheels.TabStop = false;
+			this.groupWheels.Text = "Stock Tire Size";
+			// 
+			// lblRimDiameterUnits
+			// 
+			this.lblRimDiameterUnits.Location = new System.Drawing.Point(174, 83);
+			this.lblRimDiameterUnits.Name = "lblRimDiameterUnits";
+			this.lblRimDiameterUnits.Size = new System.Drawing.Size(36, 23);
+			this.lblRimDiameterUnits.TabIndex = 15;
+			this.lblRimDiameterUnits.Text = "in";
+			this.lblRimDiameterUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// lblTireAspectUnits
+			// 
+			this.lblTireAspectUnits.Location = new System.Drawing.Point(174, 55);
+			this.lblTireAspectUnits.Name = "lblTireAspectUnits";
+			this.lblTireAspectUnits.Size = new System.Drawing.Size(36, 23);
+			this.lblTireAspectUnits.TabIndex = 12;
+			this.lblTireAspectUnits.Text = "%";
+			this.lblTireAspectUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// lblTireWidthUnits
+			// 
+			this.lblTireWidthUnits.Location = new System.Drawing.Point(174, 28);
+			this.lblTireWidthUnits.Name = "lblTireWidthUnits";
+			this.lblTireWidthUnits.Size = new System.Drawing.Size(36, 23);
+			this.lblTireWidthUnits.TabIndex = 9;
+			this.lblTireWidthUnits.Text = "mm";
+			this.lblTireWidthUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtStockRimDiameter
+			// 
+			this.txtStockRimDiameter.Location = new System.Drawing.Point(108, 83);
+			this.txtStockRimDiameter.Name = "txtStockRimDiameter";
+			this.txtStockRimDiameter.Size = new System.Drawing.Size(60, 22);
+			this.txtStockRimDiameter.TabIndex = 14;
+			this.txtStockRimDiameter.TextChanged += new System.EventHandler(this.TextChanged);
+			// 
+			// lblRimDiameter
+			// 
+			this.lblRimDiameter.Location = new System.Drawing.Point(12, 83);
+			this.lblRimDiameter.Name = "lblRimDiameter";
+			this.lblRimDiameter.Size = new System.Drawing.Size(90, 23);
+			this.lblRimDiameter.TabIndex = 13;
+			this.lblRimDiameter.Text = "Rim &diameter:";
+			this.lblRimDiameter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtStockAspectRatio
+			// 
+			this.txtStockAspectRatio.Location = new System.Drawing.Point(108, 55);
+			this.txtStockAspectRatio.Name = "txtStockAspectRatio";
+			this.txtStockAspectRatio.Size = new System.Drawing.Size(60, 22);
+			this.txtStockAspectRatio.TabIndex = 11;
+			this.txtStockAspectRatio.TextChanged += new System.EventHandler(this.TextChanged);
+			// 
+			// lblTireAspectRatio
+			// 
+			this.lblTireAspectRatio.Location = new System.Drawing.Point(12, 55);
+			this.lblTireAspectRatio.Name = "lblTireAspectRatio";
+			this.lblTireAspectRatio.Size = new System.Drawing.Size(90, 23);
+			this.lblTireAspectRatio.TabIndex = 10;
+			this.lblTireAspectRatio.Text = "Tire &aspect:";
+			this.lblTireAspectRatio.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtStockTireWidth
+			// 
+			this.txtStockTireWidth.Location = new System.Drawing.Point(108, 28);
+			this.txtStockTireWidth.Name = "txtStockTireWidth";
+			this.txtStockTireWidth.Size = new System.Drawing.Size(60, 22);
+			this.txtStockTireWidth.TabIndex = 8;
+			this.txtStockTireWidth.TextChanged += new System.EventHandler(this.TextChanged);
+			// 
+			// lblTireWidth
+			// 
+			this.lblTireWidth.Location = new System.Drawing.Point(12, 28);
+			this.lblTireWidth.Name = "lblTireWidth";
+			this.lblTireWidth.Size = new System.Drawing.Size(90, 23);
+			this.lblTireWidth.TabIndex = 7;
+			this.lblTireWidth.Text = "Tire &width:";
+			this.lblTireWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.txtCurrentRimDiameter);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.txtCurrentAspectRatio);
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.txtCurrentTireWidth);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Location = new System.Drawing.Point(240, 9);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(222, 120);
+			this.groupBox1.TabIndex = 6;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Current Tire Size";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(174, 83);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(36, 23);
+			this.label1.TabIndex = 15;
+			this.label1.Text = "in";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(174, 55);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(36, 23);
+			this.label2.TabIndex = 12;
+			this.label2.Text = "%";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(174, 28);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(36, 23);
+			this.label3.TabIndex = 9;
+			this.label3.Text = "mm";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtCurrentRimDiameter
+			// 
+			this.txtCurrentRimDiameter.Location = new System.Drawing.Point(108, 83);
+			this.txtCurrentRimDiameter.Name = "txtCurrentRimDiameter";
+			this.txtCurrentRimDiameter.Size = new System.Drawing.Size(60, 22);
+			this.txtCurrentRimDiameter.TabIndex = 14;
+			this.txtCurrentRimDiameter.TextChanged += new System.EventHandler(this.TextChanged);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(12, 83);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(90, 23);
+			this.label4.TabIndex = 13;
+			this.label4.Text = "Rim &diameter:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtCurrentAspectRatio
+			// 
+			this.txtCurrentAspectRatio.Location = new System.Drawing.Point(108, 55);
+			this.txtCurrentAspectRatio.Name = "txtCurrentAspectRatio";
+			this.txtCurrentAspectRatio.Size = new System.Drawing.Size(60, 22);
+			this.txtCurrentAspectRatio.TabIndex = 11;
+			this.txtCurrentAspectRatio.TextChanged += new System.EventHandler(this.TextChanged);
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(12, 55);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(90, 23);
+			this.label5.TabIndex = 10;
+			this.label5.Text = "Tire &aspect:";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtCurrentTireWidth
+			// 
+			this.txtCurrentTireWidth.Location = new System.Drawing.Point(108, 28);
+			this.txtCurrentTireWidth.Name = "txtCurrentTireWidth";
+			this.txtCurrentTireWidth.Size = new System.Drawing.Size(60, 22);
+			this.txtCurrentTireWidth.TabIndex = 8;
+			this.txtCurrentTireWidth.TextChanged += new System.EventHandler(this.TextChanged);
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(12, 28);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(90, 23);
+			this.label6.TabIndex = 7;
+			this.label6.Text = "Tire &width:";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// lblFactor
+			// 
+			this.lblFactor.Location = new System.Drawing.Point(18, 141);
+			this.lblFactor.Name = "lblFactor";
+			this.lblFactor.Size = new System.Drawing.Size(280, 18);
+			this.lblFactor.TabIndex = 7;
+			this.lblFactor.Text = "Calculated Speedometer Calibration Factor:";
+			this.lblFactor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtFactor
+			// 
+			this.txtFactor.Location = new System.Drawing.Point(308, 138);
+			this.txtFactor.Name = "txtFactor";
+			this.txtFactor.ReadOnly = true;
+			this.txtFactor.Size = new System.Drawing.Size(120, 22);
+			this.txtFactor.TabIndex = 8;
+			this.txtFactor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// btnSave
+			// 
+			this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.btnSave.Enabled = false;
+			this.btnSave.Location = new System.Drawing.Point(134, 175);
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(90, 27);
+			this.btnSave.TabIndex = 9;
+			this.btnSave.Text = "&Save";
+			// 
+			// btnCancel
+			// 
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnCancel.Location = new System.Drawing.Point(250, 175);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(90, 27);
+			this.btnCancel.TabIndex = 10;
+			this.btnCancel.Text = "&Cancel";
+			// 
+			// SpeedFactorCalcForm
+			// 
+			this.AcceptButton = this.btnSave;
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.CancelButton = this.btnCancel;
+			this.ClientSize = new System.Drawing.Size(472, 213);
+			this.Controls.Add(this.btnCancel);
+			this.Controls.Add(this.btnSave);
+			this.Controls.Add(this.txtFactor);
+			this.Controls.Add(this.lblFactor);
+			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.groupWheels);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "SpeedFactorCalcForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "Calculate Speedometer Calibration Factor";
+			this.groupWheels.ResumeLayout(false);
+			this.groupWheels.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.ResumeLayout(false);
+			this.PerformLayout();
+
+		}
+
 		private GroupBox groupWheels;
 		private Label lblRimDiameterUnits;
 		private Label lblTireAspectUnits;
@@ -31,337 +371,8 @@ namespace ProScan
 		private TextBox txtCurrentTireWidth;
 		private Button btnSave;
 		private Button btnCancel;
-		private float m_fFactor;
 		private TextBox txtFactor;
-		private Container components;
 
-		public SpeedFactorCalcForm()
-		{
-			InitializeComponent();
-			CalculateFactor();
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-			base.Dispose(disposing);
-		}
-
-		private void InitializeComponent()
-		{
-			groupWheels = new System.Windows.Forms.GroupBox();
-			lblRimDiameterUnits = new System.Windows.Forms.Label();
-			lblTireAspectUnits = new System.Windows.Forms.Label();
-			lblTireWidthUnits = new System.Windows.Forms.Label();
-			txtStockRimDiameter = new System.Windows.Forms.TextBox();
-			lblRimDiameter = new System.Windows.Forms.Label();
-			txtStockAspectRatio = new System.Windows.Forms.TextBox();
-			lblTireAspectRatio = new System.Windows.Forms.Label();
-			txtStockTireWidth = new System.Windows.Forms.TextBox();
-			lblTireWidth = new System.Windows.Forms.Label();
-			groupBox1 = new System.Windows.Forms.GroupBox();
-			label1 = new System.Windows.Forms.Label();
-			label2 = new System.Windows.Forms.Label();
-			label3 = new System.Windows.Forms.Label();
-			txtCurrentRimDiameter = new System.Windows.Forms.TextBox();
-			label4 = new System.Windows.Forms.Label();
-			txtCurrentAspectRatio = new System.Windows.Forms.TextBox();
-			label5 = new System.Windows.Forms.Label();
-			txtCurrentTireWidth = new System.Windows.Forms.TextBox();
-			label6 = new System.Windows.Forms.Label();
-			lblFactor = new System.Windows.Forms.Label();
-			txtFactor = new System.Windows.Forms.TextBox();
-			btnSave = new System.Windows.Forms.Button();
-			btnCancel = new System.Windows.Forms.Button();
-			groupWheels.SuspendLayout();
-			groupBox1.SuspendLayout();
-			SuspendLayout();
-			// 
-			// groupWheels
-			// 
-			groupWheels.Controls.Add(lblRimDiameterUnits);
-			groupWheels.Controls.Add(lblTireAspectUnits);
-			groupWheels.Controls.Add(lblTireWidthUnits);
-			groupWheels.Controls.Add(txtStockRimDiameter);
-			groupWheels.Controls.Add(lblRimDiameter);
-			groupWheels.Controls.Add(txtStockAspectRatio);
-			groupWheels.Controls.Add(lblTireAspectRatio);
-			groupWheels.Controls.Add(txtStockTireWidth);
-			groupWheels.Controls.Add(lblTireWidth);
-			groupWheels.Location = new System.Drawing.Point(8, 8);
-			groupWheels.Name = "groupWheels";
-			groupWheels.Size = new System.Drawing.Size(185, 104);
-			groupWheels.TabIndex = 5;
-			groupWheels.TabStop = false;
-			groupWheels.Text = "Stock Tire Size";
-			// 
-			// lblRimDiameterUnits
-			// 
-			lblRimDiameterUnits.Location = new System.Drawing.Point(145, 72);
-			lblRimDiameterUnits.Name = "lblRimDiameterUnits";
-			lblRimDiameterUnits.Size = new System.Drawing.Size(30, 20);
-			lblRimDiameterUnits.TabIndex = 15;
-			lblRimDiameterUnits.Text = "in";
-			lblRimDiameterUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lblTireAspectUnits
-			// 
-			lblTireAspectUnits.Location = new System.Drawing.Point(145, 48);
-			lblTireAspectUnits.Name = "lblTireAspectUnits";
-			lblTireAspectUnits.Size = new System.Drawing.Size(30, 20);
-			lblTireAspectUnits.TabIndex = 12;
-			lblTireAspectUnits.Text = "%";
-			lblTireAspectUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lblTireWidthUnits
-			// 
-			lblTireWidthUnits.Location = new System.Drawing.Point(145, 24);
-			lblTireWidthUnits.Name = "lblTireWidthUnits";
-			lblTireWidthUnits.Size = new System.Drawing.Size(30, 20);
-			lblTireWidthUnits.TabIndex = 9;
-			lblTireWidthUnits.Text = "mm";
-			lblTireWidthUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// txtStockRimDiameter
-			// 
-			txtStockRimDiameter.Location = new System.Drawing.Point(90, 72);
-			txtStockRimDiameter.Name = "txtStockRimDiameter";
-			txtStockRimDiameter.Size = new System.Drawing.Size(50, 20);
-			txtStockRimDiameter.TabIndex = 14;
-			txtStockRimDiameter.TextChanged += new System.EventHandler(TextChanged);
-			// 
-			// lblRimDiameter
-			// 
-			lblRimDiameter.Location = new System.Drawing.Point(10, 72);
-			lblRimDiameter.Name = "lblRimDiameter";
-			lblRimDiameter.Size = new System.Drawing.Size(75, 20);
-			lblRimDiameter.TabIndex = 13;
-			lblRimDiameter.Text = "Rim &diameter:";
-			lblRimDiameter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtStockAspectRatio
-			// 
-			txtStockAspectRatio.Location = new System.Drawing.Point(90, 48);
-			txtStockAspectRatio.Name = "txtStockAspectRatio";
-			txtStockAspectRatio.Size = new System.Drawing.Size(50, 20);
-			txtStockAspectRatio.TabIndex = 11;
-			txtStockAspectRatio.TextChanged += new System.EventHandler(TextChanged);
-			// 
-			// lblTireAspectRatio
-			// 
-			lblTireAspectRatio.Location = new System.Drawing.Point(10, 48);
-			lblTireAspectRatio.Name = "lblTireAspectRatio";
-			lblTireAspectRatio.Size = new System.Drawing.Size(75, 20);
-			lblTireAspectRatio.TabIndex = 10;
-			lblTireAspectRatio.Text = "Tire &aspect:";
-			lblTireAspectRatio.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtStockTireWidth
-			// 
-			txtStockTireWidth.Location = new System.Drawing.Point(90, 24);
-			txtStockTireWidth.Name = "txtStockTireWidth";
-			txtStockTireWidth.Size = new System.Drawing.Size(50, 20);
-			txtStockTireWidth.TabIndex = 8;
-			txtStockTireWidth.TextChanged += new System.EventHandler(TextChanged);
-			// 
-			// lblTireWidth
-			// 
-			lblTireWidth.Location = new System.Drawing.Point(10, 24);
-			lblTireWidth.Name = "lblTireWidth";
-			lblTireWidth.Size = new System.Drawing.Size(75, 20);
-			lblTireWidth.TabIndex = 7;
-			lblTireWidth.Text = "Tire &width:";
-			lblTireWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox1
-			// 
-			groupBox1.Controls.Add(label1);
-			groupBox1.Controls.Add(label2);
-			groupBox1.Controls.Add(label3);
-			groupBox1.Controls.Add(txtCurrentRimDiameter);
-			groupBox1.Controls.Add(label4);
-			groupBox1.Controls.Add(txtCurrentAspectRatio);
-			groupBox1.Controls.Add(label5);
-			groupBox1.Controls.Add(txtCurrentTireWidth);
-			groupBox1.Controls.Add(label6);
-			groupBox1.Location = new System.Drawing.Point(200, 8);
-			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new System.Drawing.Size(185, 104);
-			groupBox1.TabIndex = 6;
-			groupBox1.TabStop = false;
-			groupBox1.Text = "Current Tire Size";
-			// 
-			// label1
-			// 
-			label1.Location = new System.Drawing.Point(145, 72);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(30, 20);
-			label1.TabIndex = 15;
-			label1.Text = "in";
-			label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label2
-			// 
-			label2.Location = new System.Drawing.Point(145, 48);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(30, 20);
-			label2.TabIndex = 12;
-			label2.Text = "%";
-			label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label3
-			// 
-			label3.Location = new System.Drawing.Point(145, 24);
-			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(30, 20);
-			label3.TabIndex = 9;
-			label3.Text = "mm";
-			label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// txtCurrentRimDiameter
-			// 
-			txtCurrentRimDiameter.Location = new System.Drawing.Point(90, 72);
-			txtCurrentRimDiameter.Name = "txtCurrentRimDiameter";
-			txtCurrentRimDiameter.Size = new System.Drawing.Size(50, 20);
-			txtCurrentRimDiameter.TabIndex = 14;
-			txtCurrentRimDiameter.TextChanged += new System.EventHandler(TextChanged);
-			// 
-			// label4
-			// 
-			label4.Location = new System.Drawing.Point(10, 72);
-			label4.Name = "label4";
-			label4.Size = new System.Drawing.Size(75, 20);
-			label4.TabIndex = 13;
-			label4.Text = "Rim &diameter:";
-			label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtCurrentAspectRatio
-			// 
-			txtCurrentAspectRatio.Location = new System.Drawing.Point(90, 48);
-			txtCurrentAspectRatio.Name = "txtCurrentAspectRatio";
-			txtCurrentAspectRatio.Size = new System.Drawing.Size(50, 20);
-			txtCurrentAspectRatio.TabIndex = 11;
-			txtCurrentAspectRatio.TextChanged += new System.EventHandler(TextChanged);
-			// 
-			// label5
-			// 
-			label5.Location = new System.Drawing.Point(10, 48);
-			label5.Name = "label5";
-			label5.Size = new System.Drawing.Size(75, 20);
-			label5.TabIndex = 10;
-			label5.Text = "Tire &aspect:";
-			label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtCurrentTireWidth
-			// 
-			txtCurrentTireWidth.Location = new System.Drawing.Point(90, 24);
-			txtCurrentTireWidth.Name = "txtCurrentTireWidth";
-			txtCurrentTireWidth.Size = new System.Drawing.Size(50, 20);
-			txtCurrentTireWidth.TabIndex = 8;
-			txtCurrentTireWidth.TextChanged += new System.EventHandler(TextChanged);
-			// 
-			// label6
-			// 
-			label6.Location = new System.Drawing.Point(10, 24);
-			label6.Name = "label6";
-			label6.Size = new System.Drawing.Size(75, 20);
-			label6.TabIndex = 7;
-			label6.Text = "Tire &width:";
-			label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// lblFactor
-			// 
-			lblFactor.Location = new System.Drawing.Point(15, 122);
-			lblFactor.Name = "lblFactor";
-			lblFactor.Size = new System.Drawing.Size(233, 16);
-			lblFactor.TabIndex = 7;
-			lblFactor.Text = "Calculated Speedometer Calibration Factor:";
-			lblFactor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtFactor
-			// 
-			txtFactor.Location = new System.Drawing.Point(257, 120);
-			txtFactor.Name = "txtFactor";
-			txtFactor.ReadOnly = true;
-			txtFactor.Size = new System.Drawing.Size(100, 20);
-			txtFactor.TabIndex = 8;
-			txtFactor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			// 
-			// btnSave
-			// 
-			btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-			btnSave.Enabled = false;
-			btnSave.Location = new System.Drawing.Point(112, 152);
-			btnSave.Name = "btnSave";
-			btnSave.Size = new System.Drawing.Size(75, 23);
-			btnSave.TabIndex = 9;
-			btnSave.Text = "&Save";
-			// 
-			// btnCancel
-			// 
-			btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			btnCancel.Location = new System.Drawing.Point(208, 152);
-			btnCancel.Name = "btnCancel";
-			btnCancel.Size = new System.Drawing.Size(75, 23);
-			btnCancel.TabIndex = 10;
-			btnCancel.Text = "&Cancel";
-			// 
-			// SpeedFactorCalcForm
-			// 
-			AcceptButton = btnSave;
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(392, 182);
-			Controls.Add(btnCancel);
-			Controls.Add(btnSave);
-			Controls.Add(txtFactor);
-			Controls.Add(lblFactor);
-			Controls.Add(groupBox1);
-			Controls.Add(groupWheels);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			MaximizeBox = false;
-			MinimizeBox = false;
-			Name = "SpeedFactorCalcForm";
-			StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			Text = "Calculate Speedometer Calibration Factor";
-			groupWheels.ResumeLayout(false);
-			groupWheels.PerformLayout();
-			groupBox1.ResumeLayout(false);
-			groupBox1.PerformLayout();
-			ResumeLayout(false);
-			PerformLayout();
-
-		}
-
-		private new void TextChanged(object sender, EventArgs e)
-		{
-			CalculateFactor();
-		}
-
-		private void CalculateFactor()
-		{
-			try
-			{
-				float num7 = (float)(
-					(double)Convert.ToSingle(txtStockAspectRatio.Text) * 0.00999999977648258 * (double)Convert.ToSingle(txtStockTireWidth.Text) * 0.508000016212463
-					) + Convert.ToSingle(txtStockRimDiameter.Text);
-				m_fFactor = ((float)(
-					(double)Convert.ToSingle(txtCurrentAspectRatio.Text) * 0.00999999977648258 * (double)Convert.ToSingle(txtCurrentTireWidth.Text) * 0.508000016212463
-					) + Convert.ToSingle(txtCurrentRimDiameter.Text)) / num7;
-				txtFactor.Text = m_fFactor.ToString("0.000");
-				btnSave.Enabled = true;
-			}
-			catch (FormatException)
-			{
-				txtFactor.Text = "ERROR";
-				btnSave.Enabled = false;
-			}
-		}
-
-		public float getSpeedFactor()
-		{
-			return m_fFactor;
-		}
+		#endregion
 	}
 }

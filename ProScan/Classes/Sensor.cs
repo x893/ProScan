@@ -1,159 +1,162 @@
 ﻿using System.Runtime.InteropServices;
 
-public class Sensor
+namespace ProScan
 {
-	private string m_strName;
-	private int m_iService;
-	private int m_iPID;
-	private int m_iSubPID;
-	private bool m_bIsSensor;
-	private bool m_bIsPlottable;
-	private bool m_bIsO2Dependant;
-	private bool m_bIsFor1D;
-	private double m_dEnglishValue;
-	private double m_dEnglishMinValue;
-	private double m_dEnglishMaxValue;
-	private double m_dMetricValue;
-	private double m_dMetricMinValue;
-	private double m_dMetricMaxValue;
-
-	private string m_strEnglishDisplay = "";
-	private string m_strEnglishUnits = "";
-	private string m_strMetricDisplay = "";
-	private string m_strMetricUnits = "";
-
-	public Sensor()
+	public class Sensor
 	{
-	}
+		private string m_Name;
+		private int m_Service;
+		private int m_PID;
+		private int m_SubPID;
+		private bool m_IsSensor;
+		private bool m_IsPlottable;
+		private bool m_IsO2Dependant;
+		private bool m_IsFor1D;
+		private double m_EnglishValue;
+		private double m_EnglishMinValue;
+		private double m_EnglishMaxValue;
+		private double m_MetricValue;
+		private double m_MetricMinValue;
+		private double m_MetricMaxValue;
 
-	public Sensor(int iService, int iPID, int iSubPID, string strName, double dEnglishMinValue, double dEnglishMaxValue, string strEnglishUnits, double dMetricMinValue, double dMetricMaxValue, string strMetricUnits, bool bIsSensor, bool bIsPlottable, bool bIsO2Dependant, bool bIsFor1D)
-	{
-		m_iService = iService;
-		m_iPID = iPID;
-		m_iSubPID = iSubPID;
-		m_strName = strName;
-		m_dEnglishMinValue = dEnglishMinValue;
-		m_dEnglishMaxValue = dEnglishMaxValue;
-		m_strEnglishUnits = strEnglishUnits;
-		m_dMetricMinValue = dMetricMinValue;
-		m_dMetricMaxValue = dMetricMaxValue;
-		m_strMetricUnits = strMetricUnits;
-		m_bIsSensor = bIsSensor;
-		m_bIsPlottable = bIsPlottable;
-		m_bIsO2Dependant = bIsO2Dependant;
-		m_bIsFor1D = bIsFor1D;
-	}
+		private string m_EnglishDisplay = "";
+		private string m_EnglishUnits = "";
+		private string m_MetricDisplay = "";
+		private string m_MetricUnits = "";
 
-	public double MetricMaxValue
-	{
-		get { return m_dMetricMaxValue; }
-		set { m_dMetricMaxValue = value; }
-	}
+		public Sensor()
+		{
+		}
 
-	public double MetricMinValue
-	{
-		get { return m_dMetricMinValue; }
-		set { m_dMetricMinValue = value; }
-	}
+		public Sensor(int iService, int iPID, int iSubPID, string strName, double dEnglishMinValue, double dEnglishMaxValue, string strEnglishUnits, double dMetricMinValue, double dMetricMaxValue, string strMetricUnits, bool bIsSensor, bool bIsPlottable, bool bIsO2Dependant, bool bIsFor1D)
+		{
+			m_Service = iService;
+			m_PID = iPID;
+			m_SubPID = iSubPID;
+			m_Name = strName;
+			m_EnglishMinValue = dEnglishMinValue;
+			m_EnglishMaxValue = dEnglishMaxValue;
+			m_EnglishUnits = strEnglishUnits;
+			m_MetricMinValue = dMetricMinValue;
+			m_MetricMaxValue = dMetricMaxValue;
+			m_MetricUnits = strMetricUnits;
+			m_IsSensor = bIsSensor;
+			m_IsPlottable = bIsPlottable;
+			m_IsO2Dependant = bIsO2Dependant;
+			m_IsFor1D = bIsFor1D;
+		}
 
-	public string MetricUnits
-	{
-		get { return m_strMetricUnits; }
-		set { m_strMetricUnits = value; }
-	}
+		public double MetricMaxValue
+		{
+			get { return m_MetricMaxValue; }
+			set { m_MetricMaxValue = value; }
+		}
 
-	public double MetricValue
-	{
-		get { return m_dMetricValue; }
-		set { m_dMetricValue = value; }
-	}
+		public double MetricMinValue
+		{
+			get { return m_MetricMinValue; }
+			set { m_MetricMinValue = value; }
+		}
 
-	public string MetricDisplay
-	{
-		get { return m_strMetricDisplay; }
-		set { m_strMetricDisplay = value; }
-	}
+		public string MetricUnits
+		{
+			get { return m_MetricUnits; }
+			set { m_MetricUnits = value; }
+		}
 
-	public double EnglishMaxValue
-	{
-		get { return m_dEnglishMaxValue; }
-		set { m_dEnglishMaxValue = value; }
-	}
+		public double MetricValue
+		{
+			get { return m_MetricValue; }
+			set { m_MetricValue = value; }
+		}
 
-	public double EnglishMinValue
-	{
-		get { return m_dEnglishMinValue; }
-		set { m_dEnglishMinValue = value; }
-	}
+		public string MetricDisplay
+		{
+			get { return m_MetricDisplay; }
+			set { m_MetricDisplay = value; }
+		}
 
-	public string EnglishUnits
-	{
-		get { return m_strEnglishUnits; }
-		set { m_strEnglishUnits = value; }
-	}
+		public double EnglishMaxValue
+		{
+			get { return m_EnglishMaxValue; }
+			set { m_EnglishMaxValue = value; }
+		}
 
-	public double EnglishValue
-	{
-		get { return m_dEnglishValue; }
-		set { m_dEnglishValue = value; }
-	}
+		public double EnglishMinValue
+		{
+			get { return m_EnglishMinValue; }
+			set { m_EnglishMinValue = value; }
+		}
 
-	public string EnglishDisplay
-	{
-		get { return m_strEnglishDisplay; }
-		set { m_strEnglishDisplay = value; }
-	}
+		public string EnglishUnits
+		{
+			get { return m_EnglishUnits; }
+			set { m_EnglishUnits = value; }
+		}
 
-	public bool isFor1D
-	{
-		get { return m_bIsFor1D; }
-		set { m_bIsFor1D = value; }
-	}
+		public double EnglishValue
+		{
+			get { return m_EnglishValue; }
+			set { m_EnglishValue = value; }
+		}
 
-	public bool isO2Dependant
-	{
-		get { return m_bIsO2Dependant; }
-		set { m_bIsO2Dependant = value; }
-	}
+		public string EnglishDisplay
+		{
+			get { return m_EnglishDisplay; }
+			set { m_EnglishDisplay = value; }
+		}
 
-	public bool isPlottable
-	{
-		get { return m_bIsPlottable; }
-		set { m_bIsPlottable = value; }
-	}
+		public bool isFor1D
+		{
+			get { return m_IsFor1D; }
+			set { m_IsFor1D = value; }
+		}
 
-	public bool isSensor
-	{
-		get { return m_bIsSensor; }
-		set { m_bIsSensor = value; }
-	}
+		public bool isO2Dependant
+		{
+			get { return m_IsO2Dependant; }
+			set { m_IsO2Dependant = value; }
+		}
 
-	public int SubPID
-	{
-		get { return m_iSubPID; }
-		set { m_iSubPID = value; }
-	}
+		public bool isPlottable
+		{
+			get { return m_IsPlottable; }
+			set { m_IsPlottable = value; }
+		}
 
-	public int PID
-	{
-		get { return m_iPID; }
-		set { m_iPID = value; }
-	}
+		public bool isSensor
+		{
+			get { return m_IsSensor; }
+			set { m_IsSensor = value; }
+		}
 
-	public int Service
-	{
-		get { return m_iService; }
-		set { m_iService = value; }
-	}
+		public int SubPID
+		{
+			get { return m_SubPID; }
+			set { m_SubPID = value; }
+		}
 
-	public string Name
-	{
-		get { return m_strName; }
-		set { m_strName = value; }
-	}
+		public int PID
+		{
+			get { return m_PID; }
+			set { m_PID = value; }
+		}
 
-	public override string ToString()
-	{
-		return m_strName;
+		public int Service
+		{
+			get { return m_Service; }
+			set { m_Service = value; }
+		}
+
+		public string Name
+		{
+			get { return m_Name; }
+			set { m_Name = value; }
+		}
+
+		public override string ToString()
+		{
+			return m_Name;
+		}
 	}
 }

@@ -3,32 +3,32 @@
 [Serializable]
 public class UserPreferences
 {
-	private string m_strName;
-	private string m_strAddress1;
-	private string m_strAddress2;
-	private string m_strTelephone;
+	private string m_Name;
+	private string m_Address1;
+	private string m_Address2;
+	private string m_Telephone;
 
 	public string Telephone
 	{
-		get { return m_strTelephone; }
-		set { m_strTelephone = value; }
+		get { return m_Telephone; }
+		set { m_Telephone = value; }
 	}
 
 	public string Address2
 	{
-		get { return m_strAddress2; }
-		set { m_strAddress2 = value; }
+		get { return m_Address2; }
+		set { m_Address2 = value; }
 	}
 
 	public string Address1
 	{
-		get { return m_strAddress1; }
-		set { m_strAddress1 = value; }
+		get { return m_Address1; }
+		set { m_Address1 = value; }
 	}
 
 	public string Name
 	{
-		get { return m_strName; }
-		set { m_strName = value; }
+		get { return m_Name; }
+		set { m_Name = value; }
 	}
 }

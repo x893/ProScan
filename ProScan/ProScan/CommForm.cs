@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using System.Resources;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace ProScan
 {
 	public class CommForm : Form
 	{
-		private ArrayList m_listVehicles;
-		private OBDInterface m_obdInterface;
-		private System.Windows.Forms.Timer timer1;
+		private List<VehicleProfile> m_profiles;
+		private OBDInterface m_OBDInterface;
+		private System.Windows.Forms.Timer m_timer;
 
-		public CommForm(OBDInterface obd2)
+		public CommForm(OBDInterface obd)
 		{
 			InitializeComponent();
-			m_obdInterface = obd2;
-			m_listVehicles = m_obdInterface.GetVehicleProfiles();
+
+			m_OBDInterface = obd;
+			m_profiles = m_OBDInterface.VehicleProfiles;
 			PopulateProfileCombobox();
 		}
 
@@ -35,48 +33,56 @@ namespace ProScan
 			picCheck2.Image = picBlankBox.Image;
 			picCheck3.Image = picBlankBox.Image;
 			picCheck4.Image = picBlankBox.Image;
-			m_obdInterface.SaveActiveProfile((VehicleProfile)comboProfile.SelectedItem);
-			m_obdInterface.logItem("ProScan v5.9");
-			m_obdInterface.logItem("Connection Procedure Initiated");
-			if (m_obdInterface.GetCommSettings().AutoDetect)
-				m_obdInterface.logItem("   Automatic Hardware Detection: ON");
+
+			m_OBDInterface.SaveActiveProfile((VehicleProfile)comboProfile.SelectedItem);
+
+			m_OBDInterface.logItem("ProScan");
+			m_OBDInterface.logItem("Connection Procedure Initiated");
+
+			if (m_OBDInterface.CommSettings.AutoDetect)
+				m_OBDInterface.logItem("   Automatic Hardware Detection: ON");
 			else
-				m_obdInterface.logItem("   Automatic Hardware Detection: OFF");
-			int baudRate = m_obdInterface.GetCommSettings().BaudRate;
-			string strMsg = string.Format("   Baud Rate: {0}", baudRate);
-			m_obdInterface.logItem(strMsg);
-			string str2 = string.Format("   Default Port: {0}", m_obdInterface.GetCommSettings().ComPortName);
-			m_obdInterface.logItem(str2);
-			switch (m_obdInterface.GetCommSettings().HardwareIndex)
+				m_OBDInterface.logItem("   Automatic Hardware Detection: OFF");
+
+			m_OBDInterface.logItem(string.Format("   Baud Rate: {0}", m_OBDInterface.CommSettings.BaudRate));
+			m_OBDInterface.logItem(string.Format("   Default Port: {0}", m_OBDInterface.CommSettings.ComPortName));
+
+			switch (m_OBDInterface.CommSettings.HardwareIndex)
 			{
-				case 0:
-					m_obdInterface.logItem("   Interface: Auto-Detect");
+				case HardwareType.Automatic:
+					m_OBDInterface.logItem("   Interface: Auto-Detect");
 					break;
 
-				case 1:
-					m_obdInterface.logItem("   Interface: ELM327");
+				case HardwareType.ELM327:
+					m_OBDInterface.logItem("   Interface: ELM327");
 					break;
 
-				case 2:
-					m_obdInterface.logItem("   Interface: ELM320");
+				case HardwareType.ELM320:
+					m_OBDInterface.logItem("   Interface: ELM320");
 					break;
 
-				case 3:
-					m_obdInterface.logItem("   Interface: ELM322");
+				case HardwareType.ELM322:
+					m_OBDInterface.logItem("   Interface: ELM322");
 					break;
 
-				case 4:
-					m_obdInterface.logItem("   Interface: ELM323");
+				case HardwareType.ELM323:
+					m_OBDInterface.logItem("   Interface: ELM323");
 					break;
+				case HardwareType.CANtact:
+					m_OBDInterface.logItem("   Interface: CANtact");
+					break;
+				default:
+					throw new Exception("Bad hardware type.");
 			}
-			string[] strArray = new string[] { "Automatic", "SAE J1850 PWM (41.6 Kbaud)", "SAE J1850 VPW (10.4 Kbaud)", "ISO 9141-2 (5 baud init, 10.4 Kbaud)", "ISO 14230-4 KWP (5 baud init, 10.4 Kbaud)", "ISO 14230-4 KWP (fast init, 10.4 Kbaud)", "ISO 15765-4 CAN (11 bit ID, 500 Kbaud)", "ISO 15765-4 CAN (29 bit ID, 500 Kbaud)", "ISO 15765-4 CAN (11 bit ID, 250 Kbaud)", "ISO 15765-4 CAN (29 bit ID, 250 Kbaud)" };
-			int protocolIndex = m_obdInterface.GetCommSettings().ProtocolIndex;
-			string str = string.Format("   Protocol: {0}", strArray[protocolIndex]);
-			m_obdInterface.logItem(str);
-			if (m_obdInterface.GetCommSettings().DoInitialization)
-				m_obdInterface.logItem("   Initialize: YES");
+
+
+			m_OBDInterface.logItem(string.Format("   Protocol: {0}", m_OBDInterface.CommSettings.ProtocolName));
+
+			if (m_OBDInterface.CommSettings.DoInitialization)
+				m_OBDInterface.logItem("   Initialize: YES");
 			else
-				m_obdInterface.logItem("   Initialize: NO");
+				m_OBDInterface.logItem("   Initialize: NO");
+
 			ThreadPool.QueueUserWorkItem(new WaitCallback(ConnectThreadNew));
 		}
 
@@ -87,12 +93,12 @@ namespace ProScan
 			picCheck2.Image = picBlankBox.Image;
 			picCheck3.Image = picBlankBox.Image;
 			picCheck4.Image = picBlankBox.Image;
-			m_obdInterface.disconnect();
+			m_OBDInterface.Disconnect();
 		}
 
 		private void btnManageProfiles_Click(object sender, EventArgs e)
 		{
-			new VehicleForm(m_obdInterface).ShowDialog();
+			new VehicleForm(m_OBDInterface).ShowDialog();
 			PopulateProfileCombobox();
 		}
 
@@ -103,42 +109,54 @@ namespace ProScan
 		private void ConnectThreadNew(object state)
 		{
 			ShowConnectingLabel();
-			if (m_obdInterface.GetCommSettings().AutoDetect)
+			if (m_OBDInterface.CommSettings.AutoDetect)
 			{
-				if (m_obdInterface.initDeviceAuto())
+				if (m_OBDInterface.initDeviceAuto())
 				{
-					m_obdInterface.logItem("Connection Established!");
+					m_OBDInterface.logItem("Connection Established!");
 					ShowConnectedLabel();
 					OBDParameter param = new OBDParameter();
 					param.OBDRequest = "0902";
 					param.Service = 9;
 					param.Parameter = 2;
 					param.ValueTypes = 4;
-					m_obdInterface.getValue(param, true);
+					m_OBDInterface.getValue(param, true);
 				}
 				else
 				{
 					MessageBox.Show("ProScan failed to find a compatible OBD-II interface attached to this computer.\r\n\r\nPlease verify that no other application is currently using the required port.", "Auto Detection Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-					m_obdInterface.logItem("Failed to find a compatible OBD-II interface.");
+					m_OBDInterface.logItem("Failed to find a compatible OBD-II interface.");
 					ShowDisconnectedLabel();
 				}
 			}
 			else
 			{
-				int baudRate = m_obdInterface.GetCommSettings().BaudRate;
-				int comPort = m_obdInterface.GetCommSettings().ComPort;
-				int protocolIndex = m_obdInterface.GetCommSettings().ProtocolIndex;
-				int hardwareIndex = m_obdInterface.GetCommSettings().HardwareIndex;
-				if (m_obdInterface.initDevice(hardwareIndex, comPort, baudRate, protocolIndex))
+				int baudRate = m_OBDInterface.CommSettings.BaudRate;
+				int comPort = m_OBDInterface.CommSettings.ComPort;
+				if (m_OBDInterface.initDevice(
+						m_OBDInterface.CommSettings.HardwareIndex,
+						comPort,
+						baudRate,
+						m_OBDInterface.CommSettings.ProtocolIndex
+						))
 				{
-					m_obdInterface.logItem("Connection Established!");
+					m_OBDInterface.logItem("Connection Established!");
 					ShowConnectedLabel();
 				}
 				else
 				{
-					int num5 = m_obdInterface.GetCommSettings().BaudRate;
-					MessageBox.Show(string.Format("ProScan failed to find a compatible OBD-II interface attached to {0} at baud rate {1} bps.\r\n\r\nPlease verify that no other application is currently using the required port and that the baud rate is correct.", m_obdInterface.GetCommSettings().ComPortName, num5.ToString()), "Connection Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-					m_obdInterface.logItem("Failed to find a compatible OBD-II interface.");
+					MessageBox.Show(
+						string.Format(@"ProScan failed to find a compatible OBD-II interface attached to {0} at baud rate {1} bps.
+
+Please verify that no other application is currently using the required port and that the baud rate is correct.",
+							m_OBDInterface.CommSettings.ComPortName,
+							m_OBDInterface.CommSettings.BaudRate
+							),
+						"Connection Failure",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Exclamation
+						);
+					m_OBDInterface.logItem("Failed to find a compatible OBD-II interface.");
 					ShowDisconnectedLabel();
 				}
 			}
@@ -146,7 +164,7 @@ namespace ProScan
 
 		private void Disconnect()
 		{
-			m_obdInterface.disconnect();
+			m_OBDInterface.Disconnect();
 			ShowDisconnectedLabel();
 		}
 
@@ -160,19 +178,13 @@ namespace ProScan
 		private void PopulateProfileCombobox()
 		{
 			comboProfile.Items.Clear();
-			IEnumerator enumerator = m_listVehicles.GetEnumerator();
-			if (enumerator.MoveNext())
-			{
-				do
-				{
-					comboProfile.Items.Add(enumerator.Current);
-				}
-				while (enumerator.MoveNext());
-			}
+			foreach(VehicleProfile vehicle in m_profiles)
+				comboProfile.Items.Add(vehicle);
+			
 			if (comboProfile.Items.Count > 0)
 			{
-				if (m_obdInterface.GetCommSettings().ActiveProfileIndex < comboProfile.Items.Count)
-					comboProfile.SelectedIndex = m_obdInterface.GetCommSettings().ActiveProfileIndex;
+				if (m_OBDInterface.CommSettings.ActiveProfileIndex < comboProfile.Items.Count)
+					comboProfile.SelectedIndex = m_OBDInterface.CommSettings.ActiveProfileIndex;
 				else
 					comboProfile.SelectedIndex = 0;
 			}
@@ -288,7 +300,7 @@ namespace ProScan
 			this.picBlankBox = new System.Windows.Forms.PictureBox();
 			this.picX = new System.Windows.Forms.PictureBox();
 			this.picCheckMark = new System.Windows.Forms.PictureBox();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.m_timer = new System.Windows.Forms.Timer(this.components);
 			this.panelStatus.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picCheck4)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picCheck3)).BeginInit();
@@ -329,9 +341,9 @@ namespace ProScan
 			this.panelStatus.Controls.Add(this.lblBullet3);
 			this.panelStatus.Controls.Add(this.lblBullet2);
 			this.panelStatus.Controls.Add(this.lblBullet1);
-			this.panelStatus.Location = new System.Drawing.Point(8, 120);
+			this.panelStatus.Location = new System.Drawing.Point(10, 138);
 			this.panelStatus.Name = "panelStatus";
-			this.panelStatus.Size = new System.Drawing.Size(596, 286);
+			this.panelStatus.Size = new System.Drawing.Size(777, 466);
 			this.panelStatus.TabIndex = 4;
 			// 
 			// lblStatus
@@ -339,9 +351,9 @@ namespace ProScan
 			this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblStatus.ForeColor = System.Drawing.Color.Red;
-			this.lblStatus.Location = new System.Drawing.Point(334, 77);
+			this.lblStatus.Location = new System.Drawing.Point(422, 89);
 			this.lblStatus.Name = "lblStatus";
-			this.lblStatus.Size = new System.Drawing.Size(243, 42);
+			this.lblStatus.Size = new System.Drawing.Size(291, 48);
 			this.lblStatus.TabIndex = 19;
 			this.lblStatus.Text = "Disconnected";
 			this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -351,9 +363,9 @@ namespace ProScan
 			this.lblBuildList.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblBuildList.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblBuildList.ForeColor = System.Drawing.Color.Blue;
-			this.lblBuildList.Location = new System.Drawing.Point(392, 190);
+			this.lblBuildList.Location = new System.Drawing.Point(491, 219);
 			this.lblBuildList.Name = "lblBuildList";
-			this.lblBuildList.Size = new System.Drawing.Size(190, 40);
+			this.lblBuildList.Size = new System.Drawing.Size(228, 46);
 			this.lblBuildList.TabIndex = 18;
 			this.lblBuildList.Text = "Initialize OBD-II";
 			this.lblBuildList.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -363,9 +375,9 @@ namespace ProScan
 			// 
 			this.picCheck4.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.picCheck4.Image = ((System.Drawing.Image)(resources.GetObject("picCheck4.Image")));
-			this.picCheck4.Location = new System.Drawing.Point(342, 190);
+			this.picCheck4.Location = new System.Drawing.Point(431, 219);
 			this.picCheck4.Name = "picCheck4";
-			this.picCheck4.Size = new System.Drawing.Size(46, 40);
+			this.picCheck4.Size = new System.Drawing.Size(56, 46);
 			this.picCheck4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picCheck4.TabIndex = 17;
 			this.picCheck4.TabStop = false;
@@ -376,9 +388,9 @@ namespace ProScan
 			this.lblInitInterface.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblInitInterface.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblInitInterface.ForeColor = System.Drawing.Color.Blue;
-			this.lblInitInterface.Location = new System.Drawing.Point(392, 150);
+			this.lblInitInterface.Location = new System.Drawing.Point(491, 173);
 			this.lblInitInterface.Name = "lblInitInterface";
-			this.lblInitInterface.Size = new System.Drawing.Size(190, 40);
+			this.lblInitInterface.Size = new System.Drawing.Size(228, 46);
 			this.lblInitInterface.TabIndex = 16;
 			this.lblInitInterface.Text = "Initialize Interface";
 			this.lblInitInterface.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -388,9 +400,9 @@ namespace ProScan
 			// 
 			this.picCheck3.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.picCheck3.Image = ((System.Drawing.Image)(resources.GetObject("picCheck3.Image")));
-			this.picCheck3.Location = new System.Drawing.Point(342, 150);
+			this.picCheck3.Location = new System.Drawing.Point(431, 173);
 			this.picCheck3.Name = "picCheck3";
-			this.picCheck3.Size = new System.Drawing.Size(46, 40);
+			this.picCheck3.Size = new System.Drawing.Size(56, 46);
 			this.picCheck3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picCheck3.TabIndex = 15;
 			this.picCheck3.TabStop = false;
@@ -401,9 +413,9 @@ namespace ProScan
 			this.lblDetectInterface.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblDetectInterface.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblDetectInterface.ForeColor = System.Drawing.Color.Blue;
-			this.lblDetectInterface.Location = new System.Drawing.Point(392, 110);
+			this.lblDetectInterface.Location = new System.Drawing.Point(491, 127);
 			this.lblDetectInterface.Name = "lblDetectInterface";
-			this.lblDetectInterface.Size = new System.Drawing.Size(190, 40);
+			this.lblDetectInterface.Size = new System.Drawing.Size(228, 46);
 			this.lblDetectInterface.TabIndex = 14;
 			this.lblDetectInterface.Text = "Detect Interface";
 			this.lblDetectInterface.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -413,9 +425,9 @@ namespace ProScan
 			// 
 			this.picCheck2.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.picCheck2.Image = ((System.Drawing.Image)(resources.GetObject("picCheck2.Image")));
-			this.picCheck2.Location = new System.Drawing.Point(342, 110);
+			this.picCheck2.Location = new System.Drawing.Point(431, 127);
 			this.picCheck2.Name = "picCheck2";
-			this.picCheck2.Size = new System.Drawing.Size(46, 40);
+			this.picCheck2.Size = new System.Drawing.Size(56, 46);
 			this.picCheck2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picCheck2.TabIndex = 13;
 			this.picCheck2.TabStop = false;
@@ -426,9 +438,9 @@ namespace ProScan
 			this.lblCheckComPort.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblCheckComPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblCheckComPort.ForeColor = System.Drawing.Color.Blue;
-			this.lblCheckComPort.Location = new System.Drawing.Point(392, 70);
+			this.lblCheckComPort.Location = new System.Drawing.Point(491, 81);
 			this.lblCheckComPort.Name = "lblCheckComPort";
-			this.lblCheckComPort.Size = new System.Drawing.Size(190, 40);
+			this.lblCheckComPort.Size = new System.Drawing.Size(228, 46);
 			this.lblCheckComPort.TabIndex = 12;
 			this.lblCheckComPort.Text = "Open Serial Port";
 			this.lblCheckComPort.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -438,9 +450,9 @@ namespace ProScan
 			// 
 			this.picCheck1.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.picCheck1.Image = ((System.Drawing.Image)(resources.GetObject("picCheck1.Image")));
-			this.picCheck1.Location = new System.Drawing.Point(342, 70);
+			this.picCheck1.Location = new System.Drawing.Point(431, 81);
 			this.picCheck1.Name = "picCheck1";
-			this.picCheck1.Size = new System.Drawing.Size(46, 40);
+			this.picCheck1.Size = new System.Drawing.Size(56, 46);
 			this.picCheck1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picCheck1.TabIndex = 11;
 			this.picCheck1.TabStop = false;
@@ -449,9 +461,9 @@ namespace ProScan
 			// lblInstruction4
 			// 
 			this.lblInstruction4.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblInstruction4.Location = new System.Drawing.Point(47, 215);
+			this.lblInstruction4.Location = new System.Drawing.Point(77, 248);
 			this.lblInstruction4.Name = "lblInstruction4";
-			this.lblInstruction4.Size = new System.Drawing.Size(265, 30);
+			this.lblInstruction4.Size = new System.Drawing.Size(318, 35);
 			this.lblInstruction4.TabIndex = 10;
 			this.lblInstruction4.Text = "Turn the vehicle\'s ignition key to the ON position or start the engine.";
 			// 
@@ -459,9 +471,9 @@ namespace ProScan
 			// 
 			this.picDiagram.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.picDiagram.Image = ((System.Drawing.Image)(resources.GetObject("picDiagram.Image")));
-			this.picDiagram.Location = new System.Drawing.Point(77, 3);
+			this.picDiagram.Location = new System.Drawing.Point(113, 3);
 			this.picDiagram.Name = "picDiagram";
-			this.picDiagram.Size = new System.Drawing.Size(440, 66);
+			this.picDiagram.Size = new System.Drawing.Size(528, 77);
 			this.picDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picDiagram.TabIndex = 9;
 			this.picDiagram.TabStop = false;
@@ -469,18 +481,18 @@ namespace ProScan
 			// lblInstruction5
 			// 
 			this.lblInstruction5.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblInstruction5.Location = new System.Drawing.Point(47, 255);
+			this.lblInstruction5.Location = new System.Drawing.Point(77, 294);
 			this.lblInstruction5.Name = "lblInstruction5";
-			this.lblInstruction5.Size = new System.Drawing.Size(265, 20);
+			this.lblInstruction5.Size = new System.Drawing.Size(318, 23);
 			this.lblInstruction5.TabIndex = 8;
 			this.lblInstruction5.Text = "Click the \"Connect\" button.";
 			// 
 			// lblInstruction3
 			// 
 			this.lblInstruction3.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblInstruction3.Location = new System.Drawing.Point(47, 175);
+			this.lblInstruction3.Location = new System.Drawing.Point(77, 202);
 			this.lblInstruction3.Name = "lblInstruction3";
-			this.lblInstruction3.Size = new System.Drawing.Size(265, 30);
+			this.lblInstruction3.Size = new System.Drawing.Size(318, 35);
 			this.lblInstruction3.TabIndex = 7;
 			this.lblInstruction3.Text = "Connect the interface hardware between this computer and the vehicle\'s OBD-II con" +
     "nector.";
@@ -488,9 +500,9 @@ namespace ProScan
 			// lblInstruction2
 			// 
 			this.lblInstruction2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblInstruction2.Location = new System.Drawing.Point(47, 115);
+			this.lblInstruction2.Location = new System.Drawing.Point(77, 133);
 			this.lblInstruction2.Name = "lblInstruction2";
-			this.lblInstruction2.Size = new System.Drawing.Size(265, 50);
+			this.lblInstruction2.Size = new System.Drawing.Size(318, 57);
 			this.lblInstruction2.TabIndex = 6;
 			this.lblInstruction2.Text = "Verify that the Active Vehicle Profile selected above applies to this vehicle. If" +
     " this is the first time you have used ProScan on this vehicle, click \"Manage Pro" +
@@ -499,9 +511,9 @@ namespace ProScan
 			// lblInstruction1
 			// 
 			this.lblInstruction1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblInstruction1.Location = new System.Drawing.Point(47, 75);
+			this.lblInstruction1.Location = new System.Drawing.Point(77, 87);
 			this.lblInstruction1.Name = "lblInstruction1";
-			this.lblInstruction1.Size = new System.Drawing.Size(265, 30);
+			this.lblInstruction1.Size = new System.Drawing.Size(318, 34);
 			this.lblInstruction1.TabIndex = 5;
 			this.lblInstruction1.Text = "Verify that you have the correct hardware and communication settings defined unde" +
     "r preferences.";
@@ -510,53 +522,53 @@ namespace ProScan
 			// 
 			this.lblBullet5.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblBullet5.Image = ((System.Drawing.Image)(resources.GetObject("lblBullet5.Image")));
-			this.lblBullet5.Location = new System.Drawing.Point(17, 255);
+			this.lblBullet5.Location = new System.Drawing.Point(41, 294);
 			this.lblBullet5.Name = "lblBullet5";
-			this.lblBullet5.Size = new System.Drawing.Size(18, 18);
+			this.lblBullet5.Size = new System.Drawing.Size(22, 21);
 			this.lblBullet5.TabIndex = 4;
 			// 
 			// lblBullet4
 			// 
 			this.lblBullet4.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblBullet4.Image = ((System.Drawing.Image)(resources.GetObject("lblBullet4.Image")));
-			this.lblBullet4.Location = new System.Drawing.Point(17, 215);
+			this.lblBullet4.Location = new System.Drawing.Point(41, 248);
 			this.lblBullet4.Name = "lblBullet4";
-			this.lblBullet4.Size = new System.Drawing.Size(18, 18);
+			this.lblBullet4.Size = new System.Drawing.Size(22, 21);
 			this.lblBullet4.TabIndex = 3;
 			// 
 			// lblBullet3
 			// 
 			this.lblBullet3.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblBullet3.Image = ((System.Drawing.Image)(resources.GetObject("lblBullet3.Image")));
-			this.lblBullet3.Location = new System.Drawing.Point(17, 175);
+			this.lblBullet3.Location = new System.Drawing.Point(41, 202);
 			this.lblBullet3.Name = "lblBullet3";
-			this.lblBullet3.Size = new System.Drawing.Size(18, 18);
+			this.lblBullet3.Size = new System.Drawing.Size(22, 21);
 			this.lblBullet3.TabIndex = 2;
 			// 
 			// lblBullet2
 			// 
 			this.lblBullet2.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblBullet2.Image = ((System.Drawing.Image)(resources.GetObject("lblBullet2.Image")));
-			this.lblBullet2.Location = new System.Drawing.Point(17, 115);
+			this.lblBullet2.Location = new System.Drawing.Point(41, 133);
 			this.lblBullet2.Name = "lblBullet2";
-			this.lblBullet2.Size = new System.Drawing.Size(18, 18);
+			this.lblBullet2.Size = new System.Drawing.Size(22, 20);
 			this.lblBullet2.TabIndex = 1;
 			// 
 			// lblBullet1
 			// 
 			this.lblBullet1.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblBullet1.Image = ((System.Drawing.Image)(resources.GetObject("lblBullet1.Image")));
-			this.lblBullet1.Location = new System.Drawing.Point(17, 75);
+			this.lblBullet1.Location = new System.Drawing.Point(41, 87);
 			this.lblBullet1.Name = "lblBullet1";
-			this.lblBullet1.Size = new System.Drawing.Size(18, 18);
+			this.lblBullet1.Size = new System.Drawing.Size(22, 20);
 			this.lblBullet1.TabIndex = 0;
 			// 
 			// btnManageProfiles
 			// 
 			this.btnManageProfiles.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.btnManageProfiles.Location = new System.Drawing.Point(443, 91);
+			this.btnManageProfiles.Location = new System.Drawing.Point(563, 105);
 			this.btnManageProfiles.Name = "btnManageProfiles";
-			this.btnManageProfiles.Size = new System.Drawing.Size(102, 23);
+			this.btnManageProfiles.Size = new System.Drawing.Size(122, 27);
 			this.btnManageProfiles.TabIndex = 6;
 			this.btnManageProfiles.Text = "&Manage Profiles";
 			this.btnManageProfiles.Click += new System.EventHandler(this.btnManageProfiles_Click);
@@ -565,18 +577,18 @@ namespace ProScan
 			// 
 			this.comboProfile.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.comboProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProfile.Location = new System.Drawing.Point(214, 92);
+			this.comboProfile.Location = new System.Drawing.Point(288, 106);
 			this.comboProfile.Name = "comboProfile";
-			this.comboProfile.Size = new System.Drawing.Size(216, 21);
+			this.comboProfile.Size = new System.Drawing.Size(259, 24);
 			this.comboProfile.TabIndex = 5;
 			this.comboProfile.SelectedValueChanged += new System.EventHandler(this.comboProfile_SelectedValueChanged);
 			// 
 			// lblActiveProfile
 			// 
 			this.lblActiveProfile.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.lblActiveProfile.Location = new System.Drawing.Point(85, 91);
+			this.lblActiveProfile.Location = new System.Drawing.Point(133, 105);
 			this.lblActiveProfile.Name = "lblActiveProfile";
-			this.lblActiveProfile.Size = new System.Drawing.Size(116, 23);
+			this.lblActiveProfile.Size = new System.Drawing.Size(139, 27);
 			this.lblActiveProfile.TabIndex = 7;
 			this.lblActiveProfile.Text = "Active Vehicle &Profile:";
 			this.lblActiveProfile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -584,9 +596,9 @@ namespace ProScan
 			// btnConnect
 			// 
 			this.btnConnect.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-			this.btnConnect.Location = new System.Drawing.Point(233, 412);
+			this.btnConnect.Location = new System.Drawing.Point(311, 611);
 			this.btnConnect.Name = "btnConnect";
-			this.btnConnect.Size = new System.Drawing.Size(75, 23);
+			this.btnConnect.Size = new System.Drawing.Size(90, 27);
 			this.btnConnect.TabIndex = 8;
 			this.btnConnect.Text = "&Connect";
 			this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
@@ -595,9 +607,9 @@ namespace ProScan
 			// 
 			this.btnDisconnect.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.btnDisconnect.Enabled = false;
-			this.btnDisconnect.Location = new System.Drawing.Point(322, 412);
+			this.btnDisconnect.Location = new System.Drawing.Point(417, 611);
 			this.btnDisconnect.Name = "btnDisconnect";
-			this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
+			this.btnDisconnect.Size = new System.Drawing.Size(90, 27);
 			this.btnDisconnect.TabIndex = 9;
 			this.btnDisconnect.Text = "&Disconnect";
 			this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
@@ -611,17 +623,17 @@ namespace ProScan
 			this.panelVersion.Controls.Add(this.picBlankBox);
 			this.panelVersion.Controls.Add(this.picX);
 			this.panelVersion.Controls.Add(this.picCheckMark);
-			this.panelVersion.Location = new System.Drawing.Point(8, 8);
+			this.panelVersion.Location = new System.Drawing.Point(10, 9);
 			this.panelVersion.Name = "panelVersion";
-			this.panelVersion.Size = new System.Drawing.Size(596, 75);
+			this.panelVersion.Size = new System.Drawing.Size(777, 87);
 			this.panelVersion.TabIndex = 10;
 			// 
 			// picBlankBox
 			// 
 			this.picBlankBox.Image = ((System.Drawing.Image)(resources.GetObject("picBlankBox.Image")));
-			this.picBlankBox.Location = new System.Drawing.Point(287, 22);
+			this.picBlankBox.Location = new System.Drawing.Point(344, 25);
 			this.picBlankBox.Name = "picBlankBox";
-			this.picBlankBox.Size = new System.Drawing.Size(46, 40);
+			this.picBlankBox.Size = new System.Drawing.Size(56, 47);
 			this.picBlankBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picBlankBox.TabIndex = 17;
 			this.picBlankBox.TabStop = false;
@@ -630,9 +642,9 @@ namespace ProScan
 			// picX
 			// 
 			this.picX.Image = ((System.Drawing.Image)(resources.GetObject("picX.Image")));
-			this.picX.Location = new System.Drawing.Point(227, 20);
+			this.picX.Location = new System.Drawing.Point(272, 23);
 			this.picX.Name = "picX";
-			this.picX.Size = new System.Drawing.Size(46, 40);
+			this.picX.Size = new System.Drawing.Size(56, 46);
 			this.picX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picX.TabIndex = 16;
 			this.picX.TabStop = false;
@@ -641,9 +653,9 @@ namespace ProScan
 			// picCheckMark
 			// 
 			this.picCheckMark.Image = ((System.Drawing.Image)(resources.GetObject("picCheckMark.Image")));
-			this.picCheckMark.Location = new System.Drawing.Point(171, 18);
+			this.picCheckMark.Location = new System.Drawing.Point(205, 21);
 			this.picCheckMark.Name = "picCheckMark";
-			this.picCheckMark.Size = new System.Drawing.Size(46, 40);
+			this.picCheckMark.Size = new System.Drawing.Size(55, 46);
 			this.picCheckMark.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picCheckMark.TabIndex = 15;
 			this.picCheckMark.TabStop = false;
@@ -651,9 +663,9 @@ namespace ProScan
 			// 
 			// CommForm
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
 			this.AutoScroll = true;
-			this.ClientSize = new System.Drawing.Size(612, 441);
+			this.ClientSize = new System.Drawing.Size(796, 645);
 			this.ControlBox = false;
 			this.Controls.Add(this.panelVersion);
 			this.Controls.Add(this.btnDisconnect);
@@ -677,6 +689,7 @@ namespace ProScan
 			((System.ComponentModel.ISupportInitialize)(this.picX)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picCheckMark)).EndInit();
 			this.ResumeLayout(false);
+
 		}
 		#endregion
 	}

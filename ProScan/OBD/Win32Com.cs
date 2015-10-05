@@ -10,7 +10,6 @@ namespace ProScan
 		internal const uint ERROR_ACCESS_DENIED = 5U;
 		internal const uint ERROR_IO_PENDING = 997U;
 		internal const uint ERROR_IO_INCOMPLETE = 996U;
-		internal const int INVALID_HANDLE_VALUE = -1;
 		internal const uint FILE_FLAG_OVERLAPPED = 1073741824U;
 		internal const uint OPEN_EXISTING = 3U;
 		internal const uint GENERIC_READ = 2147483648U;
@@ -143,24 +142,24 @@ namespace ProScan
 
 			internal void init(bool parity, bool outCTS, bool outDSR, int dtr, bool inDSR, bool txc, bool xOut, bool xIn, int rts)
 			{
-				this.DCBlength = 28;
-				this.PackedValues = 16385;
+				DCBlength = 28;
+				PackedValues = 16385;
 				if (parity)
-					this.PackedValues |= 2;
+					PackedValues |= 2;
 				if (outCTS)
-					this.PackedValues |= 4;
+					PackedValues |= 4;
 				if (outDSR)
-					this.PackedValues |= 8;
-				this.PackedValues |= (dtr & 3) << 4;
+					PackedValues |= 8;
+				PackedValues |= (dtr & 3) << 4;
 				if (inDSR)
-					this.PackedValues |= 64;
+					PackedValues |= 64;
 				if (txc)
-					this.PackedValues |= 128;
+					PackedValues |= 128;
 				if (xOut)
-					this.PackedValues |= 256;
+					PackedValues |= 256;
 				if (xIn)
-					this.PackedValues |= 512;
-				this.PackedValues |= (rts & 3) << 12;
+					PackedValues |= 512;
+				PackedValues |= (rts & 3) << 12;
 			}
 		}
 

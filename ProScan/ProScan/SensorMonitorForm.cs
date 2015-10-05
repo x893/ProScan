@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -13,15 +14,44 @@ namespace ProScan
 {
 	public class SensorMonitorForm : Form
 	{
+		private static List<OBDParameter> m_ListSensors;
+		private static List<SensorLogItem> m_ListLog;
+
+		public bool IsLogging;
+		public bool IsRunThread;
+
+		public SensorMonitorForm(OBDInterface obd2)
+		{
+			try
+			{
+				InitializeComponent();
+				m_obdInterface = obd2;
+				IsLogging = false;
+				btnStart.Enabled = false;
+				btnReset.Enabled = false;
+				btnSave.Enabled = false;
+				IsRunThread = true;
+				m_ListSensors = new List<OBDParameter>();
+				m_ListLog = new List<SensorLogItem>();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString());
+			}
+		}
+
+		public new void Close()
+		{
+			IsLogging = false;
+			IsRunThread = false;
+			base.Close();
+		}
+
+		#region InitializeComponent
 		private CheckedListBox listSensors;
 		private GroupBox groupSelections;
 		private OBDInterface m_obdInterface;
 		private DateTime m_dtStartTime;
-		private static ArrayList m_arrayListSensors;
-		private static ArrayList m_arrayListRequests;
-		private static ArrayList m_arrayListLog;
-		public bool bLogging;
-		public bool bRunThread;
 		private GroupBox groupDisplay;
 		private GroupBox groupLogging;
 		private RadioButton radioDisplayEnglish;
@@ -33,240 +63,202 @@ namespace ProScan
 		private Button btnStart;
 		private Panel panelDisplay;
 		private Label lblTimeElapsed;
-		private IContainer components;
-
-		static SensorMonitorForm()
-		{
-		}
-
-		public SensorMonitorForm(OBDInterface obd2)
-		{
-			try
-			{
-				InitializeComponent();
-				m_obdInterface = obd2;
-				bLogging = false;
-				btnStart.Enabled = false;
-				btnReset.Enabled = false;
-				btnSave.Enabled = false;
-				bRunThread = true;
-				SensorMonitorForm.m_arrayListSensors = new ArrayList();
-				SensorMonitorForm.m_arrayListRequests = new ArrayList();
-				SensorMonitorForm.m_arrayListLog = new ArrayList();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString());
-			}
-		}
-
-		public new void Close()
-		{
-			bLogging = false;
-			bRunThread = false;
-			base.Close();
-		}
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
 		private void InitializeComponent()
 		{
-			listSensors = new System.Windows.Forms.CheckedListBox();
-			groupSelections = new System.Windows.Forms.GroupBox();
-			groupDisplay = new System.Windows.Forms.GroupBox();
-			radioDisplayBoth = new System.Windows.Forms.RadioButton();
-			radioDisplayMetric = new System.Windows.Forms.RadioButton();
-			radioDisplayEnglish = new System.Windows.Forms.RadioButton();
-			groupLogging = new System.Windows.Forms.GroupBox();
-			lblTimeElapsed = new System.Windows.Forms.Label();
-			scrollTime = new System.Windows.Forms.HScrollBar();
-			btnReset = new System.Windows.Forms.Button();
-			btnStart = new System.Windows.Forms.Button();
-			btnSave = new System.Windows.Forms.Button();
-			panelDisplay = new System.Windows.Forms.Panel();
-			groupSelections.SuspendLayout();
-			groupDisplay.SuspendLayout();
-			groupLogging.SuspendLayout();
-			SuspendLayout();
+			this.listSensors = new System.Windows.Forms.CheckedListBox();
+			this.groupSelections = new System.Windows.Forms.GroupBox();
+			this.groupDisplay = new System.Windows.Forms.GroupBox();
+			this.radioDisplayBoth = new System.Windows.Forms.RadioButton();
+			this.radioDisplayMetric = new System.Windows.Forms.RadioButton();
+			this.radioDisplayEnglish = new System.Windows.Forms.RadioButton();
+			this.groupLogging = new System.Windows.Forms.GroupBox();
+			this.lblTimeElapsed = new System.Windows.Forms.Label();
+			this.scrollTime = new System.Windows.Forms.HScrollBar();
+			this.btnReset = new System.Windows.Forms.Button();
+			this.btnStart = new System.Windows.Forms.Button();
+			this.btnSave = new System.Windows.Forms.Button();
+			this.panelDisplay = new System.Windows.Forms.Panel();
+			this.groupSelections.SuspendLayout();
+			this.groupDisplay.SuspendLayout();
+			this.groupLogging.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// listSensors
 			// 
-			listSensors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.listSensors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			listSensors.CheckOnClick = true;
-			listSensors.Location = new System.Drawing.Point(12, 25);
-			listSensors.Name = "listSensors";
-			listSensors.Size = new System.Drawing.Size(249, 64);
-			listSensors.TabIndex = 0;
-			listSensors.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(listSensors_ItemCheck);
+			this.listSensors.CheckOnClick = true;
+			this.listSensors.Location = new System.Drawing.Point(14, 29);
+			this.listSensors.Name = "listSensors";
+			this.listSensors.Size = new System.Drawing.Size(299, 55);
+			this.listSensors.TabIndex = 0;
+			this.listSensors.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listSensors_ItemCheck);
 			// 
 			// groupSelections
 			// 
-			groupSelections.Controls.Add(listSensors);
-			groupSelections.Location = new System.Drawing.Point(15, 15);
-			groupSelections.Name = "groupSelections";
-			groupSelections.Size = new System.Drawing.Size(273, 105);
-			groupSelections.TabIndex = 0;
-			groupSelections.TabStop = false;
-			groupSelections.Text = "&Sensors";
+			this.groupSelections.Controls.Add(this.listSensors);
+			this.groupSelections.Location = new System.Drawing.Point(18, 17);
+			this.groupSelections.Name = "groupSelections";
+			this.groupSelections.Size = new System.Drawing.Size(328, 121);
+			this.groupSelections.TabIndex = 0;
+			this.groupSelections.TabStop = false;
+			this.groupSelections.Text = "&Sensors";
 			// 
 			// groupDisplay
 			// 
-			groupDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			groupDisplay.Controls.Add(radioDisplayBoth);
-			groupDisplay.Controls.Add(radioDisplayMetric);
-			groupDisplay.Controls.Add(radioDisplayEnglish);
-			groupDisplay.Location = new System.Drawing.Point(296, 15);
-			groupDisplay.Name = "groupDisplay";
-			groupDisplay.Size = new System.Drawing.Size(82, 105);
-			groupDisplay.TabIndex = 1;
-			groupDisplay.TabStop = false;
-			groupDisplay.Text = "&Units";
+			this.groupDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupDisplay.Controls.Add(this.radioDisplayBoth);
+			this.groupDisplay.Controls.Add(this.radioDisplayMetric);
+			this.groupDisplay.Controls.Add(this.radioDisplayEnglish);
+			this.groupDisplay.Location = new System.Drawing.Point(232, 17);
+			this.groupDisplay.Name = "groupDisplay";
+			this.groupDisplay.Size = new System.Drawing.Size(99, 121);
+			this.groupDisplay.TabIndex = 1;
+			this.groupDisplay.TabStop = false;
+			this.groupDisplay.Text = "&Units";
 			// 
 			// radioDisplayBoth
 			// 
-			radioDisplayBoth.Enabled = false;
-			radioDisplayBoth.Location = new System.Drawing.Point(16, 72);
-			radioDisplayBoth.Name = "radioDisplayBoth";
-			radioDisplayBoth.Size = new System.Drawing.Size(50, 20);
-			radioDisplayBoth.TabIndex = 2;
-			radioDisplayBoth.Text = "&Both";
-			radioDisplayBoth.Visible = false;
-			radioDisplayBoth.Click += new System.EventHandler(radioDisplayBoth_Click);
+			this.radioDisplayBoth.Enabled = false;
+			this.radioDisplayBoth.Location = new System.Drawing.Point(19, 83);
+			this.radioDisplayBoth.Name = "radioDisplayBoth";
+			this.radioDisplayBoth.Size = new System.Drawing.Size(60, 23);
+			this.radioDisplayBoth.TabIndex = 2;
+			this.radioDisplayBoth.Text = "&Both";
+			this.radioDisplayBoth.Visible = false;
+			this.radioDisplayBoth.Click += new System.EventHandler(this.radioDisplayBoth_Click);
 			// 
 			// radioDisplayMetric
 			// 
-			radioDisplayMetric.Location = new System.Drawing.Point(16, 48);
-			radioDisplayMetric.Name = "radioDisplayMetric";
-			radioDisplayMetric.Size = new System.Drawing.Size(56, 20);
-			radioDisplayMetric.TabIndex = 1;
-			radioDisplayMetric.Text = "&Metric";
-			radioDisplayMetric.Click += new System.EventHandler(radioDisplayMetric_Click);
+			this.radioDisplayMetric.Location = new System.Drawing.Point(19, 55);
+			this.radioDisplayMetric.Name = "radioDisplayMetric";
+			this.radioDisplayMetric.Size = new System.Drawing.Size(67, 23);
+			this.radioDisplayMetric.TabIndex = 1;
+			this.radioDisplayMetric.Text = "&Metric";
+			this.radioDisplayMetric.Click += new System.EventHandler(this.radioDisplayMetric_Click);
 			// 
 			// radioDisplayEnglish
 			// 
-			radioDisplayEnglish.Checked = true;
-			radioDisplayEnglish.Location = new System.Drawing.Point(16, 24);
-			radioDisplayEnglish.Name = "radioDisplayEnglish";
-			radioDisplayEnglish.Size = new System.Drawing.Size(64, 20);
-			radioDisplayEnglish.TabIndex = 0;
-			radioDisplayEnglish.TabStop = true;
-			radioDisplayEnglish.Text = "E&nglish";
-			radioDisplayEnglish.Click += new System.EventHandler(radioDisplayEnglish_Click);
+			this.radioDisplayEnglish.Checked = true;
+			this.radioDisplayEnglish.Location = new System.Drawing.Point(19, 28);
+			this.radioDisplayEnglish.Name = "radioDisplayEnglish";
+			this.radioDisplayEnglish.Size = new System.Drawing.Size(77, 23);
+			this.radioDisplayEnglish.TabIndex = 0;
+			this.radioDisplayEnglish.TabStop = true;
+			this.radioDisplayEnglish.Text = "E&nglish";
+			this.radioDisplayEnglish.Click += new System.EventHandler(this.radioDisplayEnglish_Click);
 			// 
 			// groupLogging
 			// 
-			groupLogging.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			groupLogging.Controls.Add(lblTimeElapsed);
-			groupLogging.Controls.Add(scrollTime);
-			groupLogging.Controls.Add(btnReset);
-			groupLogging.Controls.Add(btnStart);
-			groupLogging.Controls.Add(btnSave);
-			groupLogging.Location = new System.Drawing.Point(386, 15);
-			groupLogging.Name = "groupLogging";
-			groupLogging.Size = new System.Drawing.Size(216, 105);
-			groupLogging.TabIndex = 2;
-			groupLogging.TabStop = false;
-			groupLogging.Text = "&Control";
+			this.groupLogging.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupLogging.Controls.Add(this.lblTimeElapsed);
+			this.groupLogging.Controls.Add(this.scrollTime);
+			this.groupLogging.Controls.Add(this.btnReset);
+			this.groupLogging.Controls.Add(this.btnStart);
+			this.groupLogging.Controls.Add(this.btnSave);
+			this.groupLogging.Location = new System.Drawing.Point(340, 17);
+			this.groupLogging.Name = "groupLogging";
+			this.groupLogging.Size = new System.Drawing.Size(259, 121);
+			this.groupLogging.TabIndex = 2;
+			this.groupLogging.TabStop = false;
+			this.groupLogging.Text = "&Control";
 			// 
 			// lblTimeElapsed
 			// 
-			lblTimeElapsed.Location = new System.Drawing.Point(17, 20);
-			lblTimeElapsed.Name = "lblTimeElapsed";
-			lblTimeElapsed.Size = new System.Drawing.Size(185, 19);
-			lblTimeElapsed.TabIndex = 0;
-			lblTimeElapsed.Text = "00:00:00.00";
-			lblTimeElapsed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblTimeElapsed.Location = new System.Drawing.Point(20, 23);
+			this.lblTimeElapsed.Name = "lblTimeElapsed";
+			this.lblTimeElapsed.Size = new System.Drawing.Size(222, 22);
+			this.lblTimeElapsed.TabIndex = 0;
+			this.lblTimeElapsed.Text = "00:00:00.00";
+			this.lblTimeElapsed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// scrollTime
 			// 
-			scrollTime.Location = new System.Drawing.Point(17, 43);
-			scrollTime.Name = "scrollTime";
-			scrollTime.Size = new System.Drawing.Size(187, 17);
-			scrollTime.TabIndex = 4;
-			scrollTime.Scroll += new System.Windows.Forms.ScrollEventHandler(scrollTime_Scroll);
+			this.scrollTime.Location = new System.Drawing.Point(20, 50);
+			this.scrollTime.Name = "scrollTime";
+			this.scrollTime.Size = new System.Drawing.Size(225, 19);
+			this.scrollTime.TabIndex = 4;
+			this.scrollTime.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollTime_Scroll);
 			// 
 			// btnReset
 			// 
-			btnReset.Enabled = false;
-			btnReset.Location = new System.Drawing.Point(80, 67);
-			btnReset.Name = "btnReset";
-			btnReset.Size = new System.Drawing.Size(60, 23);
-			btnReset.TabIndex = 2;
-			btnReset.Text = "&Reset";
-			btnReset.Click += new System.EventHandler(btnReset_Click);
+			this.btnReset.Enabled = false;
+			this.btnReset.Location = new System.Drawing.Point(96, 77);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(72, 27);
+			this.btnReset.TabIndex = 2;
+			this.btnReset.Text = "&Reset";
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// btnStart
 			// 
-			btnStart.Location = new System.Drawing.Point(16, 67);
-			btnStart.Name = "btnStart";
-			btnStart.Size = new System.Drawing.Size(60, 23);
-			btnStart.TabIndex = 1;
-			btnStart.Text = "S&tart";
-			btnStart.Click += new System.EventHandler(btnStart_Click);
+			this.btnStart.Location = new System.Drawing.Point(19, 77);
+			this.btnStart.Name = "btnStart";
+			this.btnStart.Size = new System.Drawing.Size(72, 27);
+			this.btnStart.TabIndex = 1;
+			this.btnStart.Text = "S&tart";
+			this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
 			// 
 			// btnSave
 			// 
-			btnSave.Enabled = false;
-			btnSave.Location = new System.Drawing.Point(144, 67);
-			btnSave.Name = "btnSave";
-			btnSave.Size = new System.Drawing.Size(60, 23);
-			btnSave.TabIndex = 3;
-			btnSave.Text = "&Save";
-			btnSave.Click += new System.EventHandler(btnSave_Click);
+			this.btnSave.Enabled = false;
+			this.btnSave.Location = new System.Drawing.Point(173, 77);
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(72, 27);
+			this.btnSave.TabIndex = 3;
+			this.btnSave.Text = "&Save";
+			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 			// 
 			// panelDisplay
 			// 
-			panelDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.panelDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			panelDisplay.AutoScroll = true;
-			panelDisplay.BackColor = System.Drawing.Color.Black;
-			panelDisplay.Location = new System.Drawing.Point(15, 129);
-			panelDisplay.Name = "panelDisplay";
-			panelDisplay.Size = new System.Drawing.Size(587, 244);
-			panelDisplay.TabIndex = 3;
+			this.panelDisplay.AutoScroll = true;
+			this.panelDisplay.BackColor = System.Drawing.Color.Black;
+			this.panelDisplay.Location = new System.Drawing.Point(18, 149);
+			this.panelDisplay.Name = "panelDisplay";
+			this.panelDisplay.Size = new System.Drawing.Size(581, 221);
+			this.panelDisplay.TabIndex = 3;
 			// 
 			// SensorMonitorForm
 			// 
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			ClientSize = new System.Drawing.Size(616, 388);
-			ControlBox = false;
-			Controls.Add(panelDisplay);
-			Controls.Add(groupDisplay);
-			Controls.Add(groupSelections);
-			Controls.Add(groupLogging);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			Name = "SensorMonitorForm";
-			Text = "Live Sensor Grid";
-			WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			Activated += new System.EventHandler(SensorMonitorForm_Activated);
-			Load += new System.EventHandler(SensorMonitorForm_Load);
-			Resize += new System.EventHandler(SensorMonitorForm_Resize);
-			groupSelections.ResumeLayout(false);
-			groupDisplay.ResumeLayout(false);
-			groupLogging.ResumeLayout(false);
-			ResumeLayout(false);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(616, 388);
+			this.ControlBox = false;
+			this.Controls.Add(this.panelDisplay);
+			this.Controls.Add(this.groupDisplay);
+			this.Controls.Add(this.groupSelections);
+			this.Controls.Add(this.groupLogging);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Name = "SensorMonitorForm";
+			this.Text = "Live Sensor Grid";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Activated += new System.EventHandler(this.SensorMonitorForm_Activated);
+			this.Load += new System.EventHandler(this.SensorMonitorForm_Load);
+			this.Resize += new System.EventHandler(this.SensorMonitorForm_Resize);
+			this.groupSelections.ResumeLayout(false);
+			this.groupDisplay.ResumeLayout(false);
+			this.groupLogging.ResumeLayout(false);
+			this.ResumeLayout(false);
 
 		}
-
-		public void ReceiveResponse(OBD2Response obd2Response)
-		{
-		}
+		#endregion
 
 		public void CheckConnection()
 		{
-			if (m_obdInterface.getConnectedStatus())
+			if (m_obdInterface.ConnectedStatus)
 			{
 				groupDisplay.Enabled = true;
 				groupSelections.Enabled = true;
 				groupLogging.Enabled = true;
-				if (bLogging)
+				if (IsLogging)
 				{
 					btnStart.Enabled = false;
 					btnStart.Text = "R&esume";
@@ -282,14 +274,8 @@ namespace ProScan
 					btnSave.Enabled = false;
 				}
 				listSensors.Items.Clear();
-				IEnumerator enumerator = m_obdInterface.getSupportedParameterList(1).GetEnumerator();
-				if (!enumerator.MoveNext())
-					return;
-				do
-				{
-					((ListBox.ObjectCollection)listSensors.Items).Add(enumerator.Current);
-				}
-				while (enumerator.MoveNext());
+				foreach(OBDParameter obdParameter in m_obdInterface.SupportedParameterList(1))
+					listSensors.Items.Add(obdParameter);
 			}
 			else
 			{
@@ -303,23 +289,15 @@ namespace ProScan
 		private void SensorMonitorForm_Resize(object sender, EventArgs e)
 		{
 			int index = 0;
-			if (0 < panelDisplay.Controls.Count)
+			while (index < panelDisplay.Controls.Count)
 			{
-				do
-				{
-					Control control = panelDisplay.Controls[index];
-					control.Width = panelDisplay.Width / 2 - 8;
-					if (index % 2 != 0)
-					{
-						control.Location = new Point(panelDisplay.Width / 2 + 3, (control.Height + 5) * (index / 2) + 5);
-					}
-					else
-					{
-						control.Location = new Point(0, (control.Height + 5) * (index / 2) + 5);
-					}
-					++index;
-				}
-				while (index < panelDisplay.Controls.Count);
+				Control control = panelDisplay.Controls[index];
+				control.Width = panelDisplay.Width / 2 - 8;
+				if (index % 2 != 0)
+					control.Location = new Point(panelDisplay.Width / 2 + 3, (control.Height + 5) * (index / 2) + 5);
+				else
+					control.Location = new Point(0, (control.Height + 5) * (index / 2) + 5);
+				++index;
 			}
 			groupSelections.Width = Width - 350;
 			panelDisplay.Refresh();
@@ -329,31 +307,6 @@ namespace ProScan
 		{
 			CheckConnection();
 			ThreadPool.QueueUserWorkItem(new WaitCallback(UpdateThread));
-		}
-
-		private static int getLongestField(DataGrid grid, int iCol)
-		{
-			int num2 = 60;
-			int count = ((ArrayList)grid.DataSource).Count;
-
-			Graphics graphics = grid.CreateGraphics();
-			int num5 = Convert.ToInt32(Math.Ceiling((double)graphics.MeasureString(" ", grid.Font).Width));
-			int num = 0;
-			if (0 < count)
-			{
-				do
-				{
-					string text = grid[num, iCol].ToString();
-					int num3 = Convert.ToInt32(Math.Ceiling((double)graphics.MeasureString(text, grid.Font).Width));
-					if (num3 > num2)
-					{
-						num2 = num3;
-					}
-					num++;
-				}
-				while (num < count);
-			}
-			return (num5 + num2);
 		}
 
 		private void radioDisplayEnglish_Click(object sender, EventArgs e)
@@ -373,7 +326,7 @@ namespace ProScan
 
 		private void listSensors_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
-			SensorMonitorForm.m_arrayListSensors.Clear();
+			SensorMonitorForm.m_ListSensors.Clear();
 			int index1 = 0;
 			if (0 < listSensors.CheckedIndices.Count)
 			{
@@ -381,111 +334,95 @@ namespace ProScan
 				{
 					int index2 = listSensors.CheckedIndices[index1];
 					if (index2 != e.Index)
-						SensorMonitorForm.m_arrayListSensors.Add(listSensors.Items[index2]);
+						m_ListSensors.Add((OBDParameter)listSensors.Items[index2]);
 					++index1;
 				}
 				while (index1 < listSensors.CheckedIndices.Count);
 			}
 			if (e.CurrentValue == CheckState.Unchecked)
-				SensorMonitorForm.m_arrayListSensors.Add(listSensors.Items[e.Index]);
+				m_ListSensors.Add((OBDParameter)listSensors.Items[e.Index]);
 			RebuildSensorGrid();
 		}
 
 		private void UpdateThread(object state)
 		{
-			if (!bRunThread)
-				return;
-			do
+			while (IsRunThread)
 			{
-				if (m_obdInterface.getConnectedStatus() && bLogging)
+				if (m_obdInterface.ConnectedStatus && IsLogging)
 				{
-					IEnumerator enumerator = panelDisplay.Controls.GetEnumerator();
-					if (enumerator.MoveNext())
+					foreach (SensorDisplayControl control in panelDisplay.Controls)
 					{
-						do
+						OBDParameter param = (OBDParameter)control.Tag;
+						OBDParameterValue value = m_obdInterface.getValue(param, radioDisplayEnglish.Checked);
+						if (!value.ErrorDetected)
 						{
-							SensorDisplayControl sensorDisplayControl = (SensorDisplayControl)enumerator.Current;
-							OBDParameter obdParameter = (OBDParameter)sensorDisplayControl.Tag;
-							OBDParameterValue obdParameterValue = m_obdInterface.getValue(obdParameter, radioDisplayEnglish.Checked);
-							if (!obdParameterValue.ErrorDetected)
-							{
-								string str = obdParameter.EnglishUnitLabel;
-								if (!radioDisplayEnglish.Checked)
-									str = obdParameter.MetricUnitLabel;
-								double num1 = obdParameterValue.DoubleValue;
-								double num2 = obdParameterValue.DoubleValue;
-								SensorLogItem sensorLogItem = new SensorLogItem(obdParameter.Name, num2.ToString(), str, num1.ToString(), str);
-								SensorMonitorForm.m_arrayListLog.Add((object)sensorLogItem);
-								scrollTime.Maximum = SensorMonitorForm.m_arrayListLog.Count - 1;
-								scrollTime.Value = scrollTime.Maximum;
-								DateTime dateTime = new DateTime();
-								dateTime = new DateTime(0L);
-								TimeSpan timeSpan = sensorLogItem.Time.Subtract(m_dtStartTime);
-								lblTimeElapsed.Text = dateTime.Add(timeSpan).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
-								if (radioDisplayEnglish.Checked)
-								{
-									double num3 = obdParameterValue.DoubleValue;
-									sensorDisplayControl.EnglishDisplay = num3.ToString() + " " + obdParameter.EnglishUnitLabel;
-								}
-								else
-								{
-									double num3 = obdParameterValue.DoubleValue;
-									sensorDisplayControl.MetricDisplay = num3.ToString() + " " + obdParameter.MetricUnitLabel;
-								}
-							}
+							string text = param.EnglishUnitLabel;
+							if (!radioDisplayEnglish.Checked)
+								text = param.MetricUnitLabel;
+
+							SensorLogItem sensorLogItem = new SensorLogItem(
+								param.Name,
+								value.DoubleValue.ToString(),
+								text,
+								value.DoubleValue.ToString(),
+								text);
+							m_ListLog.Add(sensorLogItem);
+							scrollTime.Maximum = m_ListLog.Count - 1;
+							scrollTime.Value = scrollTime.Maximum;
+
+							DateTime dateTime = new DateTime(0L);
+							lblTimeElapsed.Text = dateTime.Add(sensorLogItem.Time.Subtract(m_dtStartTime)).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
+
+							text = value.DoubleValue.ToString();
+							if (radioDisplayEnglish.Checked)
+								control.EnglishDisplay = text + " " + param.EnglishUnitLabel;
+							else
+								control.MetricDisplay = text + " " + param.MetricUnitLabel;
 						}
-						while (enumerator.MoveNext());
 					}
 				}
 				else
 					Thread.Sleep(300);
 			}
-			while (bRunThread);
 		}
 
 		private void RebuildSensorGrid()
 		{
 			panelDisplay.Controls.Clear();
-			IEnumerator enumerator = SensorMonitorForm.m_arrayListSensors.GetEnumerator();
-			int num = 0;
-			if (!enumerator.MoveNext())
-				return;
-			do
+			int index = 0;
+			foreach (OBDParameter param in SensorMonitorForm.m_ListSensors)
 			{
-				OBDParameter obdParameter = (OBDParameter)enumerator.Current;
-				SensorDisplayControl sensorDisplayControl = new SensorDisplayControl();
-				sensorDisplayControl.Title = obdParameter.Name;
-				sensorDisplayControl.Size = new Size(panelDisplay.Width / 2 - 8, 65);
-				sensorDisplayControl.Tag = (object)obdParameter;
+				SensorDisplayControl control = new SensorDisplayControl();
+				control.Title = param.Name;
+				control.Size = new Size(panelDisplay.Width / 2 - 8, 65);
+				control.Tag = param;
 				if (radioDisplayEnglish.Checked)
-					sensorDisplayControl.SetDisplayMode(1);
+					control.SetDisplayMode(1);
 				else
-					sensorDisplayControl.SetDisplayMode(2);
-				sensorDisplayControl.Refresh();
-				if (num % 2 != 0)
-				{
-					sensorDisplayControl.Location = new Point(panelDisplay.Width / 2 + 3, (sensorDisplayControl.Height + 5) * (num / 2) + 5);
-				}
+					control.SetDisplayMode(2);
+
+				control.Refresh();
+
+				if (index % 2 != 0)
+					control.Location = new Point(panelDisplay.Width / 2 + 3, (control.Height + 5) * (index / 2) + 5);
 				else
-				{
-					sensorDisplayControl.Location = new Point(5, (sensorDisplayControl.Height + 5) * (num / 2) + 5);
-				}
-				panelDisplay.Controls.Add((Control)sensorDisplayControl);
-				++num;
+					control.Location = new Point(5, (control.Height + 5) * (index / 2) + 5);
+
+				panelDisplay.Controls.Add((Control)control);
+				++index;
 			}
-			while (enumerator.MoveNext());
 		}
 
 		private void btnStart_Click(object sender, EventArgs e)
 		{
-			bLogging = !bLogging;
+			IsLogging = !IsLogging;
 			if (string.Compare(btnStart.Text, "S&tart") == 0)
 			{
 				m_dtStartTime = DateTime.Now;
 				listSensors.Enabled = false;
 				groupDisplay.Enabled = false;
 			}
-			if (bLogging)
+			if (IsLogging)
 			{
 				scrollTime.Enabled = false;
 				btnStart.Text = "&Pause";
@@ -503,7 +440,7 @@ namespace ProScan
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			if (m_arrayListLog.Count != 0)
+			if (m_ListLog.Count != 0)
 			{
 				SaveFileDialog dialog = new SaveFileDialog();
 				dialog.Title = "Save Logged Data As";
@@ -516,37 +453,36 @@ namespace ProScan
 					if (dialog.FileName.EndsWith(".xml"))
 					{
 						Type[] typeArray = new Type[] { typeof(SensorLogItem), typeof(Sensor) };
-						TextWriter writer2 = new StreamWriter(dialog.FileName);
-						new XmlSerializer(typeof(ArrayList), typeArray).Serialize(writer2, m_arrayListLog);
-						writer2.Close();
+						using (TextWriter writer = new StreamWriter(dialog.FileName))
+						{
+							new XmlSerializer(typeof(List<SensorLogItem>), typeArray).Serialize(writer, m_ListLog);
+							writer.Close();
+						}
 					}
 					else
 					{
-						ArrayList list = new ArrayList();
+						List<string> list = new List<string>();
 						int num2 = 0;
-						if (0 < m_arrayListLog.Count)
+						while (num2 < m_ListLog.Count)
 						{
-							do
-							{
-								string str = "";
-								SensorLogItem item = m_arrayListLog[num2] as SensorLogItem;
-								str = (((((str + item.Time.ToString("MM-dd-yyyy hh:mm:ss.fff", DateTimeFormatInfo.InvariantInfo) + ", ") + item.Name + ", ") + item.EnglishDisplay + ", ") + item.EnglishUnits + ", ") + item.MetricDisplay + ", ") + item.MetricUnits;
-								list.Add(str);
-								num2++;
-							}
-							while (num2 < m_arrayListLog.Count);
+							SensorLogItem item = m_ListLog[num2];
+							string str =
+								item.Time.ToString("MM-dd-yyyy hh:mm:ss.fff", DateTimeFormatInfo.InvariantInfo) + ", "
+								+ item.Name + ", "
+								+ item.EnglishDisplay + ", "
+								+ item.EnglishUnits + ", "
+								+ item.MetricDisplay + ", "
+								+ item.MetricUnits;
+							list.Add(str);
+							num2++;
 						}
 						FileStream stream = new FileStream(dialog.FileName, FileMode.Create, FileAccess.Write);
 						StreamWriter writer = new StreamWriter(stream);
 						int num = 0;
-						if (0 < list.Count)
+						while (num < list.Count)
 						{
-							do
-							{
-								writer.WriteLine(list[num] as string);
-								num++;
-							}
-							while (num < list.Count);
+							writer.WriteLine(list[num]);
+							num++;
 						}
 						writer.Close();
 						stream.Close();
@@ -563,40 +499,39 @@ namespace ProScan
 			btnStart.Text = "S&tart";
 			listSensors.Enabled = true;
 			groupDisplay.Enabled = true;
-			SensorMonitorForm.m_arrayListLog.Clear();
+			m_ListLog.Clear();
 			lblTimeElapsed.Text = "00:00.000";
 			scrollTime.Enabled = false;
+
 			int index = 0;
-			if (0 >= panelDisplay.Controls.Count)
-				return;
-			do
+			while (index < panelDisplay.Controls.Count)
 			{
-				SensorDisplayControl sensorDisplayControl = (SensorDisplayControl)panelDisplay.Controls[index];
-				sensorDisplayControl.EnglishDisplay = "";
-				sensorDisplayControl.MetricDisplay = "";
+				SensorDisplayControl control = (SensorDisplayControl)panelDisplay.Controls[index];
+				control.EnglishDisplay = "";
+				control.MetricDisplay = "";
 				++index;
 			}
-			while (index < panelDisplay.Controls.Count);
 		}
 
 		private void scrollTime_Scroll(object sender, ScrollEventArgs e)
 		{
 			int index1 = scrollTime.Value;
-			if (index1 < 0 || scrollTime.Value >= SensorMonitorForm.m_arrayListLog.Count)
+			if (index1 < 0 || scrollTime.Value >= m_ListLog.Count)
 				return;
-			SensorLogItem sensorLogItem1 = (SensorLogItem)SensorMonitorForm.m_arrayListLog[index1];
+
+			SensorLogItem log_item = m_ListLog[index1];
 			DateTime dateTime = new DateTime(0L);
-			TimeSpan timeSpan = sensorLogItem1.Time.Subtract(m_dtStartTime);
+			TimeSpan timeSpan = log_item.Time.Subtract(m_dtStartTime);
 			lblTimeElapsed.Text = dateTime.Add(timeSpan).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
 			int num = 0;
-			if (0 >= SensorMonitorForm.m_arrayListSensors.Count)
+			if (0 >= SensorMonitorForm.m_ListSensors.Count)
 				return;
 			int index2 = index1;
 			do
 			{
 				if (index2 >= 0)
 				{
-					SensorLogItem sensorLogItem2 = (SensorLogItem)SensorMonitorForm.m_arrayListLog[index2];
+					SensorLogItem sensorLogItem2 = m_ListLog[index2];
 					int index3 = 0;
 					if (0 < panelDisplay.Controls.Count)
 					{
@@ -616,7 +551,7 @@ namespace ProScan
 				++num;
 				--index2;
 			}
-			while (num < SensorMonitorForm.m_arrayListSensors.Count);
+			while (num < SensorMonitorForm.m_ListSensors.Count);
 		}
 
 		private void SensorMonitorForm_Activated(object sender, EventArgs e)
@@ -626,7 +561,7 @@ namespace ProScan
 
 		public void PauseLogging()
 		{
-			bLogging = false;
+			IsLogging = false;
 			btnStart.Text = "R&esume";
 			scrollTime.Enabled = true;
 			btnReset.Enabled = true;

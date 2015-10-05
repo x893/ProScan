@@ -1,35 +1,39 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
-[Serializable]
-public class DynoRecord
+namespace ProScan
 {
-	private string m_strLabel;
-	private double m_dWeight;
-	private double m_dDriveRatio;
-	private ArrayList m_arrRpmValues;
-
-	public double Weight
+	[Serializable]
+	public class DynoRecord
 	{
-		get { return m_dWeight; }
-		set { m_dWeight = value; }
-	}
+		private string m_strLabel;
+		private double m_dWeight;
+		private double m_dDriveRatio;
+		private List<DatedValue> m_RpmValues;
 
-	public string Label
-	{
-		get { return m_strLabel; }
-		set { m_strLabel = value; }
-	}
+		public double Weight
+		{
+			get { return m_dWeight; }
+			set { m_dWeight = value; }
+		}
 
-	public double DriveRatio
-	{
-		get { return m_dDriveRatio; }
-		set { m_dDriveRatio = value; }
-	}
+		public string Label
+		{
+			get { return m_strLabel; }
+			set { m_strLabel = value; }
+		}
 
-	public ArrayList RpmList
-	{
-		get { return m_arrRpmValues; }
-		set { m_arrRpmValues = value; }
+		public double DriveRatio
+		{
+			get { return m_dDriveRatio; }
+			set { m_dDriveRatio = value; }
+		}
+
+		public List<DatedValue> RpmList
+		{
+			get { return m_RpmValues; }
+			set { m_RpmValues = value; }
+		}
 	}
 }

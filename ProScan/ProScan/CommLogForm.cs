@@ -9,7 +9,6 @@ namespace ProScan
 	public class CommLogForm : Form
 	{
 		private RichTextBox richTextBox;
-		private Container components;
 
 		public CommLogForm()
 		{
@@ -27,8 +26,6 @@ namespace ProScan
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 

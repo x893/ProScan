@@ -1,317 +1,21 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace ProScan
 {
 	public class TestForm : Form
 	{
-		private DataGrid gridConTests;
-		private DataGrid gridNonConTests;
-		private OBDInterface m_obd2Interface;
-		private static ArrayList m_arrayListConTests;
-		private static ArrayList m_arrayListNonConTests;
-		private GroupBox groupConTests;
-		private GroupBox groupNonConTests;
-		private GroupBox groupFuel1;
-		private Label lblFuel1;
-		private GroupBox groupFuel2;
-		private Label lblFuel2;
-		private GroupBox groupPTO;
-		private Label lblPTO;
-		private GroupBox groupAir;
-		private Label lblAir;
-		private GroupBox groupOBD;
-		private Label lblOBD;
-		private GroupBox groupOxygen;
-		private Label lblOxygen;
-		private Button btnUpdate;
-		private ProgressBar progressBar;
-		private Label lblBattery;
-		private GroupBox groupBattery;
-		private Container components;
+		private static List<TestStatus> m_ListConTests;
+		private static List<TestStatus> m_ListNonConTests;
 
-		static TestForm()
-		{
-		}
-
-		public TestForm(OBDInterface obd2)
+		public TestForm(OBDInterface obd)
 		{
 			InitializeComponent();
-			m_obd2Interface = obd2;
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && components != null)
-				components.Dispose();
-			base.Dispose(disposing);
-		}
-
-		private void InitializeComponent()
-		{
-			groupConTests = new System.Windows.Forms.GroupBox();
-			gridConTests = new System.Windows.Forms.DataGrid();
-			groupNonConTests = new System.Windows.Forms.GroupBox();
-			gridNonConTests = new System.Windows.Forms.DataGrid();
-			groupFuel1 = new System.Windows.Forms.GroupBox();
-			lblFuel1 = new System.Windows.Forms.Label();
-			groupFuel2 = new System.Windows.Forms.GroupBox();
-			lblFuel2 = new System.Windows.Forms.Label();
-			groupPTO = new System.Windows.Forms.GroupBox();
-			lblPTO = new System.Windows.Forms.Label();
-			groupAir = new System.Windows.Forms.GroupBox();
-			lblAir = new System.Windows.Forms.Label();
-			groupOBD = new System.Windows.Forms.GroupBox();
-			lblOBD = new System.Windows.Forms.Label();
-			groupOxygen = new System.Windows.Forms.GroupBox();
-			lblOxygen = new System.Windows.Forms.Label();
-			btnUpdate = new System.Windows.Forms.Button();
-			progressBar = new System.Windows.Forms.ProgressBar();
-			groupBattery = new System.Windows.Forms.GroupBox();
-			lblBattery = new System.Windows.Forms.Label();
-			groupConTests.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(gridConTests)).BeginInit();
-			groupNonConTests.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(gridNonConTests)).BeginInit();
-			groupFuel1.SuspendLayout();
-			groupFuel2.SuspendLayout();
-			groupPTO.SuspendLayout();
-			groupAir.SuspendLayout();
-			groupOBD.SuspendLayout();
-			groupOxygen.SuspendLayout();
-			groupBattery.SuspendLayout();
-			SuspendLayout();
-			// 
-			// groupConTests
-			// 
-			groupConTests.Controls.Add(gridConTests);
-			groupConTests.Location = new System.Drawing.Point(10, 45);
-			groupConTests.Name = "groupConTests";
-			groupConTests.Size = new System.Drawing.Size(250, 140);
-			groupConTests.TabIndex = 0;
-			groupConTests.TabStop = false;
-			groupConTests.Text = "Continuous Tests";
-			// 
-			// gridConTests
-			// 
-			gridConTests.CaptionVisible = false;
-			gridConTests.DataMember = "";
-			gridConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-			gridConTests.Location = new System.Drawing.Point(10, 20);
-			gridConTests.Name = "gridConTests";
-			gridConTests.RowHeadersVisible = false;
-			gridConTests.Size = new System.Drawing.Size(230, 110);
-			gridConTests.TabIndex = 0;
-			// 
-			// groupNonConTests
-			// 
-			groupNonConTests.Controls.Add(gridNonConTests);
-			groupNonConTests.Location = new System.Drawing.Point(270, 45);
-			groupNonConTests.Name = "groupNonConTests";
-			groupNonConTests.Size = new System.Drawing.Size(250, 203);
-			groupNonConTests.TabIndex = 1;
-			groupNonConTests.TabStop = false;
-			groupNonConTests.Text = "Non-Continuous Tests";
-			// 
-			// gridNonConTests
-			// 
-			gridNonConTests.CaptionVisible = false;
-			gridNonConTests.DataMember = "";
-			gridNonConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-			gridNonConTests.Location = new System.Drawing.Point(10, 20);
-			gridNonConTests.Name = "gridNonConTests";
-			gridNonConTests.RowHeadersVisible = false;
-			gridNonConTests.Size = new System.Drawing.Size(230, 174);
-			gridNonConTests.TabIndex = 1;
-			// 
-			// groupFuel1
-			// 
-			groupFuel1.Controls.Add(lblFuel1);
-			groupFuel1.Location = new System.Drawing.Point(10, 192);
-			groupFuel1.Name = "groupFuel1";
-			groupFuel1.Size = new System.Drawing.Size(250, 56);
-			groupFuel1.TabIndex = 2;
-			groupFuel1.TabStop = false;
-			groupFuel1.Text = "Fuel System #1";
-			// 
-			// lblFuel1
-			// 
-			lblFuel1.Location = new System.Drawing.Point(10, 20);
-			lblFuel1.Name = "lblFuel1";
-			lblFuel1.Size = new System.Drawing.Size(230, 28);
-			lblFuel1.TabIndex = 0;
-			lblFuel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// groupFuel2
-			// 
-			groupFuel2.Controls.Add(lblFuel2);
-			groupFuel2.Location = new System.Drawing.Point(10, 256);
-			groupFuel2.Name = "groupFuel2";
-			groupFuel2.Size = new System.Drawing.Size(250, 60);
-			groupFuel2.TabIndex = 3;
-			groupFuel2.TabStop = false;
-			groupFuel2.Text = "Fuel System #2";
-			// 
-			// lblFuel2
-			// 
-			lblFuel2.Location = new System.Drawing.Point(10, 20);
-			lblFuel2.Name = "lblFuel2";
-			lblFuel2.Size = new System.Drawing.Size(230, 28);
-			lblFuel2.TabIndex = 0;
-			lblFuel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// groupPTO
-			// 
-			groupPTO.Controls.Add(lblPTO);
-			groupPTO.Location = new System.Drawing.Point(10, 323);
-			groupPTO.Name = "groupPTO";
-			groupPTO.Size = new System.Drawing.Size(250, 56);
-			groupPTO.TabIndex = 4;
-			groupPTO.TabStop = false;
-			groupPTO.Text = "Power Take Off";
-			// 
-			// lblPTO
-			// 
-			lblPTO.Location = new System.Drawing.Point(10, 20);
-			lblPTO.Name = "lblPTO";
-			lblPTO.Size = new System.Drawing.Size(230, 28);
-			lblPTO.TabIndex = 0;
-			lblPTO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// groupAir
-			// 
-			groupAir.Controls.Add(lblAir);
-			groupAir.Location = new System.Drawing.Point(10, 387);
-			groupAir.Name = "groupAir";
-			groupAir.Size = new System.Drawing.Size(250, 63);
-			groupAir.TabIndex = 5;
-			groupAir.TabStop = false;
-			groupAir.Text = "Commanded Secondary Air";
-			// 
-			// lblAir
-			// 
-			lblAir.Location = new System.Drawing.Point(10, 20);
-			lblAir.Name = "lblAir";
-			lblAir.Size = new System.Drawing.Size(230, 28);
-			lblAir.TabIndex = 0;
-			lblAir.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// groupOBD
-			// 
-			groupOBD.Controls.Add(lblOBD);
-			groupOBD.Location = new System.Drawing.Point(270, 256);
-			groupOBD.Name = "groupOBD";
-			groupOBD.Size = new System.Drawing.Size(250, 60);
-			groupOBD.TabIndex = 6;
-			groupOBD.TabStop = false;
-			groupOBD.Text = "Vehicle OBD Requirements";
-			// 
-			// lblOBD
-			// 
-			lblOBD.Location = new System.Drawing.Point(10, 20);
-			lblOBD.Name = "lblOBD";
-			lblOBD.Size = new System.Drawing.Size(230, 28);
-			lblOBD.TabIndex = 0;
-			lblOBD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// groupOxygen
-			// 
-			groupOxygen.Controls.Add(lblOxygen);
-			groupOxygen.Location = new System.Drawing.Point(272, 323);
-			groupOxygen.Name = "groupOxygen";
-			groupOxygen.Size = new System.Drawing.Size(250, 127);
-			groupOxygen.TabIndex = 7;
-			groupOxygen.TabStop = false;
-			groupOxygen.Text = "Oxygen Sensor Locations";
-			// 
-			// lblOxygen
-			// 
-			lblOxygen.Location = new System.Drawing.Point(10, 20);
-			lblOxygen.Name = "lblOxygen";
-			lblOxygen.Size = new System.Drawing.Size(230, 100);
-			lblOxygen.TabIndex = 0;
-			lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// btnUpdate
-			// 
-			btnUpdate.Location = new System.Drawing.Point(10, 10);
-			btnUpdate.Name = "btnUpdate";
-			btnUpdate.Size = new System.Drawing.Size(75, 23);
-			btnUpdate.TabIndex = 9;
-			btnUpdate.Text = "&Update";
-			btnUpdate.Click += new System.EventHandler(btnUpdate_Click);
-			// 
-			// progressBar
-			// 
-			progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			progressBar.Location = new System.Drawing.Point(95, 10);
-			progressBar.Name = "progressBar";
-			progressBar.Size = new System.Drawing.Size(425, 23);
-			progressBar.TabIndex = 10;
-			// 
-			// groupBattery
-			// 
-			groupBattery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			groupBattery.Controls.Add(lblBattery);
-			groupBattery.Location = new System.Drawing.Point(10, 458);
-			groupBattery.Name = "groupBattery";
-			groupBattery.Size = new System.Drawing.Size(512, 47);
-			groupBattery.TabIndex = 11;
-			groupBattery.TabStop = false;
-			groupBattery.Text = "Battery Voltage";
-			// 
-			// lblBattery
-			// 
-			lblBattery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			lblBattery.Location = new System.Drawing.Point(9, 17);
-			lblBattery.Name = "lblBattery";
-			lblBattery.Size = new System.Drawing.Size(489, 23);
-			lblBattery.TabIndex = 0;
-			lblBattery.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// TestForm
-			// 
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			ClientSize = new System.Drawing.Size(527, 511);
-			ControlBox = false;
-			Controls.Add(groupBattery);
-			Controls.Add(progressBar);
-			Controls.Add(btnUpdate);
-			Controls.Add(groupOxygen);
-			Controls.Add(groupOBD);
-			Controls.Add(groupAir);
-			Controls.Add(groupPTO);
-			Controls.Add(groupFuel2);
-			Controls.Add(groupFuel1);
-			Controls.Add(groupNonConTests);
-			Controls.Add(groupConTests);
-			MaximizeBox = false;
-			MinimizeBox = false;
-			Name = "TestForm";
-			Text = "Vehicle Status Monitor";
-			Load += new System.EventHandler(TestForm_Load);
-			Resize += new System.EventHandler(TestForm_Resize);
-			groupConTests.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(gridConTests)).EndInit();
-			groupNonConTests.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(gridNonConTests)).EndInit();
-			groupFuel1.ResumeLayout(false);
-			groupFuel2.ResumeLayout(false);
-			groupPTO.ResumeLayout(false);
-			groupAir.ResumeLayout(false);
-			groupOBD.ResumeLayout(false);
-			groupOxygen.ResumeLayout(false);
-			groupBattery.ResumeLayout(false);
-			ResumeLayout(false);
-
+			m_obd2Interface = obd;
 		}
 
 		private void TestForm_Resize(object sender, EventArgs e)
@@ -349,28 +53,28 @@ namespace ProScan
 
 		private void TestForm_Load(object sender, EventArgs e)
 		{
-			TestForm.m_arrayListConTests = getContinuousTestList();
-			TestForm.m_arrayListNonConTests = getNonContinuousTestList();
-			gridConTests.DataSource = TestForm.m_arrayListConTests;
-			gridNonConTests.DataSource = TestForm.m_arrayListNonConTests;
+			m_ListConTests = getContinuousTestList();
+			m_ListNonConTests = getNonContinuousTestList();
+			gridConTests.DataSource = m_ListConTests;
+			gridNonConTests.DataSource = m_ListNonConTests;
 			gridConTests.TableStyles.Clear();
-			gridConTests.TableStyles.Add(getTableStyle());
+			gridConTests.TableStyles.Add(GetTableStyle());
 			gridNonConTests.TableStyles.Clear();
-			gridNonConTests.TableStyles.Add(getTableStyle());
+			gridNonConTests.TableStyles.Add(GetTableStyle());
 		}
 
-		private ArrayList getContinuousTestList()
+		private List<TestStatus> getContinuousTestList()
 		{
-			ArrayList list = new ArrayList();
+			List<TestStatus> list = new List<TestStatus>();
 			list.Add(new TestStatus("Misfire", "", 2, 5));
 			list.Add(new TestStatus("Fuel System", "", 3, 6));
 			list.Add(new TestStatus("Comprehensive Component", "", 4, 7));
 			return list;
 		}
 
-		private ArrayList getNonContinuousTestList()
+		private List<TestStatus> getNonContinuousTestList()
 		{
-			ArrayList list = new ArrayList();
+			List<TestStatus> list = new List<TestStatus>();
 			list.Add(new TestStatus("Catalyst", "", 8, 0x10));
 			list.Add(new TestStatus("Heated Catalyst", "", 9, 0x11));
 			list.Add(new TestStatus("Evaporative System", "", 10, 0x12));
@@ -384,15 +88,16 @@ namespace ProScan
 
 		public void CheckConnection()
 		{
-			if (!m_obd2Interface.getConnectedStatus())
+			if (!m_obd2Interface.ConnectedStatus)
 				return;
 			UpdateTests();
 		}
 
-		public DataGridTableStyle getTableStyle()
+		#region GetTableStyle 
+		public DataGridTableStyle GetTableStyle()
 		{
 			DataGridTableStyle style = new DataGridTableStyle();
-			style.MappingName = "ArrayList";
+			style.MappingName = "List";
 
 			DataGridTextBoxColumn column = new DataGridTextBoxColumn();
 			column.MappingName = "Name";
@@ -424,6 +129,7 @@ namespace ProScan
 
 			return style;
 		}
+		#endregion
 
 		public void UpdateTests()
 		{
@@ -434,7 +140,7 @@ namespace ProScan
 			OBDParameterValue value;
 			value = m_obd2Interface.getValue("SAE.MISFIRE_SUPPORT", true);
 			progressBar.Value = 1;
-			TestStatus status = m_arrayListConTests[0] as TestStatus;
+			TestStatus status = m_ListConTests[0];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -453,7 +159,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.FUEL_SUPPORT", true);
 			progressBar.Value = 2;
-			status = m_arrayListConTests[1] as TestStatus;
+			status = m_ListConTests[1];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -472,7 +178,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.CCM_SUPPORT", true);
 			progressBar.Value = 3;
-			status = m_arrayListConTests[2] as TestStatus;
+			status = m_ListConTests[2];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -491,7 +197,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.CAT_SUPPORT", true);
 			progressBar.Value = 4;
-			status = m_arrayListNonConTests[0] as TestStatus;
+			status = m_ListNonConTests[0];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -510,7 +216,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.HCAT_SUPPORT", true);
 			progressBar.Value = 5;
-			status = m_arrayListNonConTests[1] as TestStatus;
+			status = m_ListNonConTests[1];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -529,7 +235,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.EVAP_SUPPORT", true);
 			progressBar.Value = 6;
-			status = m_arrayListNonConTests[2] as TestStatus;
+			status = m_ListNonConTests[2];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -548,7 +254,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.AIR_SUPPORT", true);
 			progressBar.Value = 7;
-			status = m_arrayListNonConTests[3] as TestStatus;
+			status = m_ListNonConTests[3];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -567,7 +273,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.AC_SUPPORT", true);
 			progressBar.Value = 8;
-			status = m_arrayListNonConTests[4] as TestStatus;
+			status = m_ListNonConTests[4];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -586,7 +292,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.O2_SUPPORT", true);
 			progressBar.Value = 9;
-			status = m_arrayListNonConTests[5] as TestStatus;
+			status = m_ListNonConTests[5];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -605,7 +311,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.O2HTR_SUPPORT", true);
 			progressBar.Value = 10;
-			status = m_arrayListNonConTests[6] as TestStatus;
+			status = m_ListNonConTests[6];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -624,7 +330,7 @@ namespace ProScan
 
 			value = m_obd2Interface.getValue("SAE.EGR_SUPPORT", true);
 			progressBar.Value = 11;
-			status = m_arrayListNonConTests[7] as TestStatus;
+			status = m_ListNonConTests[7];
 			if (!value.ErrorDetected)
 			{
 				if (!value.BoolValue)
@@ -776,7 +482,7 @@ namespace ProScan
 			}
 			lblOxygen.Text = str;
 			progressBar.Value++;
-			if (m_obd2Interface.getDevice() == 1)
+			if (m_obd2Interface.getDevice() == HardwareType.ELM327)
 			{
 				value = m_obd2Interface.getValue("ELM.BATTERY_VOLTAGE", true);
 				if (!value.ErrorDetected)
@@ -789,7 +495,7 @@ namespace ProScan
 
 		private void btnUpdate_Click(object sender, EventArgs e)
 		{
-			if (!m_obd2Interface.getConnectedStatus())
+			if (!m_obd2Interface.ConnectedStatus)
 			{
 				MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				m_obd2Interface.logItem("Error. Test Form. Attempted refresh without vehicle connection.");
@@ -801,5 +507,297 @@ namespace ProScan
 				btnUpdate.Enabled = true;
 			}
 		}
+
+		#region InitializeComponent
+		private DataGrid gridConTests;
+		private DataGrid gridNonConTests;
+		private OBDInterface m_obd2Interface;
+		private GroupBox groupConTests;
+		private GroupBox groupNonConTests;
+		private GroupBox groupFuel1;
+		private Label lblFuel1;
+		private GroupBox groupFuel2;
+		private Label lblFuel2;
+		private GroupBox groupPTO;
+		private Label lblPTO;
+		private GroupBox groupAir;
+		private Label lblAir;
+		private GroupBox groupOBD;
+		private Label lblOBD;
+		private GroupBox groupOxygen;
+		private Label lblOxygen;
+		private Button btnUpdate;
+		private ProgressBar progressBar;
+		private Label lblBattery;
+		private GroupBox groupBattery;
+
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+		}
+
+		private void InitializeComponent()
+		{
+			this.groupConTests = new System.Windows.Forms.GroupBox();
+			this.gridConTests = new System.Windows.Forms.DataGrid();
+			this.groupNonConTests = new System.Windows.Forms.GroupBox();
+			this.gridNonConTests = new System.Windows.Forms.DataGrid();
+			this.groupFuel1 = new System.Windows.Forms.GroupBox();
+			this.lblFuel1 = new System.Windows.Forms.Label();
+			this.groupFuel2 = new System.Windows.Forms.GroupBox();
+			this.lblFuel2 = new System.Windows.Forms.Label();
+			this.groupPTO = new System.Windows.Forms.GroupBox();
+			this.lblPTO = new System.Windows.Forms.Label();
+			this.groupAir = new System.Windows.Forms.GroupBox();
+			this.lblAir = new System.Windows.Forms.Label();
+			this.groupOBD = new System.Windows.Forms.GroupBox();
+			this.lblOBD = new System.Windows.Forms.Label();
+			this.groupOxygen = new System.Windows.Forms.GroupBox();
+			this.lblOxygen = new System.Windows.Forms.Label();
+			this.btnUpdate = new System.Windows.Forms.Button();
+			this.progressBar = new System.Windows.Forms.ProgressBar();
+			this.groupBattery = new System.Windows.Forms.GroupBox();
+			this.lblBattery = new System.Windows.Forms.Label();
+			this.groupConTests.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridConTests)).BeginInit();
+			this.groupNonConTests.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridNonConTests)).BeginInit();
+			this.groupFuel1.SuspendLayout();
+			this.groupFuel2.SuspendLayout();
+			this.groupPTO.SuspendLayout();
+			this.groupAir.SuspendLayout();
+			this.groupOBD.SuspendLayout();
+			this.groupOxygen.SuspendLayout();
+			this.groupBattery.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// groupConTests
+			// 
+			this.groupConTests.Controls.Add(this.gridConTests);
+			this.groupConTests.Location = new System.Drawing.Point(12, 52);
+			this.groupConTests.Name = "groupConTests";
+			this.groupConTests.Size = new System.Drawing.Size(300, 161);
+			this.groupConTests.TabIndex = 0;
+			this.groupConTests.TabStop = false;
+			this.groupConTests.Text = "Continuous Tests";
+			// 
+			// gridConTests
+			// 
+			this.gridConTests.CaptionVisible = false;
+			this.gridConTests.DataMember = "";
+			this.gridConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+			this.gridConTests.Location = new System.Drawing.Point(12, 23);
+			this.gridConTests.Name = "gridConTests";
+			this.gridConTests.RowHeadersVisible = false;
+			this.gridConTests.Size = new System.Drawing.Size(276, 127);
+			this.gridConTests.TabIndex = 0;
+			// 
+			// groupNonConTests
+			// 
+			this.groupNonConTests.Controls.Add(this.gridNonConTests);
+			this.groupNonConTests.Location = new System.Drawing.Point(324, 52);
+			this.groupNonConTests.Name = "groupNonConTests";
+			this.groupNonConTests.Size = new System.Drawing.Size(300, 234);
+			this.groupNonConTests.TabIndex = 1;
+			this.groupNonConTests.TabStop = false;
+			this.groupNonConTests.Text = "Non-Continuous Tests";
+			// 
+			// gridNonConTests
+			// 
+			this.gridNonConTests.CaptionVisible = false;
+			this.gridNonConTests.DataMember = "";
+			this.gridNonConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+			this.gridNonConTests.Location = new System.Drawing.Point(12, 23);
+			this.gridNonConTests.Name = "gridNonConTests";
+			this.gridNonConTests.RowHeadersVisible = false;
+			this.gridNonConTests.Size = new System.Drawing.Size(276, 201);
+			this.gridNonConTests.TabIndex = 1;
+			// 
+			// groupFuel1
+			// 
+			this.groupFuel1.Controls.Add(this.lblFuel1);
+			this.groupFuel1.Location = new System.Drawing.Point(12, 222);
+			this.groupFuel1.Name = "groupFuel1";
+			this.groupFuel1.Size = new System.Drawing.Size(300, 64);
+			this.groupFuel1.TabIndex = 2;
+			this.groupFuel1.TabStop = false;
+			this.groupFuel1.Text = "Fuel System #1";
+			// 
+			// lblFuel1
+			// 
+			this.lblFuel1.Location = new System.Drawing.Point(12, 23);
+			this.lblFuel1.Name = "lblFuel1";
+			this.lblFuel1.Size = new System.Drawing.Size(276, 32);
+			this.lblFuel1.TabIndex = 0;
+			this.lblFuel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// groupFuel2
+			// 
+			this.groupFuel2.Controls.Add(this.lblFuel2);
+			this.groupFuel2.Location = new System.Drawing.Point(12, 295);
+			this.groupFuel2.Name = "groupFuel2";
+			this.groupFuel2.Size = new System.Drawing.Size(300, 70);
+			this.groupFuel2.TabIndex = 3;
+			this.groupFuel2.TabStop = false;
+			this.groupFuel2.Text = "Fuel System #2";
+			// 
+			// lblFuel2
+			// 
+			this.lblFuel2.Location = new System.Drawing.Point(12, 23);
+			this.lblFuel2.Name = "lblFuel2";
+			this.lblFuel2.Size = new System.Drawing.Size(276, 32);
+			this.lblFuel2.TabIndex = 0;
+			this.lblFuel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// groupPTO
+			// 
+			this.groupPTO.Controls.Add(this.lblPTO);
+			this.groupPTO.Location = new System.Drawing.Point(12, 373);
+			this.groupPTO.Name = "groupPTO";
+			this.groupPTO.Size = new System.Drawing.Size(300, 64);
+			this.groupPTO.TabIndex = 4;
+			this.groupPTO.TabStop = false;
+			this.groupPTO.Text = "Power Take Off";
+			// 
+			// lblPTO
+			// 
+			this.lblPTO.Location = new System.Drawing.Point(12, 23);
+			this.lblPTO.Name = "lblPTO";
+			this.lblPTO.Size = new System.Drawing.Size(276, 32);
+			this.lblPTO.TabIndex = 0;
+			this.lblPTO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// groupAir
+			// 
+			this.groupAir.Controls.Add(this.lblAir);
+			this.groupAir.Location = new System.Drawing.Point(12, 447);
+			this.groupAir.Name = "groupAir";
+			this.groupAir.Size = new System.Drawing.Size(300, 72);
+			this.groupAir.TabIndex = 5;
+			this.groupAir.TabStop = false;
+			this.groupAir.Text = "Commanded Secondary Air";
+			// 
+			// lblAir
+			// 
+			this.lblAir.Location = new System.Drawing.Point(12, 23);
+			this.lblAir.Name = "lblAir";
+			this.lblAir.Size = new System.Drawing.Size(276, 32);
+			this.lblAir.TabIndex = 0;
+			this.lblAir.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// groupOBD
+			// 
+			this.groupOBD.Controls.Add(this.lblOBD);
+			this.groupOBD.Location = new System.Drawing.Point(324, 295);
+			this.groupOBD.Name = "groupOBD";
+			this.groupOBD.Size = new System.Drawing.Size(300, 70);
+			this.groupOBD.TabIndex = 6;
+			this.groupOBD.TabStop = false;
+			this.groupOBD.Text = "Vehicle OBD Requirements";
+			// 
+			// lblOBD
+			// 
+			this.lblOBD.Location = new System.Drawing.Point(12, 23);
+			this.lblOBD.Name = "lblOBD";
+			this.lblOBD.Size = new System.Drawing.Size(276, 32);
+			this.lblOBD.TabIndex = 0;
+			this.lblOBD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// groupOxygen
+			// 
+			this.groupOxygen.Controls.Add(this.lblOxygen);
+			this.groupOxygen.Location = new System.Drawing.Point(326, 373);
+			this.groupOxygen.Name = "groupOxygen";
+			this.groupOxygen.Size = new System.Drawing.Size(300, 146);
+			this.groupOxygen.TabIndex = 7;
+			this.groupOxygen.TabStop = false;
+			this.groupOxygen.Text = "Oxygen Sensor Locations";
+			// 
+			// lblOxygen
+			// 
+			this.lblOxygen.Location = new System.Drawing.Point(12, 23);
+			this.lblOxygen.Name = "lblOxygen";
+			this.lblOxygen.Size = new System.Drawing.Size(276, 115);
+			this.lblOxygen.TabIndex = 0;
+			this.lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// btnUpdate
+			// 
+			this.btnUpdate.Location = new System.Drawing.Point(12, 12);
+			this.btnUpdate.Name = "btnUpdate";
+			this.btnUpdate.Size = new System.Drawing.Size(90, 26);
+			this.btnUpdate.TabIndex = 9;
+			this.btnUpdate.Text = "&Update";
+			this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+			// 
+			// progressBar
+			// 
+			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar.Location = new System.Drawing.Point(114, 12);
+			this.progressBar.Name = "progressBar";
+			this.progressBar.Size = new System.Drawing.Size(511, 26);
+			this.progressBar.TabIndex = 10;
+			// 
+			// groupBattery
+			// 
+			this.groupBattery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBattery.Controls.Add(this.lblBattery);
+			this.groupBattery.Location = new System.Drawing.Point(12, 528);
+			this.groupBattery.Name = "groupBattery";
+			this.groupBattery.Size = new System.Drawing.Size(615, 55);
+			this.groupBattery.TabIndex = 11;
+			this.groupBattery.TabStop = false;
+			this.groupBattery.Text = "Battery Voltage";
+			// 
+			// lblBattery
+			// 
+			this.lblBattery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.lblBattery.Location = new System.Drawing.Point(11, 20);
+			this.lblBattery.Name = "lblBattery";
+			this.lblBattery.Size = new System.Drawing.Size(588, 26);
+			this.lblBattery.TabIndex = 0;
+			this.lblBattery.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// TestForm
+			// 
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(633, 585);
+			this.ControlBox = false;
+			this.Controls.Add(this.groupBattery);
+			this.Controls.Add(this.progressBar);
+			this.Controls.Add(this.btnUpdate);
+			this.Controls.Add(this.groupOxygen);
+			this.Controls.Add(this.groupOBD);
+			this.Controls.Add(this.groupAir);
+			this.Controls.Add(this.groupPTO);
+			this.Controls.Add(this.groupFuel2);
+			this.Controls.Add(this.groupFuel1);
+			this.Controls.Add(this.groupNonConTests);
+			this.Controls.Add(this.groupConTests);
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "TestForm";
+			this.Text = "Vehicle Status Monitor";
+			this.Load += new System.EventHandler(this.TestForm_Load);
+			this.Resize += new System.EventHandler(this.TestForm_Resize);
+			this.groupConTests.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.gridConTests)).EndInit();
+			this.groupNonConTests.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.gridNonConTests)).EndInit();
+			this.groupFuel1.ResumeLayout(false);
+			this.groupFuel2.ResumeLayout(false);
+			this.groupPTO.ResumeLayout(false);
+			this.groupAir.ResumeLayout(false);
+			this.groupOBD.ResumeLayout(false);
+			this.groupOxygen.ResumeLayout(false);
+			this.groupBattery.ResumeLayout(false);
+			this.ResumeLayout(false);
+
+		}
+		#endregion
 	}
 }

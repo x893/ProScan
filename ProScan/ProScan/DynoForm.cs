@@ -1,6 +1,7 @@
 ﻿using DGChart;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -16,7 +17,6 @@ namespace ProScan
 {
 	public class DynoForm : Form
 	{
-		private IContainer components;
 		private Button btnStart;
 		private GroupBox groupControl;
 		private Button btnReset;
@@ -25,22 +25,10 @@ namespace ProScan
 		private Button btnOpen;
 		private Button btnPrint;
 		private GroupBox groupGraph;
-		private PrintDialog printDialog1;
-		private PrintPreviewDialog printPreviewDialog1;
-		private PageSetupDialog pageSetupDialog1;
-		private PrintDocument printDocument1;
-		private DataList Data;
-		private OBDInterface m_obdInterface;
-		private VehicleProfile m_profile;
-		private double m_dHPMax;
-		private double m_dTQMax;
-		private bool m_bCapture;
-		private ArrayList m_arrRpmValues;
-		private ArrayList m_arrKphValues;
-		private double[] HPValue;
-		private double[] TQValue;
-		private double[] SampleRPM;
-		private double m_dVehicleWeight;
+		private PrintDialog printDialog;
+		private PrintPreviewDialog printPreviewDialog;
+		private PageSetupDialog pageSetupDialog;
+		private PrintDocument printDocument;
 		private GroupBox groupExport;
 		private Button btnExportJPEG;
 		private DynoControl dyno;
@@ -49,33 +37,41 @@ namespace ProScan
 		private Label lblToRPM;
 		private NumericUpDown numFromRPM;
 		private NumericUpDown numToRPM;
+
+		private OBDInterface m_obdInterface;
+		private VehicleProfile m_profile;
+		private double m_HPMax;
+		private double m_TQMax;
+		private bool m_Capture;
+		private List<DatedValue> m_RpmValues;
+		private List<DatedValue> m_KphValues;
+		private double[] m_HPValue;
+		private double[] m_TQValue;
+		private double[] m_SampleRPM;
+		private double m_dVehicleWeight;
 		private DateTime m_dtDynoTime;
 
-		public DynoForm(OBDInterface obd2)
+		public DynoForm(OBDInterface obd)
 		{
-			m_obdInterface = obd2;
-			m_profile = obd2.GetActiveProfile();
+			m_obdInterface = obd;
+			m_profile = obd.ActiveProfile;
 
 			InitializeComponent();
 
-			Data = new DataList();
-			m_bCapture = false;
+			m_Capture = false;
 			m_dtDynoTime = DateTime.Now;
 			btnStart.Enabled = false;
 			btnReset.Enabled = false;
-			printDocument1.DefaultPageSettings = new PageSettings()
-			{
-				Margins = new Margins(100, 100, 100, 100),
-				Landscape = true
-			};
-			pageSetupDialog1.Document = printDocument1;
+			printDocument.DefaultPageSettings = new PageSettings();
+			printDocument.DefaultPageSettings.Margins = new Margins(100, 100, 100, 100);
+			printDocument.DefaultPageSettings.Landscape = true;
+			pageSetupDialog.Document = printDocument;
 		}
 
+		#region InitializeComponent
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
-			m_bCapture = false;
+			m_Capture = false;
 			base.Dispose(disposing);
 		}
 
@@ -91,10 +87,10 @@ namespace ProScan
 			this.btnPrint = new System.Windows.Forms.Button();
 			this.groupGraph = new System.Windows.Forms.GroupBox();
 			this.dyno = new DGChart.DynoControl();
-			this.printDialog1 = new System.Windows.Forms.PrintDialog();
-			this.printDocument1 = new System.Drawing.Printing.PrintDocument();
-			this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
-			this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
+			this.printDialog = new System.Windows.Forms.PrintDialog();
+			this.printDocument = new System.Drawing.Printing.PrintDocument();
+			this.printPreviewDialog = new System.Windows.Forms.PrintPreviewDialog();
+			this.pageSetupDialog = new System.Windows.Forms.PageSetupDialog();
 			this.groupExport = new System.Windows.Forms.GroupBox();
 			this.btnExportJPEG = new System.Windows.Forms.Button();
 			this.groupSetup = new System.Windows.Forms.GroupBox();
@@ -115,27 +111,27 @@ namespace ProScan
 			// 
 			this.groupControl.Controls.Add(this.btnReset);
 			this.groupControl.Controls.Add(this.btnStart);
-			this.groupControl.Location = new System.Drawing.Point(10, 105);
+			this.groupControl.Location = new System.Drawing.Point(12, 121);
 			this.groupControl.Name = "groupControl";
-			this.groupControl.Size = new System.Drawing.Size(150, 90);
+			this.groupControl.Size = new System.Drawing.Size(180, 104);
 			this.groupControl.TabIndex = 0;
 			this.groupControl.TabStop = false;
 			this.groupControl.Text = "Control";
 			// 
 			// btnReset
 			// 
-			this.btnReset.Location = new System.Drawing.Point(10, 55);
+			this.btnReset.Location = new System.Drawing.Point(12, 63);
 			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(130, 25);
+			this.btnReset.Size = new System.Drawing.Size(156, 29);
 			this.btnReset.TabIndex = 8;
 			this.btnReset.Text = "&Reset";
 			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// btnStart
 			// 
-			this.btnStart.Location = new System.Drawing.Point(10, 20);
+			this.btnStart.Location = new System.Drawing.Point(12, 23);
 			this.btnStart.Name = "btnStart";
-			this.btnStart.Size = new System.Drawing.Size(130, 25);
+			this.btnStart.Size = new System.Drawing.Size(156, 29);
 			this.btnStart.TabIndex = 7;
 			this.btnStart.Text = "&Begin Dyno Pull";
 			this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
@@ -145,36 +141,36 @@ namespace ProScan
 			this.groupChart.Controls.Add(this.btnSave);
 			this.groupChart.Controls.Add(this.btnOpen);
 			this.groupChart.Controls.Add(this.btnPrint);
-			this.groupChart.Location = new System.Drawing.Point(10, 205);
+			this.groupChart.Location = new System.Drawing.Point(12, 237);
 			this.groupChart.Name = "groupChart";
-			this.groupChart.Size = new System.Drawing.Size(150, 125);
+			this.groupChart.Size = new System.Drawing.Size(180, 144);
 			this.groupChart.TabIndex = 2;
 			this.groupChart.TabStop = false;
 			this.groupChart.Text = "Chart";
 			// 
 			// btnSave
 			// 
-			this.btnSave.Location = new System.Drawing.Point(10, 20);
+			this.btnSave.Location = new System.Drawing.Point(12, 23);
 			this.btnSave.Name = "btnSave";
-			this.btnSave.Size = new System.Drawing.Size(130, 25);
+			this.btnSave.Size = new System.Drawing.Size(156, 29);
 			this.btnSave.TabIndex = 5;
 			this.btnSave.Text = "&Save";
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 			// 
 			// btnOpen
 			// 
-			this.btnOpen.Location = new System.Drawing.Point(10, 55);
+			this.btnOpen.Location = new System.Drawing.Point(12, 63);
 			this.btnOpen.Name = "btnOpen";
-			this.btnOpen.Size = new System.Drawing.Size(130, 25);
+			this.btnOpen.Size = new System.Drawing.Size(156, 29);
 			this.btnOpen.TabIndex = 6;
 			this.btnOpen.Text = "&Open";
 			this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
 			// 
 			// btnPrint
 			// 
-			this.btnPrint.Location = new System.Drawing.Point(10, 90);
+			this.btnPrint.Location = new System.Drawing.Point(12, 104);
 			this.btnPrint.Name = "btnPrint";
-			this.btnPrint.Size = new System.Drawing.Size(130, 25);
+			this.btnPrint.Size = new System.Drawing.Size(156, 29);
 			this.btnPrint.TabIndex = 7;
 			this.btnPrint.Text = "&Print";
 			this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
@@ -182,9 +178,9 @@ namespace ProScan
 			// groupGraph
 			// 
 			this.groupGraph.Controls.Add(this.dyno);
-			this.groupGraph.Location = new System.Drawing.Point(170, 10);
+			this.groupGraph.Location = new System.Drawing.Point(204, 12);
 			this.groupGraph.Name = "groupGraph";
-			this.groupGraph.Size = new System.Drawing.Size(446, 422);
+			this.groupGraph.Size = new System.Drawing.Size(535, 486);
 			this.groupGraph.TabIndex = 4;
 			this.groupGraph.TabStop = false;
 			// 
@@ -204,7 +200,7 @@ namespace ProScan
 			this.dyno.DrawMode = DGChart.DynoControl.DrawModeType.Line;
 			this.dyno.FontAxis = new System.Drawing.Font("Arial", 8F);
 			this.dyno.Label = "0";
-			this.dyno.Location = new System.Drawing.Point(2, 6);
+			this.dyno.Location = new System.Drawing.Point(2, 7);
 			this.dyno.Logo = null;
 			this.dyno.Name = "dyno";
 			this.dyno.ShowData1 = true;
@@ -212,7 +208,7 @@ namespace ProScan
 			this.dyno.ShowData3 = false;
 			this.dyno.ShowData4 = false;
 			this.dyno.ShowData5 = false;
-			this.dyno.Size = new System.Drawing.Size(442, 417);
+			this.dyno.Size = new System.Drawing.Size(531, 481);
 			this.dyno.TabIndex = 0;
 			this.dyno.XData1 = null;
 			this.dyno.XData2 = null;
@@ -233,42 +229,42 @@ namespace ProScan
 			// 
 			// printDialog1
 			// 
-			this.printDialog1.Document = this.printDocument1;
+			this.printDialog.Document = this.printDocument;
 			// 
 			// printDocument1
 			// 
-			this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+			this.printDocument.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
 			// 
 			// printPreviewDialog1
 			// 
-			this.printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
-			this.printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
-			this.printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
-			this.printPreviewDialog1.Document = this.printDocument1;
-			this.printPreviewDialog1.Enabled = true;
-			this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
-			this.printPreviewDialog1.Name = "printPreviewDialog1";
-			this.printPreviewDialog1.Visible = false;
+			this.printPreviewDialog.AutoScrollMargin = new System.Drawing.Size(0, 0);
+			this.printPreviewDialog.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+			this.printPreviewDialog.ClientSize = new System.Drawing.Size(400, 300);
+			this.printPreviewDialog.Document = this.printDocument;
+			this.printPreviewDialog.Enabled = true;
+			this.printPreviewDialog.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
+			this.printPreviewDialog.Name = "printPreviewDialog1";
+			this.printPreviewDialog.Visible = false;
 			// 
 			// pageSetupDialog1
 			// 
-			this.pageSetupDialog1.Document = this.printDocument1;
+			this.pageSetupDialog.Document = this.printDocument;
 			// 
 			// groupExport
 			// 
 			this.groupExport.Controls.Add(this.btnExportJPEG);
-			this.groupExport.Location = new System.Drawing.Point(10, 340);
+			this.groupExport.Location = new System.Drawing.Point(12, 392);
 			this.groupExport.Name = "groupExport";
-			this.groupExport.Size = new System.Drawing.Size(150, 55);
+			this.groupExport.Size = new System.Drawing.Size(180, 64);
 			this.groupExport.TabIndex = 5;
 			this.groupExport.TabStop = false;
 			this.groupExport.Text = "Export";
 			// 
 			// btnExportJPEG
 			// 
-			this.btnExportJPEG.Location = new System.Drawing.Point(10, 20);
+			this.btnExportJPEG.Location = new System.Drawing.Point(12, 23);
 			this.btnExportJPEG.Name = "btnExportJPEG";
-			this.btnExportJPEG.Size = new System.Drawing.Size(130, 25);
+			this.btnExportJPEG.Size = new System.Drawing.Size(156, 29);
 			this.btnExportJPEG.TabIndex = 6;
 			this.btnExportJPEG.Text = "&JPEG";
 			this.btnExportJPEG.Click += new System.EventHandler(this.btnExportJPEG_Click);
@@ -279,9 +275,9 @@ namespace ProScan
 			this.groupSetup.Controls.Add(this.numFromRPM);
 			this.groupSetup.Controls.Add(this.lblToRPM);
 			this.groupSetup.Controls.Add(this.lblFromRPM);
-			this.groupSetup.Location = new System.Drawing.Point(10, 15);
+			this.groupSetup.Location = new System.Drawing.Point(12, 17);
 			this.groupSetup.Name = "groupSetup";
-			this.groupSetup.Size = new System.Drawing.Size(150, 80);
+			this.groupSetup.Size = new System.Drawing.Size(180, 93);
 			this.groupSetup.TabIndex = 6;
 			this.groupSetup.TabStop = false;
 			this.groupSetup.Text = "Setup";
@@ -293,7 +289,7 @@ namespace ProScan
             0,
             0,
             0});
-			this.numToRPM.Location = new System.Drawing.Point(80, 44);
+			this.numToRPM.Location = new System.Drawing.Point(96, 51);
 			this.numToRPM.Maximum = new decimal(new int[] {
             16000,
             0,
@@ -306,7 +302,7 @@ namespace ProScan
             0});
 			this.numToRPM.Name = "numToRPM";
 			this.numToRPM.ReadOnly = true;
-			this.numToRPM.Size = new System.Drawing.Size(60, 20);
+			this.numToRPM.Size = new System.Drawing.Size(72, 22);
 			this.numToRPM.TabIndex = 7;
 			this.numToRPM.Value = new decimal(new int[] {
             6500,
@@ -322,7 +318,7 @@ namespace ProScan
             0,
             0,
             0});
-			this.numFromRPM.Location = new System.Drawing.Point(80, 20);
+			this.numFromRPM.Location = new System.Drawing.Point(96, 23);
 			this.numFromRPM.Maximum = new decimal(new int[] {
             5500,
             0,
@@ -335,7 +331,7 @@ namespace ProScan
             0});
 			this.numFromRPM.Name = "numFromRPM";
 			this.numFromRPM.ReadOnly = true;
-			this.numFromRPM.Size = new System.Drawing.Size(60, 20);
+			this.numFromRPM.Size = new System.Drawing.Size(72, 22);
 			this.numFromRPM.TabIndex = 6;
 			this.numFromRPM.Value = new decimal(new int[] {
             2000,
@@ -346,26 +342,26 @@ namespace ProScan
 			// 
 			// lblToRPM
 			// 
-			this.lblToRPM.Location = new System.Drawing.Point(10, 44);
+			this.lblToRPM.Location = new System.Drawing.Point(12, 51);
 			this.lblToRPM.Name = "lblToRPM";
-			this.lblToRPM.Size = new System.Drawing.Size(70, 20);
+			this.lblToRPM.Size = new System.Drawing.Size(84, 23);
 			this.lblToRPM.TabIndex = 4;
 			this.lblToRPM.Text = "&To RPM:";
 			this.lblToRPM.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lblFromRPM
 			// 
-			this.lblFromRPM.Location = new System.Drawing.Point(10, 20);
+			this.lblFromRPM.Location = new System.Drawing.Point(12, 23);
 			this.lblFromRPM.Name = "lblFromRPM";
-			this.lblFromRPM.Size = new System.Drawing.Size(70, 20);
+			this.lblFromRPM.Size = new System.Drawing.Size(84, 23);
 			this.lblFromRPM.TabIndex = 2;
 			this.lblFromRPM.Text = "&From RPM:";
 			this.lblFromRPM.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// DynoForm
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(632, 446);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(749, 511);
 			this.ControlBox = false;
 			this.Controls.Add(this.groupSetup);
 			this.Controls.Add(this.groupExport);
@@ -387,6 +383,7 @@ namespace ProScan
 			this.ResumeLayout(false);
 
 		}
+		#endregion
 
 		private void DynoForm_Resize(object sender, EventArgs e)
 		{
@@ -402,166 +399,108 @@ namespace ProScan
 			dyno.Height = groupGraph.Height - 9;
 		}
 
-		public void setProfile(VehicleProfile profile)
-		{
-			m_profile = profile;
-		}
-
 		private void btnStart_Click(object sender, EventArgs e)
 		{
-			if (!m_obdInterface.getConnectedStatus())
+			if (!m_obdInterface.ConnectedStatus)
 			{
 				MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
 			else
 			{
-				DateTime now = DateTime.Now;
-				m_dtDynoTime = now;
+				m_dtDynoTime = DateTime.Now;
 				m_dVehicleWeight = m_profile.Weight;
 				dyno.Label = m_profile.Name + "\r\n" + m_dtDynoTime.ToString("g");
 				btnStart.Enabled = false;
 				btnReset.Enabled = true;
 				btnOpen.Enabled = false;
-				m_bCapture = true;
+				m_Capture = true;
 				ThreadPool.QueueUserWorkItem(new WaitCallback(Capture));
 			}
 		}
 
 		private void DynoForm_Closing(object sender, CancelEventArgs e)
 		{
-			m_bCapture = false;
+			m_Capture = false;
 		}
 
 		private new void Capture(object state)
 		{
-			m_arrRpmValues = new ArrayList();
-			m_arrKphValues = new ArrayList();
-			bool flag = false;
-			if (m_bCapture)
+			m_RpmValues = new List<DatedValue>();
+			m_KphValues = new List<DatedValue>();
+			OBDParameterValue value;
+			DatedValue d_value;
+			while (m_Capture)
 			{
-				do
+				value = m_obdInterface.getValue("SAE.RPM", true);
+				if (!value.ErrorDetected)
 				{
-					OBDParameterValue obdParameterValue1 = m_obdInterface.getValue("SAE.RPM", true);
-					if (!obdParameterValue1.ErrorDetected)
+					d_value = new DatedValue(value.DoubleValue);
+					d_value.Date = DateTime.Now;
+					if (Convert.ToDecimal(d_value.Value) >= numFromRPM.Value
+					&& Convert.ToDecimal(d_value.Value) <= numToRPM.Value)
 					{
-						DatedValue datedValue1 = new DatedValue(obdParameterValue1.DoubleValue);
-						DateTime now1 = DateTime.Now;
-						datedValue1.Date = now1;
-						Decimal num1 = numFromRPM.Value;
-						Decimal num2 = new Decimal();
-						num2 = new Decimal(datedValue1.Value);
-						if (num2 >= num1)
+						m_RpmValues.Add(d_value);
+						value = m_obdInterface.getValue("SAE.VSS", false);
+						if (!value.ErrorDetected)
 						{
-							Decimal num3 = numToRPM.Value;
-							Decimal num4 = new Decimal();
-							num4 = new Decimal(datedValue1.Value);
-							if (num4 <= num3)
-							{
-								m_arrRpmValues.Add((object)datedValue1);
-								OBDParameterValue obdParameterValue2 = m_obdInterface.getValue("SAE.VSS", false);
-
-								if (!obdParameterValue2.ErrorDetected)
-								{
-									float num5 = m_obdInterface.GetActiveProfile().SpeedCalibrationFactor;
-									DatedValue datedValue2 = new DatedValue(obdParameterValue2.DoubleValue * (double)num5);
-									DateTime now2 = DateTime.Now;
-									datedValue2.Date = now2;
-									m_arrKphValues.Add((object)datedValue2);
-								}
-								flag = true;
-								goto label_9;
-							}
+							d_value = new DatedValue(value.DoubleValue * (double)m_obdInterface.ActiveProfile.SpeedCalibrationFactor);
+							d_value.Date = DateTime.Now;
+							m_KphValues.Add(d_value);
 						}
-						if (flag)
-							m_bCapture = false;
+						m_Capture = false;
 					}
-				label_9: ;
 				}
-				while (m_bCapture);
 			}
 			Calculate();
 			btnOpen.Enabled = true;
 		}
 
-		private double getSpeedAtTime(DateTime dt)
-		{
-			if (m_arrKphValues == null
-			|| m_arrKphValues.Count < 2
-			|| (m_arrKphValues[0] as DatedValue).Date > dt
-			|| (m_arrKphValues[m_arrKphValues.Count - 1] as DatedValue).Date < dt
-				)
-				return -1.0;
-			DateTime dateTime3 = (m_arrKphValues[0] as DatedValue).Date;
-			int index1 = 1;
-			if (1 < m_arrKphValues.Count)
-			{
-				double num1;
-				double num2;
-				DateTime dateTime4;
-				DateTime dateTime5;
-				do
-				{
-					int index2 = index1 - 1;
-					num1 = (m_arrKphValues[index2] as DatedValue).Value;
-					num2 = (m_arrKphValues[index1] as DatedValue).Value;
-					dateTime4 = (m_arrKphValues[index2] as DatedValue).Date;
-					dateTime5 = (m_arrKphValues[index1] as DatedValue).Date;
-					if (!(dateTime5 >= dt))
-						++index1;
-					else
-						return dt.Subtract(dateTime4).TotalSeconds / dateTime5.Subtract(dateTime4).TotalSeconds * (num2 - num1) + num1;
-				}
-				while (index1 < m_arrKphValues.Count);
-			}
-			return -1.0;
-		}
-
 		private void Calculate()
 		{
-			m_dTQMax = 0.0;
-			m_dHPMax = 0.0;
-			double[] numArray1 = new double[m_arrRpmValues.Count - 1];
-			numArray1.Initialize();
-			HPValue = numArray1;
-			double[] numArray2 = new double[m_arrRpmValues.Count - 1];
-			numArray2.Initialize();
-			TQValue = numArray2;
-			double[] numArray3 = new double[m_arrRpmValues.Count - 1];
-			numArray3.Initialize();
-			SampleRPM = numArray3;
-			int index1 = 0;
-			if (0 < m_arrRpmValues.Count - 1)
+			m_TQMax = 0.0;
+			m_HPMax = 0.0;
+
+			m_HPValue = new double[m_RpmValues.Count - 1];
+			m_TQValue = new double[m_RpmValues.Count - 1];
+			m_SampleRPM = new double[m_RpmValues.Count - 1];
+			int idx = 0;
+			if ((m_RpmValues.Count - 1) > 0)
 			{
 				do
 				{
-					double num1 = (m_arrRpmValues[index1] as DatedValue).Value;
-					int index2 = index1 + 1;
-					double num2 = (m_arrRpmValues[index2] as DatedValue).Value;
-					DateTime dateTime1 = (m_arrRpmValues[index1] as DatedValue).Date;
-					TimeSpan timeSpan = (m_arrRpmValues[index2] as DatedValue).Date.Subtract(dateTime1);
-					dateTime1.AddSeconds(timeSpan.TotalSeconds * 0.5);
-					double num3 = (m_arrKphValues[index1] as DatedValue).Value;
-					double num4 = (m_arrKphValues[index2] as DatedValue).Value;
-					DateTime dateTime2 = (m_arrKphValues[index1] as DatedValue).Date;
-					DateTime dateTime3 = (m_arrKphValues[index2] as DatedValue).Date;
-					SampleRPM[index1] = (num2 + num1) * 0.5 * 0.001;
-					double num5 = (num4 + num3) * 0.5 * 0.621371192 * 0.44704;
-					double num6 = m_dVehicleWeight * 0.45359237 * num5 * num5 * 0.5 / dateTime3.Subtract(dateTime2).TotalSeconds;
-					HPValue[index1] = num6 * 0.00134102209;
-					if (HPValue[index1] > m_dHPMax)
-						m_dHPMax = HPValue[index1];
-					TQValue[index1] = HPValue[index1] * 5252.0 / (SampleRPM[index1] * 1000.0);
-					if (TQValue[index1] > m_dTQMax)
-						m_dTQMax = TQValue[index1];
-					index1 = index2;
+					double rpm_value_0 = m_RpmValues[idx].Value;
+					int next = idx + 1;
+					double rpm_value_1 = m_RpmValues[next].Value;
+					DateTime rpm_date_0 = m_RpmValues[idx].Date;
+					TimeSpan delta_time = m_RpmValues[next].Date.Subtract(rpm_date_0);
+					rpm_date_0.AddSeconds(delta_time.TotalSeconds * 0.5);
+
+					double kph_value_0 = m_KphValues[idx].Value;
+					double kph_value_1 = m_KphValues[next].Value;
+					DateTime kph_date_0 = m_KphValues[idx].Date;
+					DateTime kph_date_1 = m_KphValues[next].Date;
+
+					m_SampleRPM[idx] = (rpm_value_1 + rpm_value_0) * 0.5 * 0.001;
+					double num5 = (kph_value_1 + kph_value_0) * 0.5 * 0.621371192 * 0.44704;
+					double kw_value = m_dVehicleWeight * 0.45359237 * num5 * num5 * 0.5 / kph_date_1.Subtract(kph_date_0).TotalSeconds;
+
+					m_HPValue[idx] = kw_value * 0.00134102209;
+					if (m_HPValue[idx] > m_HPMax)
+						m_HPMax = m_HPValue[idx];
+
+					m_TQValue[idx] = m_HPValue[idx] * 5252.0 / (m_SampleRPM[idx] * 1000.0);
+
+					if (m_TQValue[idx] > m_TQMax)
+						m_TQMax = m_TQValue[idx];
+					idx = next;
 				}
-				while (index1 < m_arrRpmValues.Count - 1);
+				while (idx < m_RpmValues.Count - 1);
 			}
-			dyno.XData1 = SampleRPM;
-			dyno.YData1 = HPValue;
-			dyno.XData2 = SampleRPM;
-			dyno.YData2 = TQValue;
-			dyno.YRangeEnd = m_dHPMax < m_dTQMax ? m_dTQMax : m_dHPMax;
+			dyno.XData1 = m_SampleRPM;
+			dyno.YData1 = m_HPValue;
+			dyno.XData2 = m_SampleRPM;
+			dyno.YData2 = m_TQValue;
+			dyno.YRangeEnd = m_HPMax < m_TQMax ? m_TQMax : m_HPMax;
 			dyno.YRangeEnd = (double)Convert.ToInt32(dyno.YRangeEnd + 0.5);
 			if (Convert.ToInt32(dyno.YRangeEnd) % Convert.ToInt32(dyno.YGrid) != 0)
 			{
@@ -578,13 +517,9 @@ namespace ProScan
 
 		private void btnPrint_Click(object sender, EventArgs e)
 		{
-			if (printDialog1.ShowDialog() != DialogResult.OK)
+			if (printDialog.ShowDialog() != DialogResult.OK)
 				return;
-			printDocument1.Print();
-		}
-
-		private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
-		{
+			printDocument.Print();
 		}
 
 		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
@@ -604,40 +539,11 @@ namespace ProScan
 			return (Image)bitmap;
 		}
 
-		public void ReceiveResponse(OBD2Response obd2Response)
-		{
-		}
-
-		public void Menu_PrintPreview()
-		{
-			PrintPreview();
-		}
-
-		public void Menu_PageSetup()
-		{
-			PageSetup();
-		}
-
-		public void Menu_Print()
-		{
-			Print();
-		}
-
-		private void PrintPreview()
-		{
-			printPreviewDialog1.ShowDialog();
-		}
-
-		private void PageSetup()
-		{
-			pageSetupDialog1.ShowDialog();
-		}
-
 		private void Print()
 		{
-			if (printDialog1.ShowDialog() != DialogResult.OK)
+			if (printDialog.ShowDialog() != DialogResult.OK)
 				return;
-			printDocument1.Print();
+			printDocument.Print();
 		}
 
 		private void btnExportJPEG_Click(object sender, EventArgs e)
@@ -654,14 +560,14 @@ namespace ProScan
 
 		private void btnReset_Click(object sender, EventArgs e)
 		{
-			m_bCapture = false;
-			HPValue = (double[])null;
-			TQValue = (double[])null;
-			SampleRPM = (double[])null;
-			dyno.XData1 = SampleRPM;
-			dyno.YData1 = HPValue;
-			dyno.XData2 = SampleRPM;
-			dyno.YData2 = TQValue;
+			m_Capture = false;
+			m_HPValue = (double[])null;
+			m_TQValue = (double[])null;
+			m_SampleRPM = (double[])null;
+			dyno.XData1 = m_SampleRPM;
+			dyno.YData1 = m_HPValue;
+			dyno.XData2 = m_SampleRPM;
+			dyno.YData2 = m_TQValue;
 			btnStart.Enabled = true;
 			btnReset.Enabled = false;
 			btnOpen.Enabled = true;
@@ -669,10 +575,8 @@ namespace ProScan
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			if (m_arrRpmValues == null)
-			{
+			if (m_RpmValues == null)
 				MessageBox.Show("You must first perform a dyno pull or open a previous session.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-			}
 			else
 			{
 				SaveFileDialog dialog = new SaveFileDialog();
@@ -684,13 +588,15 @@ namespace ProScan
 				if (dialog.FileName != "")
 				{
 					DynoRecord record = new DynoRecord();
-					record.RpmList = m_arrRpmValues;
+					record.RpmList = m_RpmValues;
 					record.Weight = m_dVehicleWeight;
 					record.Label = dyno.Label;
-					Type[] typeArray = new Type[] { typeof(ArrayList), typeof(DatedValue) };
-					TextWriter writer = new StreamWriter(dialog.FileName);
-					new XmlSerializer(typeof(DynoRecord), typeArray).Serialize(writer, record);
-					writer.Close();
+					Type[] typeArray = new Type[] { typeof(List<DatedValue>), typeof(DatedValue) };
+					using (TextWriter writer = new StreamWriter(dialog.FileName))
+					{
+						new XmlSerializer(typeof(DynoRecord), typeArray).Serialize(writer, record);
+						writer.Close();
+					}
 				}
 			}
 		}
@@ -703,17 +609,20 @@ namespace ProScan
 			openFileDialog.RestoreDirectory = true;
 			if (openFileDialog.ShowDialog() != DialogResult.OK)
 				return;
+
 			XmlSerializer xmlSerializer = new XmlSerializer(
 				typeof(DynoRecord),
-				new System.Type[] { typeof(ArrayList), typeof(DatedValue) }
+				new System.Type[] { typeof(List<DatedValue>), typeof(DatedValue) }
 				);
-			FileStream fileStream1 = new FileStream(openFileDialog.FileName, FileMode.Open);
-			FileStream fileStream2 = fileStream1;
-			DynoRecord dynoRecord = (DynoRecord)xmlSerializer.Deserialize((Stream)fileStream2);
-			fileStream1.Close();
+			DynoRecord dynoRecord;
+			using (FileStream reader = new FileStream(openFileDialog.FileName, FileMode.Open))
+			{
+				dynoRecord = (DynoRecord)xmlSerializer.Deserialize(reader);
+				reader.Close();
+			}
 			m_dVehicleWeight = dynoRecord.Weight;
 			dyno.Label = dynoRecord.Label;
-			m_arrRpmValues = dynoRecord.RpmList;
+			m_RpmValues = dynoRecord.RpmList;
 			Calculate();
 		}
 
@@ -731,7 +640,7 @@ namespace ProScan
 
 		public void CheckConnection()
 		{
-			if (m_obdInterface.getConnectedStatus())
+			if (m_obdInterface.ConnectedStatus)
 			{
 				btnStart.Enabled = true;
 				btnReset.Enabled = true;

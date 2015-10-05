@@ -1,9 +1,12 @@
 ﻿using System;
 
-[Serializable]
-public class WheelStruc
+namespace ProScan
 {
-	public int Width;
-	public int AspectRatio;
-	public int RimDiameter;
+	[Serializable]
+	public class WheelStruc
+	{
+		public int Width;
+		public int AspectRatio;
+		public int RimDiameter;
+	}
 }

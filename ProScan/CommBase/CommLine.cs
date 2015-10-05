@@ -6,55 +6,48 @@ namespace ProScan
 {
 	public abstract class CommLine : CommBase
 	{
-		private uint RxBufferP = 0U;
-		private string RxString = "";
-		private ManualResetEvent TransFlag = new ManualResetEvent(true);
-		private byte[] RxBuffer;
-		private CommBase.ASCII RxTerm;
-		private CommBase.ASCII[] TxTerm;
-		private CommBase.ASCII[] RxFilter;
-		private uint TransTimeout;
+		private int m_RxIndex = 0;
+		private string m_RxString = "";
+		private ManualResetEvent m_TransFlag = new ManualResetEvent(true);
+		private byte[] m_RxBuffer;
+		private CommBase.ASCII m_RxTerm;
+		private CommBase.ASCII[] m_TxTerm;
+		private CommBase.ASCII[] m_RxFilter;
+		private int m_TransTimeout;
 
-		protected void Send(string toSend)
+		protected void Send(string data)
 		{
-			int num = Encoding.ASCII.GetByteCount(toSend);
-			if (TxTerm != null)
-				num += TxTerm.GetLength(0);
-			byte[] tosend = new byte[num];
-			byte[] bytes = Encoding.ASCII.GetBytes(toSend);
-			int index1;
-			for (index1 = 0; index1 <= bytes.GetUpperBound(0); ++index1)
-				tosend[index1] = bytes[index1];
-			if (TxTerm != null)
-			{
-				int index2 = 0;
-				while (index2 <= TxTerm.GetUpperBound(0))
-				{
-					tosend[index1] = (byte)TxTerm[index2];
-					++index2;
-					++index1;
-				}
-			}
-			base.Send(tosend);
+			int len_data = Encoding.ASCII.GetByteCount(data);
+
+			int len_term = 0;
+			if (m_TxTerm != null)
+				len_term = m_TxTerm.Length;
+
+			byte[] sending = new byte[len_data + len_term];
+			Encoding.ASCII.GetBytes(data).CopyTo(sending, 0);
+
+			if (m_TxTerm != null)
+				m_TxTerm.CopyTo(sending, len_data);
+			base.Send(sending);
 		}
 
-		protected string Transact(string toSend)
+		protected string Transact(string data)
 		{
-			Send(toSend);
-			TransFlag.Reset();
-			if (!TransFlag.WaitOne((int)TransTimeout, false))
+			Send(data);
+			m_TransFlag.Reset();
+			if (!m_TransFlag.WaitOne(m_TransTimeout, false))
 				ThrowException("Timeout");
-			lock (RxString)
-				return RxString;
+			lock (m_RxString)
+				return m_RxString;
 		}
 
-		protected void Setup(CommLine.CommLineSettings s)
+		protected void Setup(CommLine.CommLineSettings settings)
 		{
-			RxBuffer = new byte[s.rxStringBufferSize];
-			RxTerm = s.rxTerminator;
-			RxFilter = s.rxFilter;
-			TransTimeout = (uint)s.transactTimeout;
-			TxTerm = s.txTerminator;
+			m_RxBuffer = new byte[settings.RxStringBufferSize];
+			m_RxTerm = settings.RxTerminator;
+			m_RxFilter = settings.RxFilter;
+			m_TransTimeout = settings.TransactTimeout;
+			m_TxTerm = settings.TxTerminator;
 		}
 
 		protected virtual void OnRxLine(string s)
@@ -64,46 +57,36 @@ namespace ProScan
 		protected override void OnRxChar(byte ch)
 		{
 			CommBase.ASCII ascii = (CommBase.ASCII)ch;
-			if (ascii == RxTerm || (long)RxBufferP > (long)RxBuffer.GetUpperBound(0))
+			if (ascii == m_RxTerm || m_RxIndex >= m_RxBuffer.Length)
 			{
-				lock (RxString)
-					RxString = Encoding.ASCII.GetString(RxBuffer, 0, (int)RxBufferP);
-				RxBufferP = 0U;
-				if (TransFlag.WaitOne(0, false))
-					OnRxLine(RxString);
+				lock (m_RxString)
+					m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
+				m_RxIndex = 0;
+				if (m_TransFlag.WaitOne(0, false))
+					OnRxLine(m_RxString);
 				else
-					TransFlag.Set();
+					m_TransFlag.Set();
 			}
 			else
 			{
-				bool flag = true;
-				if (RxFilter != null)
+				if (m_RxFilter != null)
 				{
-					for (int index = 0; index <= RxFilter.GetUpperBound(0); ++index)
-					{
-						if (RxFilter[index] == ascii)
-							flag = false;
-					}
+					for (int idx = 0; idx < m_RxFilter.Length; ++idx)
+						if (m_RxFilter[idx] == ascii)
+							return;
 				}
-				if (!flag)
-					return;
-				RxBuffer[RxBufferP] = ch;
-				++RxBufferP;
+				m_RxBuffer[m_RxIndex] = ch;
+				++m_RxIndex;
 			}
 		}
 
 		public class CommLineSettings : CommBase.CommBaseSettings
 		{
-			public int rxStringBufferSize = 256;
-			public CommBase.ASCII rxTerminator = CommBase.ASCII.CR;
-			public int transactTimeout = 500;
-			public CommBase.ASCII[] rxFilter;
-			public CommBase.ASCII[] txTerminator;
-
-			public new static CommLine.CommLineSettings LoadFromXML(Stream s)
-			{
-				return (CommLine.CommLineSettings)CommBase.CommBaseSettings.LoadFromXML(s, typeof(CommLine.CommLineSettings));
-			}
+			public int RxStringBufferSize = 256;
+			public CommBase.ASCII RxTerminator = CommBase.ASCII.CR;
+			public int TransactTimeout = 500;
+			public CommBase.ASCII[] RxFilter;
+			public CommBase.ASCII[] TxTerminator;
 		}
 	}
 }

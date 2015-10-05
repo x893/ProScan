@@ -1,6 +1,7 @@
 ﻿using DGChart;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
@@ -38,10 +39,12 @@ namespace ProScan
 		private ComboBox comboUnits4;
 		private ComboBox comboUnits3;
 		private ScopeForm MyScopeForm;
-		private ArrayList m_arraySensor1Values;
-		private ArrayList m_arraySensor2Values;
-		private ArrayList m_arraySensor3Values;
-		private ArrayList m_arraySensor4Values;
+
+		private List<DatedValue> m_arraySensor1Values;
+		private List<DatedValue> m_arraySensor2Values;
+		private List<DatedValue> m_arraySensor3Values;
+		private List<DatedValue> m_arraySensor4Values;
+
 		private double m_dSensor1Max;
 		private double m_dSensor2Max;
 		private double m_dSensor3Max;
@@ -58,8 +61,7 @@ namespace ProScan
 		private double[] dSensor3Times;
 		private double[] dSensor4Values;
 		private double[] dSensor4Times;
-		public bool m_isPlotting;
-		private Container components;
+		public bool IsPlotting;
 
 		public ScopeForm(OBDInterface obd2)
 		{
@@ -68,538 +70,527 @@ namespace ProScan
 			InitializeComponent();
 		}
 
-		public void ReceiveResponse(OBD2Response obd2Response)
-		{
-		}
-
-		public void On_OBD2_Disconnect()
-		{
-			StopLogging();
-		}
-
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
 		private void InitializeComponent()
 		{
-			chart1 = new DGChart.DGChartControl();
-			comboSensor1 = new System.Windows.Forms.ComboBox();
-			chart2 = new DGChart.DGChartControl();
-			chart3 = new DGChart.DGChartControl();
-			chart4 = new DGChart.DGChartControl();
-			groupSetup = new System.Windows.Forms.GroupBox();
-			comboStyle4 = new System.Windows.Forms.ComboBox();
-			comboStyle3 = new System.Windows.Forms.ComboBox();
-			comboStyle2 = new System.Windows.Forms.ComboBox();
-			comboStyle1 = new System.Windows.Forms.ComboBox();
-			comboUnits4 = new System.Windows.Forms.ComboBox();
-			comboUnits3 = new System.Windows.Forms.ComboBox();
-			comboUnits2 = new System.Windows.Forms.ComboBox();
-			comboUnits1 = new System.Windows.Forms.ComboBox();
-			chkSensor4 = new System.Windows.Forms.CheckBox();
-			chkSensor3 = new System.Windows.Forms.CheckBox();
-			chkSensor2 = new System.Windows.Forms.CheckBox();
-			chkSensor1 = new System.Windows.Forms.CheckBox();
-			comboSensor4 = new System.Windows.Forms.ComboBox();
-			comboSensor3 = new System.Windows.Forms.ComboBox();
-			comboSensor2 = new System.Windows.Forms.ComboBox();
-			groupControl = new System.Windows.Forms.GroupBox();
-			btnStop = new System.Windows.Forms.Button();
-			btnStart = new System.Windows.Forms.Button();
-			numHistory = new System.Windows.Forms.NumericUpDown();
-			lblHistory = new System.Windows.Forms.Label();
-			groupSetup.SuspendLayout();
-			groupControl.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(numHistory)).BeginInit();
-			SuspendLayout();
+			this.chart1 = new DGChart.DGChartControl();
+			this.comboSensor1 = new System.Windows.Forms.ComboBox();
+			this.chart2 = new DGChart.DGChartControl();
+			this.chart3 = new DGChart.DGChartControl();
+			this.chart4 = new DGChart.DGChartControl();
+			this.groupSetup = new System.Windows.Forms.GroupBox();
+			this.comboStyle4 = new System.Windows.Forms.ComboBox();
+			this.comboStyle3 = new System.Windows.Forms.ComboBox();
+			this.comboStyle2 = new System.Windows.Forms.ComboBox();
+			this.comboStyle1 = new System.Windows.Forms.ComboBox();
+			this.comboUnits4 = new System.Windows.Forms.ComboBox();
+			this.comboUnits3 = new System.Windows.Forms.ComboBox();
+			this.comboUnits2 = new System.Windows.Forms.ComboBox();
+			this.comboUnits1 = new System.Windows.Forms.ComboBox();
+			this.chkSensor4 = new System.Windows.Forms.CheckBox();
+			this.chkSensor3 = new System.Windows.Forms.CheckBox();
+			this.chkSensor2 = new System.Windows.Forms.CheckBox();
+			this.chkSensor1 = new System.Windows.Forms.CheckBox();
+			this.comboSensor4 = new System.Windows.Forms.ComboBox();
+			this.comboSensor3 = new System.Windows.Forms.ComboBox();
+			this.comboSensor2 = new System.Windows.Forms.ComboBox();
+			this.groupControl = new System.Windows.Forms.GroupBox();
+			this.btnStop = new System.Windows.Forms.Button();
+			this.btnStart = new System.Windows.Forms.Button();
+			this.numHistory = new System.Windows.Forms.NumericUpDown();
+			this.lblHistory = new System.Windows.Forms.Label();
+			this.groupSetup.SuspendLayout();
+			this.groupControl.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numHistory)).BeginInit();
+			this.SuspendLayout();
 			// 
 			// chart1
 			// 
-			chart1.BackColor = System.Drawing.SystemColors.Control;
-			chart1.BorderBottom = 25;
-			chart1.BorderTop = 20;
-			chart1.ColorAxis = System.Drawing.Color.Black;
-			chart1.ColorBg = System.Drawing.SystemColors.Control;
-			chart1.ColorGrid = System.Drawing.Color.Gray;
-			chart1.ColorSet1 = System.Drawing.Color.DarkBlue;
-			chart1.ColorSet2 = System.Drawing.Color.Red;
-			chart1.ColorSet3 = System.Drawing.Color.Lime;
-			chart1.ColorSet4 = System.Drawing.Color.Gold;
-			chart1.ColorSet5 = System.Drawing.Color.Magenta;
-			chart1.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
-			chart1.FontAxis = new System.Drawing.Font("Arial", 8F);
-			chart1.Location = new System.Drawing.Point(0, 128);
-			chart1.Name = "chart1";
-			chart1.ShowData1 = true;
-			chart1.ShowData2 = false;
-			chart1.ShowData3 = false;
-			chart1.ShowData4 = false;
-			chart1.ShowData5 = false;
-			chart1.Size = new System.Drawing.Size(316, 160);
-			chart1.TabIndex = 0;
-			chart1.XData1 = null;
-			chart1.XData2 = null;
-			chart1.XData3 = null;
-			chart1.XData4 = null;
-			chart1.XData5 = null;
-			chart1.XGrid = 10D;
-			chart1.XLabel = "0";
-			chart1.XRangeEnd = 30D;
-			chart1.XRangeStart = 0D;
-			chart1.YData1 = null;
-			chart1.YData2 = null;
-			chart1.YData3 = null;
-			chart1.YData4 = null;
-			chart1.YData5 = null;
-			chart1.YGrid = 20D;
-			chart1.YLabel = "0";
-			chart1.YRangeEnd = 100D;
-			chart1.YRangeStart = 0D;
+			this.chart1.BackColor = System.Drawing.SystemColors.Control;
+			this.chart1.BorderBottom = 25;
+			this.chart1.BorderTop = 20;
+			this.chart1.ColorAxis = System.Drawing.Color.Black;
+			this.chart1.ColorBg = System.Drawing.SystemColors.Control;
+			this.chart1.ColorGrid = System.Drawing.Color.Gray;
+			this.chart1.ColorSet1 = System.Drawing.Color.DarkBlue;
+			this.chart1.ColorSet2 = System.Drawing.Color.Red;
+			this.chart1.ColorSet3 = System.Drawing.Color.Lime;
+			this.chart1.ColorSet4 = System.Drawing.Color.Gold;
+			this.chart1.ColorSet5 = System.Drawing.Color.Magenta;
+			this.chart1.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
+			this.chart1.FontAxis = new System.Drawing.Font("Arial", 8F);
+			this.chart1.Location = new System.Drawing.Point(0, 148);
+			this.chart1.Name = "chart1";
+			this.chart1.ShowData1 = true;
+			this.chart1.ShowData2 = false;
+			this.chart1.ShowData3 = false;
+			this.chart1.ShowData4 = false;
+			this.chart1.ShowData5 = false;
+			this.chart1.Size = new System.Drawing.Size(379, 184);
+			this.chart1.TabIndex = 0;
+			this.chart1.XData1 = null;
+			this.chart1.XData2 = null;
+			this.chart1.XData3 = null;
+			this.chart1.XData4 = null;
+			this.chart1.XData5 = null;
+			this.chart1.XGrid = 10D;
+			this.chart1.XLabel = "0";
+			this.chart1.XRangeEnd = 30D;
+			this.chart1.XRangeStart = 0D;
+			this.chart1.YData1 = null;
+			this.chart1.YData2 = null;
+			this.chart1.YData3 = null;
+			this.chart1.YData4 = null;
+			this.chart1.YData5 = null;
+			this.chart1.YGrid = 20D;
+			this.chart1.YLabel = "0";
+			this.chart1.YRangeEnd = 100D;
+			this.chart1.YRangeStart = 0D;
 			// 
 			// comboSensor1
 			// 
-			comboSensor1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboSensor1.Enabled = false;
-			comboSensor1.Location = new System.Drawing.Point(90, 20);
-			comboSensor1.Name = "comboSensor1";
-			comboSensor1.Size = new System.Drawing.Size(200, 21);
-			comboSensor1.TabIndex = 1;
-			comboSensor1.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits1_SelectedIndexChanged);
+			this.comboSensor1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSensor1.Enabled = false;
+			this.comboSensor1.Location = new System.Drawing.Point(108, 23);
+			this.comboSensor1.Name = "comboSensor1";
+			this.comboSensor1.Size = new System.Drawing.Size(240, 24);
+			this.comboSensor1.TabIndex = 1;
+			this.comboSensor1.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits1_SelectedIndexChanged);
 			// 
 			// chart2
 			// 
-			chart2.BackColor = System.Drawing.SystemColors.Control;
-			chart2.BorderBottom = 25;
-			chart2.BorderTop = 20;
-			chart2.ColorAxis = System.Drawing.Color.Black;
-			chart2.ColorBg = System.Drawing.SystemColors.Control;
-			chart2.ColorGrid = System.Drawing.Color.Gray;
-			chart2.ColorSet1 = System.Drawing.Color.Red;
-			chart2.ColorSet2 = System.Drawing.Color.DarkBlue;
-			chart2.ColorSet3 = System.Drawing.Color.Lime;
-			chart2.ColorSet4 = System.Drawing.Color.Gold;
-			chart2.ColorSet5 = System.Drawing.Color.Magenta;
-			chart2.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
-			chart2.FontAxis = new System.Drawing.Font("Arial", 8F);
-			chart2.Location = new System.Drawing.Point(316, 128);
-			chart2.Name = "chart2";
-			chart2.ShowData1 = true;
-			chart2.ShowData2 = false;
-			chart2.ShowData3 = false;
-			chart2.ShowData4 = false;
-			chart2.ShowData5 = false;
-			chart2.Size = new System.Drawing.Size(316, 160);
-			chart2.TabIndex = 3;
-			chart2.XData1 = null;
-			chart2.XData2 = null;
-			chart2.XData3 = null;
-			chart2.XData4 = null;
-			chart2.XData5 = null;
-			chart2.XGrid = 10D;
-			chart2.XLabel = "0";
-			chart2.XRangeEnd = 30D;
-			chart2.XRangeStart = 0D;
-			chart2.YData1 = null;
-			chart2.YData2 = null;
-			chart2.YData3 = null;
-			chart2.YData4 = null;
-			chart2.YData5 = null;
-			chart2.YGrid = 20D;
-			chart2.YLabel = "0";
-			chart2.YRangeEnd = 100D;
-			chart2.YRangeStart = 0D;
+			this.chart2.BackColor = System.Drawing.SystemColors.Control;
+			this.chart2.BorderBottom = 25;
+			this.chart2.BorderTop = 20;
+			this.chart2.ColorAxis = System.Drawing.Color.Black;
+			this.chart2.ColorBg = System.Drawing.SystemColors.Control;
+			this.chart2.ColorGrid = System.Drawing.Color.Gray;
+			this.chart2.ColorSet1 = System.Drawing.Color.Red;
+			this.chart2.ColorSet2 = System.Drawing.Color.DarkBlue;
+			this.chart2.ColorSet3 = System.Drawing.Color.Lime;
+			this.chart2.ColorSet4 = System.Drawing.Color.Gold;
+			this.chart2.ColorSet5 = System.Drawing.Color.Magenta;
+			this.chart2.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
+			this.chart2.FontAxis = new System.Drawing.Font("Arial", 8F);
+			this.chart2.Location = new System.Drawing.Point(379, 148);
+			this.chart2.Name = "chart2";
+			this.chart2.ShowData1 = true;
+			this.chart2.ShowData2 = false;
+			this.chart2.ShowData3 = false;
+			this.chart2.ShowData4 = false;
+			this.chart2.ShowData5 = false;
+			this.chart2.Size = new System.Drawing.Size(379, 184);
+			this.chart2.TabIndex = 3;
+			this.chart2.XData1 = null;
+			this.chart2.XData2 = null;
+			this.chart2.XData3 = null;
+			this.chart2.XData4 = null;
+			this.chart2.XData5 = null;
+			this.chart2.XGrid = 10D;
+			this.chart2.XLabel = "0";
+			this.chart2.XRangeEnd = 30D;
+			this.chart2.XRangeStart = 0D;
+			this.chart2.YData1 = null;
+			this.chart2.YData2 = null;
+			this.chart2.YData3 = null;
+			this.chart2.YData4 = null;
+			this.chart2.YData5 = null;
+			this.chart2.YGrid = 20D;
+			this.chart2.YLabel = "0";
+			this.chart2.YRangeEnd = 100D;
+			this.chart2.YRangeStart = 0D;
 			// 
 			// chart3
 			// 
-			chart3.BackColor = System.Drawing.SystemColors.Control;
-			chart3.BorderBottom = 25;
-			chart3.BorderTop = 20;
-			chart3.ColorAxis = System.Drawing.Color.Black;
-			chart3.ColorBg = System.Drawing.SystemColors.Control;
-			chart3.ColorGrid = System.Drawing.Color.Gray;
-			chart3.ColorSet1 = System.Drawing.Color.Lime;
-			chart3.ColorSet2 = System.Drawing.Color.Red;
-			chart3.ColorSet3 = System.Drawing.Color.DarkBlue;
-			chart3.ColorSet4 = System.Drawing.Color.Gold;
-			chart3.ColorSet5 = System.Drawing.Color.Magenta;
-			chart3.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
-			chart3.FontAxis = new System.Drawing.Font("Arial", 8F);
-			chart3.Location = new System.Drawing.Point(0, 288);
-			chart3.Name = "chart3";
-			chart3.ShowData1 = true;
-			chart3.ShowData2 = false;
-			chart3.ShowData3 = false;
-			chart3.ShowData4 = false;
-			chart3.ShowData5 = false;
-			chart3.Size = new System.Drawing.Size(316, 160);
-			chart3.TabIndex = 4;
-			chart3.XData1 = null;
-			chart3.XData2 = null;
-			chart3.XData3 = null;
-			chart3.XData4 = null;
-			chart3.XData5 = null;
-			chart3.XGrid = 10D;
-			chart3.XLabel = "0";
-			chart3.XRangeEnd = 30D;
-			chart3.XRangeStart = 0D;
-			chart3.YData1 = null;
-			chart3.YData2 = null;
-			chart3.YData3 = null;
-			chart3.YData4 = null;
-			chart3.YData5 = null;
-			chart3.YGrid = 20D;
-			chart3.YLabel = "0";
-			chart3.YRangeEnd = 100D;
-			chart3.YRangeStart = 0D;
+			this.chart3.BackColor = System.Drawing.SystemColors.Control;
+			this.chart3.BorderBottom = 25;
+			this.chart3.BorderTop = 20;
+			this.chart3.ColorAxis = System.Drawing.Color.Black;
+			this.chart3.ColorBg = System.Drawing.SystemColors.Control;
+			this.chart3.ColorGrid = System.Drawing.Color.Gray;
+			this.chart3.ColorSet1 = System.Drawing.Color.Lime;
+			this.chart3.ColorSet2 = System.Drawing.Color.Red;
+			this.chart3.ColorSet3 = System.Drawing.Color.DarkBlue;
+			this.chart3.ColorSet4 = System.Drawing.Color.Gold;
+			this.chart3.ColorSet5 = System.Drawing.Color.Magenta;
+			this.chart3.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
+			this.chart3.FontAxis = new System.Drawing.Font("Arial", 8F);
+			this.chart3.Location = new System.Drawing.Point(0, 332);
+			this.chart3.Name = "chart3";
+			this.chart3.ShowData1 = true;
+			this.chart3.ShowData2 = false;
+			this.chart3.ShowData3 = false;
+			this.chart3.ShowData4 = false;
+			this.chart3.ShowData5 = false;
+			this.chart3.Size = new System.Drawing.Size(379, 185);
+			this.chart3.TabIndex = 4;
+			this.chart3.XData1 = null;
+			this.chart3.XData2 = null;
+			this.chart3.XData3 = null;
+			this.chart3.XData4 = null;
+			this.chart3.XData5 = null;
+			this.chart3.XGrid = 10D;
+			this.chart3.XLabel = "0";
+			this.chart3.XRangeEnd = 30D;
+			this.chart3.XRangeStart = 0D;
+			this.chart3.YData1 = null;
+			this.chart3.YData2 = null;
+			this.chart3.YData3 = null;
+			this.chart3.YData4 = null;
+			this.chart3.YData5 = null;
+			this.chart3.YGrid = 20D;
+			this.chart3.YLabel = "0";
+			this.chart3.YRangeEnd = 100D;
+			this.chart3.YRangeStart = 0D;
 			// 
 			// chart4
 			// 
-			chart4.BackColor = System.Drawing.SystemColors.Control;
-			chart4.BorderBottom = 25;
-			chart4.BorderTop = 20;
-			chart4.ColorAxis = System.Drawing.Color.Black;
-			chart4.ColorBg = System.Drawing.SystemColors.Control;
-			chart4.ColorGrid = System.Drawing.Color.Gray;
-			chart4.ColorSet1 = System.Drawing.Color.Magenta;
-			chart4.ColorSet2 = System.Drawing.Color.Red;
-			chart4.ColorSet3 = System.Drawing.Color.Lime;
-			chart4.ColorSet4 = System.Drawing.Color.Gold;
-			chart4.ColorSet5 = System.Drawing.Color.DarkBlue;
-			chart4.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
-			chart4.FontAxis = new System.Drawing.Font("Arial", 8F);
-			chart4.Location = new System.Drawing.Point(316, 288);
-			chart4.Name = "chart4";
-			chart4.ShowData1 = true;
-			chart4.ShowData2 = false;
-			chart4.ShowData3 = false;
-			chart4.ShowData4 = false;
-			chart4.ShowData5 = false;
-			chart4.Size = new System.Drawing.Size(316, 160);
-			chart4.TabIndex = 5;
-			chart4.XData1 = null;
-			chart4.XData2 = null;
-			chart4.XData3 = null;
-			chart4.XData4 = null;
-			chart4.XData5 = null;
-			chart4.XGrid = 10D;
-			chart4.XLabel = "0";
-			chart4.XRangeEnd = 30D;
-			chart4.XRangeStart = 0D;
-			chart4.YData1 = null;
-			chart4.YData2 = null;
-			chart4.YData3 = null;
-			chart4.YData4 = null;
-			chart4.YData5 = null;
-			chart4.YGrid = 20D;
-			chart4.YLabel = "0";
-			chart4.YRangeEnd = 100D;
-			chart4.YRangeStart = 0D;
+			this.chart4.BackColor = System.Drawing.SystemColors.Control;
+			this.chart4.BorderBottom = 25;
+			this.chart4.BorderTop = 20;
+			this.chart4.ColorAxis = System.Drawing.Color.Black;
+			this.chart4.ColorBg = System.Drawing.SystemColors.Control;
+			this.chart4.ColorGrid = System.Drawing.Color.Gray;
+			this.chart4.ColorSet1 = System.Drawing.Color.Magenta;
+			this.chart4.ColorSet2 = System.Drawing.Color.Red;
+			this.chart4.ColorSet3 = System.Drawing.Color.Lime;
+			this.chart4.ColorSet4 = System.Drawing.Color.Gold;
+			this.chart4.ColorSet5 = System.Drawing.Color.DarkBlue;
+			this.chart4.DrawMode = DGChart.DGChartControl.DrawModeType.Line;
+			this.chart4.FontAxis = new System.Drawing.Font("Arial", 8F);
+			this.chart4.Location = new System.Drawing.Point(379, 332);
+			this.chart4.Name = "chart4";
+			this.chart4.ShowData1 = true;
+			this.chart4.ShowData2 = false;
+			this.chart4.ShowData3 = false;
+			this.chart4.ShowData4 = false;
+			this.chart4.ShowData5 = false;
+			this.chart4.Size = new System.Drawing.Size(379, 185);
+			this.chart4.TabIndex = 5;
+			this.chart4.XData1 = null;
+			this.chart4.XData2 = null;
+			this.chart4.XData3 = null;
+			this.chart4.XData4 = null;
+			this.chart4.XData5 = null;
+			this.chart4.XGrid = 10D;
+			this.chart4.XLabel = "0";
+			this.chart4.XRangeEnd = 30D;
+			this.chart4.XRangeStart = 0D;
+			this.chart4.YData1 = null;
+			this.chart4.YData2 = null;
+			this.chart4.YData3 = null;
+			this.chart4.YData4 = null;
+			this.chart4.YData5 = null;
+			this.chart4.YGrid = 20D;
+			this.chart4.YLabel = "0";
+			this.chart4.YRangeEnd = 100D;
+			this.chart4.YRangeStart = 0D;
 			// 
 			// groupSetup
 			// 
-			groupSetup.Controls.Add(comboStyle4);
-			groupSetup.Controls.Add(comboStyle3);
-			groupSetup.Controls.Add(comboStyle2);
-			groupSetup.Controls.Add(comboStyle1);
-			groupSetup.Controls.Add(comboUnits4);
-			groupSetup.Controls.Add(comboUnits3);
-			groupSetup.Controls.Add(comboUnits2);
-			groupSetup.Controls.Add(comboUnits1);
-			groupSetup.Controls.Add(chkSensor4);
-			groupSetup.Controls.Add(chkSensor3);
-			groupSetup.Controls.Add(chkSensor2);
-			groupSetup.Controls.Add(chkSensor1);
-			groupSetup.Controls.Add(comboSensor4);
-			groupSetup.Controls.Add(comboSensor3);
-			groupSetup.Controls.Add(comboSensor2);
-			groupSetup.Controls.Add(comboSensor1);
-			groupSetup.Location = new System.Drawing.Point(8, 8);
-			groupSetup.Name = "groupSetup";
-			groupSetup.Size = new System.Drawing.Size(496, 120);
-			groupSetup.TabIndex = 6;
-			groupSetup.TabStop = false;
-			groupSetup.Text = "Setup";
+			this.groupSetup.Controls.Add(this.comboStyle4);
+			this.groupSetup.Controls.Add(this.comboStyle3);
+			this.groupSetup.Controls.Add(this.comboStyle2);
+			this.groupSetup.Controls.Add(this.comboStyle1);
+			this.groupSetup.Controls.Add(this.comboUnits4);
+			this.groupSetup.Controls.Add(this.comboUnits3);
+			this.groupSetup.Controls.Add(this.comboUnits2);
+			this.groupSetup.Controls.Add(this.comboUnits1);
+			this.groupSetup.Controls.Add(this.chkSensor4);
+			this.groupSetup.Controls.Add(this.chkSensor3);
+			this.groupSetup.Controls.Add(this.chkSensor2);
+			this.groupSetup.Controls.Add(this.chkSensor1);
+			this.groupSetup.Controls.Add(this.comboSensor4);
+			this.groupSetup.Controls.Add(this.comboSensor3);
+			this.groupSetup.Controls.Add(this.comboSensor2);
+			this.groupSetup.Controls.Add(this.comboSensor1);
+			this.groupSetup.Location = new System.Drawing.Point(10, 9);
+			this.groupSetup.Name = "groupSetup";
+			this.groupSetup.Size = new System.Drawing.Size(595, 139);
+			this.groupSetup.TabIndex = 6;
+			this.groupSetup.TabStop = false;
+			this.groupSetup.Text = "Setup";
 			// 
 			// comboStyle4
 			// 
-			comboStyle4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboStyle4.Enabled = false;
-			comboStyle4.Items.AddRange(new object[] {
+			this.comboStyle4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStyle4.Enabled = false;
+			this.comboStyle4.Items.AddRange(new object[] {
             "Line",
             "Dot",
             "Bar"});
-			comboStyle4.Location = new System.Drawing.Point(410, 86);
-			comboStyle4.Name = "comboStyle4";
-			comboStyle4.Size = new System.Drawing.Size(75, 21);
-			comboStyle4.TabIndex = 20;
-			comboStyle4.SelectedIndexChanged += new System.EventHandler(comboStyle4_SelectedIndexChanged);
+			this.comboStyle4.Location = new System.Drawing.Point(492, 99);
+			this.comboStyle4.Name = "comboStyle4";
+			this.comboStyle4.Size = new System.Drawing.Size(90, 24);
+			this.comboStyle4.TabIndex = 20;
+			this.comboStyle4.SelectedIndexChanged += new System.EventHandler(this.comboStyle4_SelectedIndexChanged);
 			// 
 			// comboStyle3
 			// 
-			comboStyle3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboStyle3.Enabled = false;
-			comboStyle3.Items.AddRange(new object[] {
+			this.comboStyle3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStyle3.Enabled = false;
+			this.comboStyle3.Items.AddRange(new object[] {
             "Line",
             "Dot",
             "Bar"});
-			comboStyle3.Location = new System.Drawing.Point(410, 64);
-			comboStyle3.Name = "comboStyle3";
-			comboStyle3.Size = new System.Drawing.Size(75, 21);
-			comboStyle3.TabIndex = 19;
-			comboStyle3.SelectedIndexChanged += new System.EventHandler(comboStyle3_SelectedIndexChanged);
+			this.comboStyle3.Location = new System.Drawing.Point(492, 74);
+			this.comboStyle3.Name = "comboStyle3";
+			this.comboStyle3.Size = new System.Drawing.Size(90, 24);
+			this.comboStyle3.TabIndex = 19;
+			this.comboStyle3.SelectedIndexChanged += new System.EventHandler(this.comboStyle3_SelectedIndexChanged);
 			// 
 			// comboStyle2
 			// 
-			comboStyle2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboStyle2.Enabled = false;
-			comboStyle2.Items.AddRange(new object[] {
+			this.comboStyle2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStyle2.Enabled = false;
+			this.comboStyle2.Items.AddRange(new object[] {
             "Line",
             "Dot",
             "Bar"});
-			comboStyle2.Location = new System.Drawing.Point(410, 42);
-			comboStyle2.Name = "comboStyle2";
-			comboStyle2.Size = new System.Drawing.Size(75, 21);
-			comboStyle2.TabIndex = 18;
-			comboStyle2.SelectedIndexChanged += new System.EventHandler(comboStyle2_SelectedIndexChanged);
+			this.comboStyle2.Location = new System.Drawing.Point(492, 48);
+			this.comboStyle2.Name = "comboStyle2";
+			this.comboStyle2.Size = new System.Drawing.Size(90, 24);
+			this.comboStyle2.TabIndex = 18;
+			this.comboStyle2.SelectedIndexChanged += new System.EventHandler(this.comboStyle2_SelectedIndexChanged);
 			// 
 			// comboStyle1
 			// 
-			comboStyle1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboStyle1.Enabled = false;
-			comboStyle1.Items.AddRange(new object[] {
+			this.comboStyle1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboStyle1.Enabled = false;
+			this.comboStyle1.Items.AddRange(new object[] {
             "Line",
             "Dot",
             "Bar"});
-			comboStyle1.Location = new System.Drawing.Point(410, 20);
-			comboStyle1.Name = "comboStyle1";
-			comboStyle1.Size = new System.Drawing.Size(75, 21);
-			comboStyle1.TabIndex = 17;
-			comboStyle1.SelectedIndexChanged += new System.EventHandler(comboStyle1_SelectedIndexChanged);
+			this.comboStyle1.Location = new System.Drawing.Point(492, 23);
+			this.comboStyle1.Name = "comboStyle1";
+			this.comboStyle1.Size = new System.Drawing.Size(90, 24);
+			this.comboStyle1.TabIndex = 17;
+			this.comboStyle1.SelectedIndexChanged += new System.EventHandler(this.comboStyle1_SelectedIndexChanged);
 			// 
 			// comboUnits4
 			// 
-			comboUnits4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboUnits4.Enabled = false;
-			comboUnits4.Items.AddRange(new object[] {
+			this.comboUnits4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUnits4.Enabled = false;
+			this.comboUnits4.Items.AddRange(new object[] {
             "English",
             "Metric"});
-			comboUnits4.Location = new System.Drawing.Point(300, 86);
-			comboUnits4.Name = "comboUnits4";
-			comboUnits4.Size = new System.Drawing.Size(100, 21);
-			comboUnits4.TabIndex = 16;
-			comboUnits4.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits4_SelectedIndexChanged);
+			this.comboUnits4.Location = new System.Drawing.Point(360, 99);
+			this.comboUnits4.Name = "comboUnits4";
+			this.comboUnits4.Size = new System.Drawing.Size(120, 24);
+			this.comboUnits4.TabIndex = 16;
+			this.comboUnits4.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits4_SelectedIndexChanged);
 			// 
 			// comboUnits3
 			// 
-			comboUnits3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboUnits3.Enabled = false;
-			comboUnits3.Items.AddRange(new object[] {
+			this.comboUnits3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUnits3.Enabled = false;
+			this.comboUnits3.Items.AddRange(new object[] {
             "English",
             "Metric"});
-			comboUnits3.Location = new System.Drawing.Point(300, 64);
-			comboUnits3.Name = "comboUnits3";
-			comboUnits3.Size = new System.Drawing.Size(100, 21);
-			comboUnits3.TabIndex = 15;
-			comboUnits3.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits3_SelectedIndexChanged);
+			this.comboUnits3.Location = new System.Drawing.Point(360, 74);
+			this.comboUnits3.Name = "comboUnits3";
+			this.comboUnits3.Size = new System.Drawing.Size(120, 24);
+			this.comboUnits3.TabIndex = 15;
+			this.comboUnits3.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits3_SelectedIndexChanged);
 			// 
 			// comboUnits2
 			// 
-			comboUnits2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboUnits2.Enabled = false;
-			comboUnits2.Items.AddRange(new object[] {
+			this.comboUnits2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUnits2.Enabled = false;
+			this.comboUnits2.Items.AddRange(new object[] {
             "English",
             "Metric"});
-			comboUnits2.Location = new System.Drawing.Point(300, 42);
-			comboUnits2.Name = "comboUnits2";
-			comboUnits2.Size = new System.Drawing.Size(100, 21);
-			comboUnits2.TabIndex = 14;
-			comboUnits2.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits2_SelectedIndexChanged);
+			this.comboUnits2.Location = new System.Drawing.Point(360, 48);
+			this.comboUnits2.Name = "comboUnits2";
+			this.comboUnits2.Size = new System.Drawing.Size(120, 24);
+			this.comboUnits2.TabIndex = 14;
+			this.comboUnits2.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits2_SelectedIndexChanged);
 			// 
 			// comboUnits1
 			// 
-			comboUnits1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboUnits1.Enabled = false;
-			comboUnits1.Items.AddRange(new object[] {
+			this.comboUnits1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUnits1.Enabled = false;
+			this.comboUnits1.Items.AddRange(new object[] {
             "English",
             "Metric"});
-			comboUnits1.Location = new System.Drawing.Point(300, 20);
-			comboUnits1.Name = "comboUnits1";
-			comboUnits1.Size = new System.Drawing.Size(100, 21);
-			comboUnits1.TabIndex = 13;
-			comboUnits1.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits1_SelectedIndexChanged);
+			this.comboUnits1.Location = new System.Drawing.Point(360, 23);
+			this.comboUnits1.Name = "comboUnits1";
+			this.comboUnits1.Size = new System.Drawing.Size(120, 24);
+			this.comboUnits1.TabIndex = 13;
+			this.comboUnits1.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits1_SelectedIndexChanged);
 			// 
 			// chkSensor4
 			// 
-			chkSensor4.Enabled = false;
-			chkSensor4.Location = new System.Drawing.Point(10, 86);
-			chkSensor4.Name = "chkSensor4";
-			chkSensor4.Size = new System.Drawing.Size(80, 20);
-			chkSensor4.TabIndex = 12;
-			chkSensor4.Text = "Sensor &4:";
-			chkSensor4.CheckStateChanged += new System.EventHandler(chkSensor4_CheckedChanged);
-			chkSensor4.EnabledChanged += new System.EventHandler(chkSensor4_EnabledChanged);
+			this.chkSensor4.Enabled = false;
+			this.chkSensor4.Location = new System.Drawing.Point(12, 99);
+			this.chkSensor4.Name = "chkSensor4";
+			this.chkSensor4.Size = new System.Drawing.Size(96, 23);
+			this.chkSensor4.TabIndex = 12;
+			this.chkSensor4.Text = "Sensor &4:";
+			this.chkSensor4.CheckStateChanged += new System.EventHandler(this.chkSensor4_CheckedChanged);
+			this.chkSensor4.EnabledChanged += new System.EventHandler(this.chkSensor4_EnabledChanged);
 			// 
 			// chkSensor3
 			// 
-			chkSensor3.Enabled = false;
-			chkSensor3.Location = new System.Drawing.Point(10, 64);
-			chkSensor3.Name = "chkSensor3";
-			chkSensor3.Size = new System.Drawing.Size(80, 20);
-			chkSensor3.TabIndex = 11;
-			chkSensor3.Text = "Sensor &3:";
-			chkSensor3.CheckStateChanged += new System.EventHandler(chkSensor3_CheckedChanged);
-			chkSensor3.EnabledChanged += new System.EventHandler(chkSensor3_EnabledChanged);
+			this.chkSensor3.Enabled = false;
+			this.chkSensor3.Location = new System.Drawing.Point(12, 74);
+			this.chkSensor3.Name = "chkSensor3";
+			this.chkSensor3.Size = new System.Drawing.Size(96, 23);
+			this.chkSensor3.TabIndex = 11;
+			this.chkSensor3.Text = "Sensor &3:";
+			this.chkSensor3.CheckStateChanged += new System.EventHandler(this.chkSensor3_CheckedChanged);
+			this.chkSensor3.EnabledChanged += new System.EventHandler(this.chkSensor3_EnabledChanged);
 			// 
 			// chkSensor2
 			// 
-			chkSensor2.Enabled = false;
-			chkSensor2.Location = new System.Drawing.Point(10, 42);
-			chkSensor2.Name = "chkSensor2";
-			chkSensor2.Size = new System.Drawing.Size(80, 20);
-			chkSensor2.TabIndex = 10;
-			chkSensor2.Text = "Sensor &2:";
-			chkSensor2.CheckStateChanged += new System.EventHandler(chkSensor2_CheckedChanged);
-			chkSensor2.EnabledChanged += new System.EventHandler(chkSensor2_EnabledChanged);
+			this.chkSensor2.Enabled = false;
+			this.chkSensor2.Location = new System.Drawing.Point(12, 48);
+			this.chkSensor2.Name = "chkSensor2";
+			this.chkSensor2.Size = new System.Drawing.Size(96, 24);
+			this.chkSensor2.TabIndex = 10;
+			this.chkSensor2.Text = "Sensor &2:";
+			this.chkSensor2.CheckStateChanged += new System.EventHandler(this.chkSensor2_CheckedChanged);
+			this.chkSensor2.EnabledChanged += new System.EventHandler(this.chkSensor2_EnabledChanged);
 			// 
 			// chkSensor1
 			// 
-			chkSensor1.Location = new System.Drawing.Point(10, 20);
-			chkSensor1.Name = "chkSensor1";
-			chkSensor1.Size = new System.Drawing.Size(80, 20);
-			chkSensor1.TabIndex = 9;
-			chkSensor1.Text = "Sensor &1:";
-			chkSensor1.CheckedChanged += new System.EventHandler(chkSensor1_CheckedChanged);
-			chkSensor1.EnabledChanged += new System.EventHandler(chkSensor1_EnabledChanged);
+			this.chkSensor1.Location = new System.Drawing.Point(12, 23);
+			this.chkSensor1.Name = "chkSensor1";
+			this.chkSensor1.Size = new System.Drawing.Size(96, 23);
+			this.chkSensor1.TabIndex = 9;
+			this.chkSensor1.Text = "Sensor &1:";
+			this.chkSensor1.CheckedChanged += new System.EventHandler(this.chkSensor1_CheckedChanged);
+			this.chkSensor1.EnabledChanged += new System.EventHandler(this.chkSensor1_EnabledChanged);
 			// 
 			// comboSensor4
 			// 
-			comboSensor4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboSensor4.Enabled = false;
-			comboSensor4.Location = new System.Drawing.Point(90, 86);
-			comboSensor4.Name = "comboSensor4";
-			comboSensor4.Size = new System.Drawing.Size(200, 21);
-			comboSensor4.TabIndex = 7;
-			comboSensor4.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits4_SelectedIndexChanged);
+			this.comboSensor4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSensor4.Enabled = false;
+			this.comboSensor4.Location = new System.Drawing.Point(108, 99);
+			this.comboSensor4.Name = "comboSensor4";
+			this.comboSensor4.Size = new System.Drawing.Size(240, 24);
+			this.comboSensor4.TabIndex = 7;
+			this.comboSensor4.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits4_SelectedIndexChanged);
 			// 
 			// comboSensor3
 			// 
-			comboSensor3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboSensor3.Enabled = false;
-			comboSensor3.Location = new System.Drawing.Point(90, 64);
-			comboSensor3.Name = "comboSensor3";
-			comboSensor3.Size = new System.Drawing.Size(200, 21);
-			comboSensor3.TabIndex = 5;
-			comboSensor3.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits3_SelectedIndexChanged);
+			this.comboSensor3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSensor3.Enabled = false;
+			this.comboSensor3.Location = new System.Drawing.Point(108, 74);
+			this.comboSensor3.Name = "comboSensor3";
+			this.comboSensor3.Size = new System.Drawing.Size(240, 24);
+			this.comboSensor3.TabIndex = 5;
+			this.comboSensor3.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits3_SelectedIndexChanged);
 			// 
 			// comboSensor2
 			// 
-			comboSensor2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			comboSensor2.Enabled = false;
-			comboSensor2.Location = new System.Drawing.Point(90, 42);
-			comboSensor2.Name = "comboSensor2";
-			comboSensor2.Size = new System.Drawing.Size(200, 21);
-			comboSensor2.TabIndex = 3;
-			comboSensor2.SelectedIndexChanged += new System.EventHandler(comboSensorOrUnits2_SelectedIndexChanged);
+			this.comboSensor2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSensor2.Enabled = false;
+			this.comboSensor2.Location = new System.Drawing.Point(108, 48);
+			this.comboSensor2.Name = "comboSensor2";
+			this.comboSensor2.Size = new System.Drawing.Size(240, 24);
+			this.comboSensor2.TabIndex = 3;
+			this.comboSensor2.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits2_SelectedIndexChanged);
 			// 
 			// groupControl
 			// 
-			groupControl.Controls.Add(btnStop);
-			groupControl.Controls.Add(btnStart);
-			groupControl.Controls.Add(numHistory);
-			groupControl.Controls.Add(lblHistory);
-			groupControl.Location = new System.Drawing.Point(512, 8);
-			groupControl.Name = "groupControl";
-			groupControl.Size = new System.Drawing.Size(112, 120);
-			groupControl.TabIndex = 7;
-			groupControl.TabStop = false;
-			groupControl.Text = "Control";
+			this.groupControl.Controls.Add(this.btnStop);
+			this.groupControl.Controls.Add(this.btnStart);
+			this.groupControl.Controls.Add(this.numHistory);
+			this.groupControl.Controls.Add(this.lblHistory);
+			this.groupControl.Location = new System.Drawing.Point(614, 9);
+			this.groupControl.Name = "groupControl";
+			this.groupControl.Size = new System.Drawing.Size(135, 139);
+			this.groupControl.TabIndex = 7;
+			this.groupControl.TabStop = false;
+			this.groupControl.Text = "Control";
 			// 
 			// btnStop
 			// 
-			btnStop.Enabled = false;
-			btnStop.Location = new System.Drawing.Point(10, 86);
-			btnStop.Name = "btnStop";
-			btnStop.Size = new System.Drawing.Size(92, 20);
-			btnStop.TabIndex = 4;
-			btnStop.Text = "S&top";
-			btnStop.Click += new System.EventHandler(btnStop_Click);
+			this.btnStop.Enabled = false;
+			this.btnStop.Location = new System.Drawing.Point(12, 99);
+			this.btnStop.Name = "btnStop";
+			this.btnStop.Size = new System.Drawing.Size(110, 23);
+			this.btnStop.TabIndex = 4;
+			this.btnStop.Text = "S&top";
+			this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
 			// 
 			// btnStart
 			// 
-			btnStart.Location = new System.Drawing.Point(10, 64);
-			btnStart.Name = "btnStart";
-			btnStart.Size = new System.Drawing.Size(92, 20);
-			btnStart.TabIndex = 3;
-			btnStart.Text = "&Start";
-			btnStart.Click += new System.EventHandler(btnStart_Click);
+			this.btnStart.Location = new System.Drawing.Point(12, 74);
+			this.btnStart.Name = "btnStart";
+			this.btnStart.Size = new System.Drawing.Size(110, 23);
+			this.btnStart.TabIndex = 3;
+			this.btnStart.Text = "&Start";
+			this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
 			// 
 			// numHistory
 			// 
-			numHistory.Increment = new decimal(new int[] {
+			this.numHistory.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-			numHistory.Location = new System.Drawing.Point(10, 42);
-			numHistory.Maximum = new decimal(new int[] {
+			this.numHistory.Location = new System.Drawing.Point(12, 48);
+			this.numHistory.Maximum = new decimal(new int[] {
             300,
             0,
             0,
             0});
-			numHistory.Minimum = new decimal(new int[] {
+			this.numHistory.Minimum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-			numHistory.Name = "numHistory";
-			numHistory.ReadOnly = true;
-			numHistory.Size = new System.Drawing.Size(92, 20);
-			numHistory.TabIndex = 1;
-			numHistory.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			numHistory.Value = new decimal(new int[] {
+			this.numHistory.Name = "numHistory";
+			this.numHistory.ReadOnly = true;
+			this.numHistory.Size = new System.Drawing.Size(110, 22);
+			this.numHistory.TabIndex = 1;
+			this.numHistory.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.numHistory.Value = new decimal(new int[] {
             30,
             0,
             0,
             0});
-			numHistory.ValueChanged += new System.EventHandler(numHistory_ValueChanged);
+			this.numHistory.ValueChanged += new System.EventHandler(this.numHistory_ValueChanged);
 			// 
 			// lblHistory
 			// 
-			lblHistory.Location = new System.Drawing.Point(6, 20);
-			lblHistory.Name = "lblHistory";
-			lblHistory.Size = new System.Drawing.Size(100, 20);
-			lblHistory.TabIndex = 0;
-			lblHistory.Text = "&History (secs):";
-			lblHistory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblHistory.Location = new System.Drawing.Point(7, 23);
+			this.lblHistory.Name = "lblHistory";
+			this.lblHistory.Size = new System.Drawing.Size(120, 23);
+			this.lblHistory.TabIndex = 0;
+			this.lblHistory.Text = "&History (secs):";
+			this.lblHistory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ScopeForm
 			// 
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			ClientSize = new System.Drawing.Size(634, 448);
-			ControlBox = false;
-			Controls.Add(groupControl);
-			Controls.Add(groupSetup);
-			Controls.Add(chart4);
-			Controls.Add(chart3);
-			Controls.Add(chart2);
-			Controls.Add(chart1);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			MaximizeBox = false;
-			MinimizeBox = false;
-			Name = "ScopeForm";
-			ShowInTaskbar = false;
-			Text = "Live Sensor Graphs";
-			Activated += new System.EventHandler(ScopeForm_Activated);
-			Load += new System.EventHandler(ScopeForm_Load);
-			Resize += new System.EventHandler(ScopeForm_Resize);
-			groupSetup.ResumeLayout(false);
-			groupControl.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(numHistory)).EndInit();
-			ResumeLayout(false);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(760, 538);
+			this.ControlBox = false;
+			this.Controls.Add(this.groupControl);
+			this.Controls.Add(this.groupSetup);
+			this.Controls.Add(this.chart4);
+			this.Controls.Add(this.chart3);
+			this.Controls.Add(this.chart2);
+			this.Controls.Add(this.chart1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "ScopeForm";
+			this.ShowInTaskbar = false;
+			this.Text = "Live Sensor Graphs";
+			this.Activated += new System.EventHandler(this.ScopeForm_Activated);
+			this.Load += new System.EventHandler(this.ScopeForm_Load);
+			this.Resize += new System.EventHandler(this.ScopeForm_Resize);
+			this.groupSetup.ResumeLayout(false);
+			this.groupControl.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.numHistory)).EndInit();
+			this.ResumeLayout(false);
 
 		}
 
@@ -747,7 +738,7 @@ namespace ProScan
 				numHistory.Enabled = false;
 				btnStart.Enabled = false;
 				btnStop.Enabled = true;
-				m_isPlotting = true;
+				IsPlotting = true;
 				ThreadPool.QueueUserWorkItem(new WaitCallback(UpdateThread));
 			}
 		}
@@ -776,14 +767,14 @@ namespace ProScan
 				chkSensor3.Enabled = true;
 				chkSensor4.Enabled = true;
 			}
-			m_isPlotting = false;
+			IsPlotting = false;
 			btnStart.Enabled = true;
 			btnStop.Enabled = false;
 		}
 
 		private void ScopeForm_Load(object sender, EventArgs e)
 		{
-			m_isPlotting = false;
+			IsPlotting = false;
 			CheckConnection();
 			chart1.XRangeStart = -30.0;
 			chart1.XRangeEnd = 0.0;
@@ -797,10 +788,10 @@ namespace ProScan
 			comboSensor1.Enabled = true;
 			comboStyle1.Enabled = true;
 			comboUnits1.Enabled = true;
-			m_arraySensor1Values = new ArrayList();
-			m_arraySensor2Values = new ArrayList();
-			m_arraySensor3Values = new ArrayList();
-			m_arraySensor4Values = new ArrayList();
+			m_arraySensor1Values = new List<DatedValue>();
+			m_arraySensor2Values = new List<DatedValue>();
+			m_arraySensor3Values = new List<DatedValue>();
+			m_arraySensor4Values = new List<DatedValue>();
 			comboUnits1.SelectedIndex = 0;
 			comboUnits2.SelectedIndex = 0;
 			comboUnits3.SelectedIndex = 0;
@@ -814,29 +805,23 @@ namespace ProScan
 		static bool isConnected;
 		public bool CheckConnection()
 		{
-			if (m_obdInterface.getConnectedStatus())
+			if (m_obdInterface.ConnectedStatus)
 			{
 				if (!isConnected)
 				{
 					isConnected = true;
-					if (!m_isPlotting)
+					if (!IsPlotting)
 						btnStart.Enabled = true;
 					comboSensor1.Items.Clear();
 					comboSensor2.Items.Clear();
 					comboSensor3.Items.Clear();
 					comboSensor4.Items.Clear();
-					IEnumerator enumerator = m_obdInterface.getSupportedParameterList(1).GetEnumerator();
-					if (enumerator.MoveNext())
+					foreach (OBDParameter obdParameter in m_obdInterface.SupportedParameterList(1))
 					{
-						do
-						{
-							OBDParameter obdParameter = (OBDParameter)enumerator.Current;
-							comboSensor1.Items.Add((object)obdParameter);
-							comboSensor2.Items.Add((object)obdParameter);
-							comboSensor3.Items.Add((object)obdParameter);
-							comboSensor4.Items.Add((object)obdParameter);
-						}
-						while (enumerator.MoveNext());
+						comboSensor1.Items.Add((object)obdParameter);
+						comboSensor2.Items.Add((object)obdParameter);
+						comboSensor3.Items.Add((object)obdParameter);
+						comboSensor4.Items.Add((object)obdParameter);
 					}
 				}
 				return true;
@@ -844,7 +829,7 @@ namespace ProScan
 			else
 			{
 				isConnected = false;
-				m_isPlotting = false;
+				IsPlotting = false;
 				btnStart.Enabled = false;
 				comboSensor1.Items.Clear();
 				comboSensor2.Items.Clear();
@@ -856,7 +841,7 @@ namespace ProScan
 
 		public void UpdateThread(object state)
 		{
-			if (!m_isPlotting)
+			if (!IsPlotting)
 				return;
 			do
 			{
@@ -870,7 +855,7 @@ namespace ProScan
 						OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor1.Items[comboSensor1.SelectedIndex] as OBDParameter, bEnglishUnits);
 						if (!obdParameterValue.ErrorDetected)
 						{
-							MyScopeForm.m_arraySensor1Values.Add((object)new DatedValue(obdParameterValue.DoubleValue));
+							MyScopeForm.m_arraySensor1Values.Add(new DatedValue(obdParameterValue.DoubleValue));
 							UpdateChart1();
 						}
 					}
@@ -879,7 +864,7 @@ namespace ProScan
 						OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor2.Items[comboSensor2.SelectedIndex] as OBDParameter, bEnglishUnits);
 						if (!obdParameterValue.ErrorDetected)
 						{
-							MyScopeForm.m_arraySensor2Values.Add((object)new DatedValue(obdParameterValue.DoubleValue));
+							MyScopeForm.m_arraySensor2Values.Add(new DatedValue(obdParameterValue.DoubleValue));
 							UpdateChart2();
 						}
 					}
@@ -888,7 +873,7 @@ namespace ProScan
 						OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor3.Items[comboSensor3.SelectedIndex] as OBDParameter, bEnglishUnits);
 						if (!obdParameterValue.ErrorDetected)
 						{
-							MyScopeForm.m_arraySensor3Values.Add((object)new DatedValue(obdParameterValue.DoubleValue));
+							MyScopeForm.m_arraySensor3Values.Add(new DatedValue(obdParameterValue.DoubleValue));
 							UpdateChart3();
 						}
 					}
@@ -897,13 +882,13 @@ namespace ProScan
 						OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor4.Items[comboSensor4.SelectedIndex] as OBDParameter, bEnglishUnits);
 						if (!obdParameterValue.ErrorDetected)
 						{
-							MyScopeForm.m_arraySensor4Values.Add((object)new DatedValue(obdParameterValue.DoubleValue));
+							MyScopeForm.m_arraySensor4Values.Add(new DatedValue(obdParameterValue.DoubleValue));
 							UpdateChart4();
 						}
 					}
 				}
 			}
-			while (m_isPlotting);
+			while (IsPlotting);
 		}
 
 		public void UpdateChart1()
@@ -913,7 +898,7 @@ namespace ProScan
 			{
 				do
 				{
-					if (DateTime.Now.Subtract((m_arraySensor1Values[index1] as DatedValue).Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
+					if (DateTime.Now.Subtract(m_arraySensor1Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
 					{
 						m_arraySensor1Values.RemoveAt(index1);
 						--index1;
@@ -930,14 +915,14 @@ namespace ProScan
 			double[] numArray2 = new double[m_arraySensor1Values.Count];
 			numArray2.Initialize();
 			dSensor1Times = numArray2;
-			m_dSensor1Max = (m_arraySensor1Values[0] as DatedValue).Value;
-			m_dSensor1Min = (m_arraySensor1Values[0] as DatedValue).Value;
+			m_dSensor1Max = m_arraySensor1Values[0].Value;
+			m_dSensor1Min = m_arraySensor1Values[0].Value;
 			int index2 = 0;
 			if (0 < m_arraySensor1Values.Count)
 			{
 				do
 				{
-					DatedValue datedValue = m_arraySensor1Values[index2] as DatedValue;
+					DatedValue datedValue = m_arraySensor1Values[index2];
 					if (datedValue.Value > m_dSensor1Max)
 						m_dSensor1Max = datedValue.Value;
 					if (datedValue.Value < m_dSensor1Min)
@@ -970,7 +955,7 @@ namespace ProScan
 			{
 				do
 				{
-					if (DateTime.Now.Subtract((m_arraySensor2Values[index1] as DatedValue).Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
+					if (DateTime.Now.Subtract(m_arraySensor2Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
 					{
 						m_arraySensor2Values.RemoveAt(index1);
 						--index1;
@@ -987,14 +972,14 @@ namespace ProScan
 			double[] numArray2 = new double[m_arraySensor2Values.Count];
 			numArray2.Initialize();
 			dSensor2Times = numArray2;
-			m_dSensor2Max = (m_arraySensor2Values[0] as DatedValue).Value;
-			m_dSensor2Min = (m_arraySensor2Values[0] as DatedValue).Value;
+			m_dSensor2Max = m_arraySensor2Values[0].Value;
+			m_dSensor2Min = m_arraySensor2Values[0].Value;
 			int index2 = 0;
 			if (0 < m_arraySensor2Values.Count)
 			{
 				do
 				{
-					DatedValue datedValue = m_arraySensor2Values[index2] as DatedValue;
+					DatedValue datedValue = m_arraySensor2Values[index2];
 					if (datedValue.Value > m_dSensor2Max)
 						m_dSensor2Max = datedValue.Value;
 					if (datedValue.Value < m_dSensor2Min)
@@ -1027,7 +1012,7 @@ namespace ProScan
 			{
 				do
 				{
-					if (DateTime.Now.Subtract((m_arraySensor3Values[index1] as DatedValue).Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
+					if (DateTime.Now.Subtract(m_arraySensor3Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
 					{
 						m_arraySensor3Values.RemoveAt(index1);
 						--index1;
@@ -1044,14 +1029,14 @@ namespace ProScan
 			double[] numArray2 = new double[m_arraySensor3Values.Count];
 			numArray2.Initialize();
 			dSensor3Times = numArray2;
-			m_dSensor3Max = (m_arraySensor3Values[0] as DatedValue).Value;
-			m_dSensor3Min = (m_arraySensor3Values[0] as DatedValue).Value;
+			m_dSensor3Max = m_arraySensor3Values[0].Value;
+			m_dSensor3Min = m_arraySensor3Values[0].Value;
 			int index2 = 0;
 			if (0 < m_arraySensor3Values.Count)
 			{
 				do
 				{
-					DatedValue datedValue = m_arraySensor3Values[index2] as DatedValue;
+					DatedValue datedValue = m_arraySensor3Values[index2];
 					if (datedValue.Value > m_dSensor3Max)
 						m_dSensor3Max = datedValue.Value;
 					if (datedValue.Value < m_dSensor3Min)
@@ -1084,7 +1069,7 @@ namespace ProScan
 			{
 				do
 				{
-					if (DateTime.Now.Subtract((m_arraySensor4Values[index1] as DatedValue).Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
+					if (DateTime.Now.Subtract(m_arraySensor4Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value))
 					{
 						m_arraySensor4Values.RemoveAt(index1);
 						--index1;
@@ -1101,14 +1086,14 @@ namespace ProScan
 			double[] numArray2 = new double[m_arraySensor4Values.Count];
 			numArray2.Initialize();
 			dSensor4Times = numArray2;
-			m_dSensor4Max = (m_arraySensor4Values[0] as DatedValue).Value;
-			m_dSensor4Min = (m_arraySensor4Values[0] as DatedValue).Value;
+			m_dSensor4Max = m_arraySensor4Values[0].Value;
+			m_dSensor4Min = m_arraySensor4Values[0].Value;
 			int index2 = 0;
 			if (0 < m_arraySensor4Values.Count)
 			{
 				do
 				{
-					DatedValue datedValue = m_arraySensor4Values[index2] as DatedValue;
+					DatedValue datedValue = m_arraySensor4Values[index2];
 					if (datedValue.Value > m_dSensor4Max)
 						m_dSensor4Max = datedValue.Value;
 					if (datedValue.Value < m_dSensor4Min)

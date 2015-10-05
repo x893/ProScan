@@ -1,40 +1,40 @@
 ﻿public class DTC
 {
-	private string m_strCategory;
-	private string m_strDTC;
-	private string m_strDescription;
+	private string m_DTC;
+	private string m_Description;
+	private string m_Category;
 
 	public DTC()
 	{
 	}
 
+	public DTC(string strDTC, string strCategory, string strDesc)
+	{
+		m_DTC = strDTC;
+		m_Category = strCategory;
+		m_Description = strDesc;
+	}
+
 	public string Description
 	{
-		get { return m_strDescription; }
-		set { m_strDescription = value; }
+		get { return m_Description; }
+		set { m_Description = value; }
 	}
 
 	public string Name
 	{
-		get { return m_strDTC; }
-		set { m_strDTC = value; }
+		get { return m_DTC; }
+		set { m_DTC = value; }
 	}
 
 	public string Category
 	{
-		get { return m_strCategory; }
-		set { m_strCategory = value; }
-	}
-
-	public DTC(string strDTC, string strCategory, string strDesc)
-	{
-		m_strDTC = strDTC;
-		m_strCategory = strCategory;
-		m_strDescription = strDesc;
+		get { return m_Category; }
+		set { m_Category = value; }
 	}
 
 	public override string ToString()
 	{
-		return m_strDTC;
+		return m_DTC;
 	}
 }

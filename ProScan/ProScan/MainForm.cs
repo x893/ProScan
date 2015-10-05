@@ -10,53 +10,59 @@ namespace ProScan
 {
 	public class MainForm : Form
 	{
-		private CommForm m_formStart;
-		private TestForm m_formMonitorTests;
-		private DTCForm m_formDTC;
-		private FreezeFramesForm m_formFreezeFrames;
-		private OxygenSensorsForm m_formOxygenSensors;
-		private SensorMonitorForm m_formSensorGrid;
-		private ScopeForm m_formSensorChart;
-		private TrackForm m_formTrack;
-		private DynoForm m_formDyno;
-		private TerminalForm m_formTerminal;
-		private ReportGeneratorForm m_formReport;
-		private CommLogForm m_formCommLog;
-		private FuelEconomyForm m_formFuelEconomy;
+		private CommForm f_Start;
+		private TestForm f_MonitorTests;
+		private DTCForm f_DTC;
+		private FreezeFramesForm f_FreezeFrames;
+		private OxygenSensorsForm f_OxygenSensors;
+		private SensorMonitorForm f_SensorGrid;
+		private ScopeForm f_SensorChart;
+		private TrackForm f_Track;
+		private DynoForm f_Dyno;
+		private TerminalForm f_Terminal;
+		private ReportGeneratorForm f_Report;
+		private CommLogForm f_CommLog;
+		private FuelEconomyForm f_FuelEconomy;
 		private Form m_formActive;
+		private OBDInterface m_obdInterface;
 
 		public MainForm()
 		{
 			InitializeComponent();
-			m_obdInterface = new OBDInterface();
-			m_obdInterface.OnConnect += new OBDInterface.__Delegate_OnConnect(On_OBD2_Connect);
-			m_obdInterface.OnDisconnect += new OBDInterface.__Delegate_OnDisconnect(On_OBD2_Disconnect);
-			if (m_obdInterface.GetActiveProfile() != null)
-				panelVehicle.Text = m_obdInterface.GetActiveProfile().ToString();
 
-			if (m_obdInterface.GetCommSettings() != null)
+			m_obdInterface = new OBDInterface();
+			m_obdInterface.OnConnect += new OBDInterface.__Delegate_OnConnect(On_OBD_Connect);
+			m_obdInterface.OnDisconnect += new OBDInterface.__Delegate_OnDisconnect(On_OBD_Disconnect);
+
+			if (m_obdInterface.ActiveProfile != null)
+				panelVehicle.Text = m_obdInterface.ActiveProfile.ToString();
+
+			if (m_obdInterface.CommSettings != null)
 			{
-				if (m_obdInterface.GetCommSettings().AutoDetect)
+				if (m_obdInterface.CommSettings.AutoDetect)
 					panelComPort.Text = "Auto-Detect";
 				else
-					panelComPort.Text = "COM" + m_obdInterface.GetCommSettings().ComPort.ToString();
+					panelComPort.Text = m_obdInterface.CommSettings.ComPortName;
 			}
+
 			SetDescriptiveToolTips();
-			m_formStart = new CommForm(m_obdInterface);
-			m_formMonitorTests = new TestForm(m_obdInterface);
-			m_formDTC = new DTCForm(m_obdInterface);
-			m_formFreezeFrames = new FreezeFramesForm(m_obdInterface);
-			m_formOxygenSensors = new OxygenSensorsForm(m_obdInterface);
-			m_formSensorGrid = new SensorMonitorForm(m_obdInterface);
-			m_formSensorChart = new ScopeForm(m_obdInterface);
-			m_formTrack = new TrackForm(m_obdInterface);
-			m_formDyno = new DynoForm(m_obdInterface);
-			m_formFuelEconomy = new FuelEconomyForm(m_obdInterface);
-			m_formTerminal = new TerminalForm(m_obdInterface);
-			m_formReport = new ReportGeneratorForm(m_obdInterface);
-			m_formCommLog = new CommLogForm();
+
+			f_Start = new CommForm(m_obdInterface);
+			f_MonitorTests = new TestForm(m_obdInterface);
+			f_DTC = new DTCForm(m_obdInterface);
+			f_FreezeFrames = new FreezeFramesForm(m_obdInterface);
+			f_OxygenSensors = new OxygenSensorsForm(m_obdInterface);
+			f_SensorGrid = new SensorMonitorForm(m_obdInterface);
+			f_SensorChart = new ScopeForm(m_obdInterface);
+			f_Track = new TrackForm(m_obdInterface);
+			f_Dyno = new DynoForm(m_obdInterface);
+			f_FuelEconomy = new FuelEconomyForm(m_obdInterface);
+			f_Terminal = new TerminalForm(m_obdInterface);
+			f_Report = new ReportGeneratorForm(m_obdInterface);
+			f_CommLog = new CommLogForm();
+
 			toolBarButtonStart.Pushed = true;
-			SetActiveForm(m_formStart);
+			SetActiveForm(f_Start);
 		}
 
 		#region InitializeComponent()
@@ -84,7 +90,6 @@ namespace ProScan
 		private StatusBarPanel panelRx;
 		private StatusBarPanel panelConnectedIcon;
 		private StatusBarPanel panelDisconnectedIcon;
-		private OBDInterface m_obdInterface;
 		private MenuItem menuItemCommLog;
 		private ToolBarButton toolBarButtonFF;
 		private ToolBarButton toolBarButtonDTC;
@@ -136,8 +141,8 @@ namespace ProScan
 		protected override void Dispose(bool disposing)
 		{
 			Monitor.Enter(m_obdInterface);
-			if (m_obdInterface.getConnectedStatus())
-				m_obdInterface.disconnect();
+			if (m_obdInterface.ConnectedStatus)
+				m_obdInterface.Disconnect();
 			Monitor.Exit(m_obdInterface);
 			if (disposing && components != null)
 				components.Dispose();
@@ -468,7 +473,7 @@ namespace ProScan
 			this.toolBar.Location = new System.Drawing.Point(0, 0);
 			this.toolBar.Name = "toolBar";
 			this.toolBar.ShowToolTips = true;
-			this.toolBar.Size = new System.Drawing.Size(784, 34);
+			this.toolBar.Size = new System.Drawing.Size(942, 34);
 			this.toolBar.TabIndex = 1;
 			this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar_ButtonClick);
 			// 
@@ -649,7 +654,7 @@ namespace ProScan
 			// 
 			// statusBar
 			// 
-			this.statusBar.Location = new System.Drawing.Point(0, 568);
+			this.statusBar.Location = new System.Drawing.Point(0, 677);
 			this.statusBar.Name = "statusBar";
 			this.statusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.panelStatus,
@@ -661,7 +666,7 @@ namespace ProScan
             this.panelConnectedIcon,
             this.panelDisconnectedIcon});
 			this.statusBar.ShowPanels = true;
-			this.statusBar.Size = new System.Drawing.Size(784, 22);
+			this.statusBar.Size = new System.Drawing.Size(942, 26);
 			this.statusBar.TabIndex = 2;
 			// 
 			// panelStatus
@@ -677,7 +682,7 @@ namespace ProScan
 			this.panelVehicle.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
 			this.panelVehicle.Icon = ((System.Drawing.Icon)(resources.GetObject("panelVehicle.Icon")));
 			this.panelVehicle.Name = "panelVehicle";
-			this.panelVehicle.Width = 217;
+			this.panelVehicle.Width = 371;
 			// 
 			// panelComPort
 			// 
@@ -717,14 +722,14 @@ namespace ProScan
 			// 
 			// MainForm
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(784, 590);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(942, 703);
 			this.Controls.Add(this.statusBar);
 			this.Controls.Add(this.toolBar);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.IsMdiContainer = true;
 			this.Menu = this.mainMenu;
-			this.MinimumSize = new System.Drawing.Size(800, 650);
+			this.MinimumSize = new System.Drawing.Size(960, 750);
 			this.Name = "MainForm";
 			this.Text = "ProScan";
 			this.Closed += new System.EventHandler(this.MainForm_Closed);
@@ -782,12 +787,12 @@ namespace ProScan
 			toolBarButtonSettings.ToolTipText = "Communication Settings.\r\nConfigure your serial port and interface hardware.";
 		}
 
-		private void On_OBD2_Connect()
+		private void On_OBD_Connect()
 		{
 			panelChipInfo.Text = m_obdInterface.getDeviceIDString();
 			panelStatus.Icon = panelConnectedIcon.Icon;
 			panelStatus.Text = "Connected";
-			panelVehicle.Text = m_obdInterface.GetActiveProfile().Name;
+			panelVehicle.Text = m_obdInterface.ActiveProfile.Name;
 			menuItemCommSettings.Enabled = false;
 			toolBarButtonSettings.Enabled = false;
 			menuItemVehicleProfiles.Enabled = false;
@@ -797,7 +802,7 @@ namespace ProScan
 			BroadcastConnectionUpdate();
 		}
 
-		private void On_OBD2_Disconnect()
+		private void On_OBD_Disconnect()
 		{
 			panelStatus.Text = "Disconnected";
 			panelStatus.Icon = panelDisconnectedIcon.Icon;
@@ -809,19 +814,6 @@ namespace ProScan
 			toolBarButtonUserPrefs.Enabled = true;
 			BroadcastConnectionUpdate();
 			MessageBox.Show(m_formActive, "Vehicle connection has been disconnected.", "Disconnected", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-		}
-		private void On_OBD2_Sent(OBD2Request obd2Request)
-		{
-			panelTx.Text = "Tx: " + obd2Request.Request;
-		}
-
-		private void On_OBD2_Received(OBD2Response obd2Response)
-		{
-			panelRx.Text = "Rx: " + obd2Response.Response;
-		}
-
-		private void BroadcastResponse(OBD2Response obd2Response)
-		{
 		}
 
 		private void BroadcastConnectionUpdate()
@@ -872,37 +864,33 @@ namespace ProScan
 
 		private void EditUserPreferences()
 		{
-			UserPreferences userPreferences = m_obdInterface.GetUserPreferences();
+			UserPreferences userPreferences = m_obdInterface.UserPreferences;
 			int num = (int)new UserPreferencesForm(userPreferences).ShowDialog();
 			m_obdInterface.SaveUserPreferences(userPreferences);
 		}
 
 		private void EditSettings()
 		{
-			Preferences commSettings = m_obdInterface.GetCommSettings();
+			Preferences commSettings = m_obdInterface.CommSettings;
 			new SettingsForm(commSettings).ShowDialog();
 			m_obdInterface.SaveCommSettings(commSettings);
 			if (commSettings.AutoDetect)
-			{
 				panelComPort.Text = "Auto-Detect";
-			}
 			else
-			{
 				panelComPort.Text = commSettings.ComPortName;
-			}
 		}
 
 		private void EditVehicles()
 		{
 			int num = (int)new VehicleForm(m_obdInterface).ShowDialog();
-			m_formStart.UpdateForm();
+			f_Start.UpdateForm();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			if (!m_obdInterface.loadParameters("generic.dat"))
+			if (!m_obdInterface.LoadParameters("generic.xml"))
 				MessageBox.Show("Failed to load generic parameter definitions!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-			if (m_obdInterface.loadDTCDefinitions("dtc.dat") == 0)
+			if (m_obdInterface.LoadDTCDefinitions("dtc.xml") == 0)
 				MessageBox.Show("Failed to load DTC definitions!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 		}
 
@@ -982,72 +970,76 @@ namespace ProScan
 		private void toolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button.Style == ToolBarButtonStyle.ToggleButton && !e.Button.Pushed)
-				e.Button.Pushed = true;
-			else
 			{
-				if (m_formActive == m_formSensorGrid && m_formSensorGrid.bLogging)
-				{
-					if (DialogResult.Yes == MessageBox.Show("This action will pause the current recording session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
-						m_formSensorGrid.PauseLogging();
-					else
-					{
-						e.Button.Pushed = false;
-						return;
-					}
-				}
-				if (m_formActive == m_formSensorChart && m_formSensorChart.m_isPlotting)
-				{
-					if (DialogResult.Yes == MessageBox.Show("This action will stop the current oscilloscope session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
-						m_formSensorChart.StopLogging();
-					else
-					{
-						e.Button.Pushed = false;
-						return;
-					}
-				}
-				if ((m_formActive == m_formFuelEconomy) && m_formFuelEconomy.m_isWorking)
-				{
-					if (DialogResult.Yes == MessageBox.Show("This action will stop the current fuel economy analysis session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
-						m_formFuelEconomy.StopWorking();
-					else
-					{
-						e.Button.Pushed = false;
-						return;
-					}
-				}
-				if (e.Button == toolBarButtonStart)
-					ShowConnectionManager();
-				else if (e.Button == toolBarButtonTests)
-					ShowVehicleStatusMonitor();
-				else if (e.Button == toolBarButtonDTC)
-					ShowDiagnosticTroubleCodes();
-				else if (e.Button == toolBarButtonFF)
-					ShowFreezeFrameData();
-				else if (e.Button == toolBarButtonO2)
-					ShowOxygenSensorTests();
-				else if (e.Button == toolBarButtonSensorGrid)
-					ShowLiveSensorGrid();
-				else if (e.Button == toolBarButtonSensorGraph)
-					ShowLiveSensorGraphs();
-				else if (e.Button == toolBarButtonTrack)
-					ShowRaceTrackAnalysis();
-				else if (e.Button == toolBarButtonDyno)
-					ShowDynamometer();
-				else if (e.Button == toolBarButtonFuel)
-					ShowFuelEconomyAnalysis();
-				else if (e.Button == toolBarButtonReport)
-					ShowDiagnosticReport();
-				else if (e.Button == toolBarButtonTerminal)
-					ShowTerminal();
-				else if (e.Button == toolBarButtonCommLog)
-					ShowCommunicationLog();
-				else if (e.Button == toolBarButtonUserPrefs)
-					EditUserPreferences();
-				else if (e.Button == toolBarButtonSettings)
-					EditSettings();
-				else if (e.Button == toolBarButtonVehicles)
-					EditVehicles();
+				e.Button.Pushed = true;
+				return;
 			}
+
+			if (m_formActive == f_SensorGrid && f_SensorGrid.IsLogging)
+			{
+				if (DialogResult.Yes == MessageBox.Show("This action will pause the current recording session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+					f_SensorGrid.PauseLogging();
+				else
+				{
+					e.Button.Pushed = false;
+					return;
+				}
+			}
+
+			if (m_formActive == f_SensorChart && f_SensorChart.IsPlotting)
+			{
+				if (DialogResult.Yes == MessageBox.Show("This action will stop the current oscilloscope session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+					f_SensorChart.StopLogging();
+				else
+				{
+					e.Button.Pushed = false;
+					return;
+				}
+			}
+
+			if ((m_formActive == f_FuelEconomy) && f_FuelEconomy.IsWorking)
+			{
+				if (DialogResult.Yes == MessageBox.Show("This action will stop the current fuel economy analysis session.\r\n\r\nContinue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+					f_FuelEconomy.StopWorking();
+				else
+				{
+					e.Button.Pushed = false;
+					return;
+				}
+			}
+
+			if (e.Button == toolBarButtonStart)
+				ShowConnectionManager();
+			else if (e.Button == toolBarButtonTests)
+				ShowVehicleStatusMonitor();
+			else if (e.Button == toolBarButtonDTC)
+				ShowDiagnosticTroubleCodes();
+			else if (e.Button == toolBarButtonFF)
+				ShowFreezeFrameData();
+			else if (e.Button == toolBarButtonO2)
+				ShowOxygenSensorTests();
+			else if (e.Button == toolBarButtonSensorGrid)
+				ShowLiveSensorGrid();
+			else if (e.Button == toolBarButtonSensorGraph)
+				ShowLiveSensorGraphs();
+			else if (e.Button == toolBarButtonTrack)
+				ShowRaceTrackAnalysis();
+			else if (e.Button == toolBarButtonDyno)
+				ShowDynamometer();
+			else if (e.Button == toolBarButtonFuel)
+				ShowFuelEconomyAnalysis();
+			else if (e.Button == toolBarButtonReport)
+				ShowDiagnosticReport();
+			else if (e.Button == toolBarButtonTerminal)
+				ShowTerminal();
+			else if (e.Button == toolBarButtonCommLog)
+				ShowCommunicationLog();
+			else if (e.Button == toolBarButtonUserPrefs)
+				EditUserPreferences();
+			else if (e.Button == toolBarButtonSettings)
+				EditSettings();
+			else if (e.Button == toolBarButtonVehicles)
+				EditVehicles();
 		}
 
 		private void menuItemCommSettings_Click(object sender, EventArgs e)
@@ -1069,91 +1061,91 @@ namespace ProScan
 
 		private void ShowConnectionManager()
 		{
-			if (m_formActive != m_formStart)
+			if (m_formActive != f_Start)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Vehicle Connection Manager");
-				SetActiveForm(m_formStart);
+				SetActiveForm(f_Start);
 				PushedOne(toolBarButtonStart);
 			}
 		}
 
 		private void ShowVehicleStatusMonitor()
 		{
-			if (m_formActive != m_formMonitorTests)
+			if (m_formActive != f_MonitorTests)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Vehicle Status Monitor");
-				SetActiveForm(m_formMonitorTests);
+				SetActiveForm(f_MonitorTests);
 				PushedOne(toolBarButtonTests);
 			}
 		}
 
 		private void ShowDiagnosticTroubleCodes()
 		{
-			if (m_formActive != m_formDTC)
+			if (m_formActive != f_DTC)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Diagnostic Trouble Codes");
-				SetActiveForm(m_formDTC);
+				SetActiveForm(f_DTC);
 				PushedOne(toolBarButtonDTC);
 			}
 		}
 
 		private void ShowFreezeFrameData()
 		{
-			if (m_formActive != m_formFreezeFrames)
+			if (m_formActive != f_FreezeFrames)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Freeze Frame Data");
-				SetActiveForm(m_formFreezeFrames);
+				SetActiveForm(f_FreezeFrames);
 				PushedOne(toolBarButtonFF);
 			}
 		}
 
 		private void ShowOxygenSensorTests()
 		{
-			if (m_formActive != m_formOxygenSensors)
+			if (m_formActive != f_OxygenSensors)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Oxygen Sensor Tests");
-				m_formOxygenSensors.Update();
-				SetActiveForm(m_formOxygenSensors);
+				f_OxygenSensors.Update();
+				SetActiveForm(f_OxygenSensors);
 				PushedOne(toolBarButtonO2);
 			}
 		}
 
 		private void ShowLiveSensorGrid()
 		{
-			if (m_formActive != m_formSensorGrid)
+			if (m_formActive != f_SensorGrid)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Live Sensor Grid");
-				SetActiveForm(m_formSensorGrid);
+				SetActiveForm(f_SensorGrid);
 				PushedOne(toolBarButtonSensorGrid);
 			}
 		}
 
 		private void ShowLiveSensorGraphs()
 		{
-			if (m_formActive != m_formSensorChart)
+			if (m_formActive != f_SensorChart)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Live Sensor Graphs");
-				SetActiveForm(m_formSensorChart);
+				SetActiveForm(f_SensorChart);
 				PushedOne(toolBarButtonSensorGraph);
 			}
 		}
 
 		private void ShowRaceTrackAnalysis()
 		{
-			if (m_formActive != m_formTrack)
+			if (m_formActive != f_Track)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Race Track Analysis");
-				SetActiveForm(m_formTrack);
+				SetActiveForm(f_Track);
 				PushedOne(toolBarButtonTrack);
 			}
 		}
 
 		private void ShowDynamometer()
 		{
-			if (m_formActive != m_formDyno)
+			if (m_formActive != f_Dyno)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Dynamometer");
-				SetActiveForm(m_formDyno);
+				SetActiveForm(f_Dyno);
 				PushedOne(toolBarButtonDyno);
 			}
 		}
@@ -1161,20 +1153,20 @@ namespace ProScan
 
 		private void ShowFuelEconomyAnalysis()
 		{
-			if (m_formActive != m_formFuelEconomy)
+			if (m_formActive != f_FuelEconomy)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Fuel Economy Analysis");
-				SetActiveForm(m_formFuelEconomy);
+				SetActiveForm(f_FuelEconomy);
 				PushedOne(toolBarButtonFuel);
 			}
 		}
 
 		private void ShowDiagnosticReport()
 		{
-			if (m_formActive != m_formReport)
+			if (m_formActive != f_Report)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Diagnostic Report Generator");
-				SetActiveForm(m_formReport);
+				SetActiveForm(f_Report);
 				PushedOne(toolBarButtonReport);
 			}
 		}
@@ -1182,22 +1174,22 @@ namespace ProScan
 
 		private void ShowTerminal()
 		{
-			if (m_formActive != m_formTerminal)
+			if (m_formActive != f_Terminal)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Terminal");
-				m_formTerminal.Update();
-				SetActiveForm(m_formTerminal);
+				f_Terminal.Update();
+				SetActiveForm(f_Terminal);
 				PushedOne(toolBarButtonTerminal);
 			}
 		}
 
 		private void ShowCommunicationLog()
 		{
-			if (m_formActive != m_formCommLog)
+			if (m_formActive != f_CommLog)
 			{
 				m_obdInterface.logItem("Switched Active Tool: Communication Log");
-				SetActiveForm(m_formCommLog);
-				m_formCommLog.Update();
+				SetActiveForm(f_CommLog);
+				f_CommLog.Update();
 				PushedOne(toolBarButtonCommLog);
 			}
 		}
@@ -1210,14 +1202,14 @@ namespace ProScan
 
 		private void menuItemCommLoggingOn_Click(object sender, EventArgs e)
 		{
-			m_obdInterface.enableLogFile(true);
+			m_obdInterface.EnableLogFile(true);
 			menuItemCommLoggingOn.Checked = true;
 			menuItemCommLoggingOff.Checked = false;
 		}
 
 		private void menuItemCommLoggingOff_Click(object sender, EventArgs e)
 		{
-			m_obdInterface.enableLogFile(false);
+			m_obdInterface.EnableLogFile(false);
 			menuItemCommLoggingOn.Checked = false;
 			menuItemCommLoggingOff.Checked = true;
 		}

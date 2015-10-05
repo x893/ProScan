@@ -9,23 +9,20 @@ namespace ProScan
 {
 	public class SensorDisplayControl : UserControl
 	{
-		private Bitmap BackBuffer;
-		private Graphics BufferGraphics;
-		private Bitmap BackgroundBuffer;
-		private Graphics BufferBGGraphics;
-		private Container components;
-		private string m_strName;
-		private string m_strValue;
-		private string m_strEnglishDisplay;
-		private string m_strMetricDisplay;
+		private string m_Name;
+		private string m_Value;
+		private string m_EnglishDisplay;
+		private string m_MetricDisplay;
 		private int m_iDisplayMode;
 
 		public SensorDisplayControl()
 		{
 			InitializeComponent();
+
 			SetStyle(ControlStyles.DoubleBuffer, true);
 			SetStyle(ControlStyles.UserPaint, true);
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
 			UpdateStyles();
 		}
 
@@ -34,14 +31,15 @@ namespace ProScan
 		[Description("Sets/returns the metric display of the sensor.")]
 		public string MetricDisplay
 		{
-			get
-			{
-				return m_strMetricDisplay;
-			}
+			get { return m_MetricDisplay; }
 			set
 			{
-				m_strMetricDisplay = value;
-				m_strValue = m_iDisplayMode != 1 ? (m_iDisplayMode != 2 ? m_strEnglishDisplay + " (" + m_strMetricDisplay + ")" : m_strMetricDisplay) : m_strEnglishDisplay;
+				m_MetricDisplay = value;
+				m_Value = m_iDisplayMode != 1
+					? (m_iDisplayMode != 2
+						? m_EnglishDisplay + " (" + m_MetricDisplay + ")"
+						: m_MetricDisplay)
+					: m_EnglishDisplay;
 				Invalidate();
 			}
 		}
@@ -51,14 +49,15 @@ namespace ProScan
 		[Description("Sets/returns the english display of the sensor.")]
 		public string EnglishDisplay
 		{
-			get
-			{
-				return m_strEnglishDisplay;
-			}
+			get { return m_EnglishDisplay; }
 			set
 			{
-				m_strEnglishDisplay = value;
-				m_strValue = m_iDisplayMode != 1 ? (m_iDisplayMode != 2 ? m_strEnglishDisplay + " (" + m_strMetricDisplay + ")" : m_strMetricDisplay) : m_strEnglishDisplay;
+				m_EnglishDisplay = value;
+				m_Value = m_iDisplayMode != 1
+					? (m_iDisplayMode != 2
+						? m_EnglishDisplay + " (" + m_MetricDisplay + ")"
+						: m_MetricDisplay)
+					: m_EnglishDisplay;
 				Invalidate();
 			}
 		}
@@ -68,13 +67,10 @@ namespace ProScan
 		[DefaultValue("Sensor Name")]
 		public string Title
 		{
-			get
-			{
-				return m_strName;
-			}
+			get { return m_Name; }
 			set
 			{
-				m_strName = value;
+				m_Name = value;
 				Invalidate();
 			}
 		}
@@ -86,8 +82,6 @@ namespace ProScan
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
@@ -103,18 +97,6 @@ namespace ProScan
 			this.Resize += new System.EventHandler(this.SensorDisplayControl_Resize);
 			this.ResumeLayout(false);
 
-		}
-
-		private void DrawBG()
-		{
-			Rectangle clientRectangle = ClientRectangle;
-			BufferBGGraphics.FillRectangle((Brush)new LinearGradientBrush(clientRectangle, Color.SlateGray, Color.White, 225f, true), ClientRectangle);
-			LinearGradientBrush linearGradientBrush = new LinearGradientBrush(clientRectangle, Color.SlateGray, Color.White, 45f, true);
-			clientRectangle.Inflate(-5, -5);
-			BufferBGGraphics.FillRectangle((Brush)linearGradientBrush, clientRectangle);
-			SolidBrush solidBrush = new SolidBrush(Color.White);
-			clientRectangle.Inflate(-5, -5);
-			BufferBGGraphics.FillRectangle((Brush)solidBrush, clientRectangle);
 		}
 
 		private void PaintControl(Graphics g)
@@ -139,9 +121,9 @@ namespace ProScan
 			float emSize = (float)rectangle.Width * 0.04f;
 			Font font = new Font("Arial", emSize, FontStyle.Bold);
 			SizeF sizeF;
-			for (sizeF = g.MeasureString(m_strName, font);
+			for (sizeF = g.MeasureString(m_Name, font);
 				sizeF.Width > (float)rectangle.Width || sizeF.Height > (float)(rectangle.Height / 2);
-				sizeF = g.MeasureString(m_strName, font)
+				sizeF = g.MeasureString(m_Name, font)
 				)
 			{
 				font.Dispose();
@@ -152,13 +134,13 @@ namespace ProScan
 				(int)((double)((rectangle.Right + rectangle.Left) / 2) - (double)sizeF.Width * 0.5),
 				(int)(((double)(rectangle.Height / 2) - (double)sizeF.Height) * 0.5 + (double)rectangle.Top)
 				);
-			g.DrawString(m_strName, font, new SolidBrush(Color.Black), point1.X, point1.Y);
+			g.DrawString(m_Name, font, new SolidBrush(Color.Black), point1.X, point1.Y);
 
 			emSize = (float)rectangle.Width * 0.04f;
 			Font font2 = new Font("Arial", emSize, FontStyle.Bold);
-			for (sizeF = g.MeasureString(m_strValue, font);
+			for (sizeF = g.MeasureString(m_Value, font);
 				sizeF.Width > (float)rectangle.Width || sizeF.Height > (float)(rectangle.Height / 2);
-				sizeF = g.MeasureString(m_strValue, font)
+				sizeF = g.MeasureString(m_Value, font)
 				)
 			{
 				font.Dispose();
@@ -169,7 +151,7 @@ namespace ProScan
 				((int)((double)((rectangle.Right + rectangle.Left) / 2) - (double)sizeF.Width * 0.5)),
 				((int)(((double)(rectangle.Height / 2) - (double)sizeF.Height) * 0.5 + (double)((rectangle.Bottom + rectangle.Top) / 2)))
 				);
-			g.DrawString(m_strValue, font, new SolidBrush(Color.DarkGreen), point2);
+			g.DrawString(m_Value, font, new SolidBrush(Color.DarkGreen), point2);
 		}
 
 		private void SensorDisplayControl_Paint(object sender, PaintEventArgs e)

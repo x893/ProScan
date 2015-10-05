@@ -9,7 +9,6 @@ namespace ProScan
 	{
 		private Gauge gauge1;
 		private Gauge gauge2;
-		private Container components;
 
 		public DashForm()
 		{
@@ -18,8 +17,6 @@ namespace ProScan
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 

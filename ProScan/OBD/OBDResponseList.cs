@@ -1,70 +1,49 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
-public class OBDResponseList
+namespace ProScan
 {
-	private bool m_bErrorDetected;
-	private ArrayList m_listResponses;
-	private string m_strResponseRaw;
-
-	public bool ErrorDetected
+	public class OBDResponseList
 	{
-		get
+		private bool m_ErrorDetected;
+		private List<OBDResponse> m_Responses;
+		private string m_ResponseRaw;
+
+		public bool ErrorDetected
 		{
-			return m_bErrorDetected;
+			get { return m_ErrorDetected; }
+			set { m_ErrorDetected = value; }
 		}
-		set
+
+		public string RawResponse
 		{
-			m_bErrorDetected = value;
+			get { return m_ResponseRaw; }
+			set { m_ResponseRaw = value; }
 		}
-	}
 
-	public string RawResponse
-	{
-		get
+		public int ResponseCount
 		{
-			return m_strResponseRaw;
+			get { return m_Responses.Count; }
 		}
-		set
+
+		public OBDResponseList(string response)
 		{
-			m_strResponseRaw = value;
+			m_ResponseRaw = response;
+			m_ErrorDetected = false;
+			m_Responses = new List<OBDResponse>();
 		}
-	}
 
-	public int ResponseCount
-	{
-		get
+		public void AddOBDResponse(OBDResponse response)
 		{
-			return m_listResponses.Count;
+			m_Responses.Add(response);
 		}
-	}
 
-	public OBDResponseList(string response)
-	{
-		m_strResponseRaw = response;
-		m_bErrorDetected = false;
-		m_listResponses = new ArrayList();
-	}
-
-	~OBDResponseList()
-	{
-	}
-
-	public void AddOBDResponse(OBDResponse response)
-	{
-		m_listResponses.Add((object)response);
-	}
-
-	public OBDResponse GetOBDResponse(int index)
-	{
-		if (index < m_listResponses.Count)
-			return (OBDResponse)m_listResponses[index];
-		else
-			return (OBDResponse)null;
-	}
-
-	public void __dtor()
-	{
-		GC.SuppressFinalize((object)this);
+		public OBDResponse GetOBDResponse(int index)
+		{
+			if (index < m_Responses.Count)
+				return m_Responses[index];
+			return null;
+		}
 	}
 }

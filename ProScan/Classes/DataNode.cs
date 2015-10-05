@@ -1,6 +1,9 @@
-﻿internal class DataNode
+﻿namespace ProScan
 {
-	public DataNode pNext;
-	public DataNode pPrev;
-	public DataItem pData;
+	internal class DataNode
+	{
+		public DataNode pNext;
+		public DataNode pPrev;
+		public DataItem pData;
+	}
 }

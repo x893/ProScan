@@ -200,8 +200,6 @@ namespace ProScan
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
@@ -271,7 +269,6 @@ namespace ProScan
 		private Label lblValue09;
 		private Label lblDescription09;
 		private Label lblTestID09;
-		private Container components;
 
 		private void InitializeComponent()
 		{

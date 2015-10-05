@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,6 +12,13 @@ namespace ProScan
 {
 	public class DTCForm : Form
 	{
+		private OBDInterface m_obdInterface;
+		private bool m_bMilStatus;
+		private int m_iTotalDTC;
+		private List<DTC> m_ListDTC;
+		private List<DTC> m_ListPending;
+		private List<DTC> m_ListPermanent;
+
 		private GroupBox groupMIL;
 		private PictureBox picMilOn;
 		private PictureBox picMilOff;
@@ -20,19 +28,12 @@ namespace ProScan
 		private Label lblTotalCodes;
 		private Label lblMilStatus;
 		private PictureBox picMIL;
-		private OBDInterface m_obdInterface;
-		private bool m_bMilStatus;
-		private int m_iTotalDTC;
-		private ArrayList arrayListDTC;
 		private GroupBox groupPermanent;
 		private RichTextBox richTextPermanent;
 		private GroupBox groupCodes;
 		private RichTextBox richTextDTC;
 		private GroupBox groupPending;
 		private RichTextBox richTextPending;
-		private ArrayList arrayListPending;
-		private ArrayList arrayListPermanent;
-		private Container components;
 
 		public DTCForm(OBDInterface obd2)
 		{
@@ -41,10 +42,9 @@ namespace ProScan
 			CheckConnection();
 		}
 
+		#region InitializeComponent
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
@@ -277,10 +277,11 @@ namespace ProScan
 			ResumeLayout(false);
 
 		}
+		#endregion
 
 		public void CheckConnection()
 		{
-			if (m_obdInterface.getConnectedStatus())
+			if (m_obdInterface.ConnectedStatus)
 			{
 				btnRefresh.Enabled = true;
 				btnErase.Enabled = true;
@@ -299,7 +300,7 @@ namespace ProScan
 			lblTotalCodes.Text = "0";
 			richTextDTC.Text = "";
 			richTextPending.Text = "";
-			if (!m_obdInterface.getConnectedStatus())
+			if (!m_obdInterface.ConnectedStatus)
 			{
 				MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				m_obdInterface.logItem("Error. DTC Form. Attempted refresh without vehicle connection.");
@@ -313,71 +314,40 @@ namespace ProScan
 
 		public void ReadCodes()
 		{
-			arrayListDTC.Clear();
-			arrayListPending.Clear();
-			arrayListPermanent.Clear();
-			OBDParameterValue value6 = m_obdInterface.getValue("SAE.MIL", true);
-			if (!value6.ErrorDetected)
-			{
-				SetMilStatus(value6.BoolValue);
-			}
-			OBDParameterValue value5 = m_obdInterface.getValue("SAE.DTC_COUNT", true);
-			if (!value5.ErrorDetected)
-			{
-				SetDTCTotal((int)value5.DoubleValue);
-			}
-			OBDParameterValue value4 = m_obdInterface.getValue("SAE.STORED_DTCS", true);
-			if (!value4.ErrorDetected)
-			{
-				StringEnumerator enumerator3 = value4.StringCollectionValue.GetEnumerator();
-				if (enumerator3.MoveNext())
-				{
-					do
-					{
-						string current = enumerator3.Current;
-						DTC dtc3 = m_obdInterface.getDTC(current);
-						arrayListDTC.Add(dtc3);
-					}
-					while (enumerator3.MoveNext());
-				}
-			}
-			OBDParameterValue value3 = m_obdInterface.getValue("SAE.PENDING_DTCS", true);
-			if (!value3.ErrorDetected)
-			{
-				StringEnumerator enumerator2 = value3.StringCollectionValue.GetEnumerator();
-				if (enumerator2.MoveNext())
-				{
-					do
-					{
-						string strDTC = enumerator2.Current;
-						DTC dtc2 = m_obdInterface.getDTC(strDTC);
-						arrayListPending.Add(dtc2);
-					}
-					while (enumerator2.MoveNext());
-				}
-			}
-			OBDParameterValue value2 = m_obdInterface.getValue("SAE.PERMANENT_DTCS", true);
-			if (!value2.ErrorDetected)
-			{
-				StringEnumerator enumerator = value2.StringCollectionValue.GetEnumerator();
-				if (enumerator.MoveNext())
-				{
-					do
-					{
-						string str = enumerator.Current;
-						DTC dtc = m_obdInterface.getDTC(str);
-						arrayListPermanent.Add(dtc);
-					}
-					while (enumerator.MoveNext());
-				}
-			}
+			m_ListDTC.Clear();
+			m_ListPending.Clear();
+			m_ListPermanent.Clear();
+			OBDParameterValue value;
+
+			value = m_obdInterface.getValue("SAE.MIL", true);
+			if (!value.ErrorDetected)
+				SetMilStatus(value.BoolValue);
+
+			value = m_obdInterface.getValue("SAE.DTC_COUNT", true);
+			if (!value.ErrorDetected)
+				SetDTCTotal((int)value.DoubleValue);
+
+			value = m_obdInterface.getValue("SAE.STORED_DTCS", true);
+			if (!value.ErrorDetected)
+				foreach (string dtc in value.StringCollectionValue)
+					m_ListDTC.Add(m_obdInterface.GetDTC(dtc));
+			
+			value = m_obdInterface.getValue("SAE.PENDING_DTCS", true);
+			if (!value.ErrorDetected)
+				foreach (string dtc in value.StringCollectionValue)
+					m_ListPending.Add(m_obdInterface.GetDTC(dtc));
+
+			value = m_obdInterface.getValue("SAE.PERMANENT_DTCS", true);
+			if (!value.ErrorDetected)
+				foreach (string dtc in value.StringCollectionValue)
+					m_ListPermanent.Add(m_obdInterface.GetDTC(dtc));
 		}
 
 		private void DTCForm_Load(object sender, EventArgs e)
 		{
-			arrayListDTC = new ArrayList();
-			arrayListPending = new ArrayList();
-			arrayListPermanent = new ArrayList();
+			m_ListDTC = new List<DTC>();
+			m_ListPending = new List<DTC>();
+			m_ListPermanent = new List<DTC>();
 			SetMilStatus(false);
 		}
 
@@ -402,165 +372,104 @@ namespace ProScan
 			lblTotalCodes.Text = Convert.ToString(iTotal);
 		}
 
-		private bool isDTCAlreadyRecorded(string strDTC)
-		{
-			int num = 0;
-			if (0 < arrayListDTC.Count)
-			{
-				do
-				{
-					if (string.Compare(((DTC)arrayListDTC[num]).Name, strDTC) == 0)
-					{
-						return true;
-					}
-					num++;
-				}
-				while (num < arrayListDTC.Count);
-			}
-			return false;
-		}
-
-		private bool isPendingAlreadyRecorded(string strDTC)
-		{
-			int num = 0;
-			if (0 < arrayListPending.Count)
-			{
-				do
-				{
-					if (string.Compare(((DTC)arrayListPending[num]).Name, strDTC) == 0)
-					{
-						return true;
-					}
-					num++;
-				}
-				while (num < arrayListPending.Count);
-			}
-			return false;
-		}
-
 		private void RefreshDisplay()
 		{
 			richTextDTC.Text = "";
 			richTextPending.Text = "";
 			richTextPermanent.Text = "";
-			if (arrayListDTC.Count > 0)
+			int idx;
+			string text;
+
+			if (m_ListDTC.Count > 0)
 			{
-				int num3 = 1;
-				if (1 <= arrayListDTC.Count)
+				for (idx = 1; idx <= m_ListDTC.Count; idx++)
 				{
-					do
+					DTC dtc = m_ListDTC[idx - 1];
+					richTextDTC.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+					richTextDTC.SelectionColor = Color.Red;
+					richTextDTC.AppendText(string.Format("{0}. {1}\r\n", idx, dtc.Name));
+
+					if (string.IsNullOrEmpty(dtc.Description))
 					{
-						DTC dtc3 = (DTC)arrayListDTC[num3 - 1];
-						string text = string.Format("{0}. {1}\r\n", num3, dtc3.Name);
-						richTextDTC.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
-						Color red = Color.Red;
-						richTextDTC.SelectionColor = red;
-						richTextDTC.AppendText(text);
-						if (string.Compare(dtc3.Description, "") == 0)
-						{
-							richTextDTC.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
-							Color black = Color.Black;
-							richTextDTC.SelectionColor = black;
-							richTextDTC.AppendText("    No definition found.\r\n\r\n");
-						}
-						else
-						{
-							string str5 = string.Format("    {0}: {1}\r\n\r\n", dtc3.Category, dtc3.Description);
-							richTextDTC.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
-							Color color19 = Color.Black;
-							richTextDTC.SelectionColor = color19;
-							richTextDTC.AppendText(str5);
-						}
-						num3++;
+						richTextDTC.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
+						richTextDTC.SelectionColor = Color.Black;
+						text = "    No definition found.\r\n\r\n";
 					}
-					while (num3 <= arrayListDTC.Count);
+					else
+					{
+						richTextDTC.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
+						richTextDTC.SelectionColor = Color.Black;
+						text = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
+					}
+					richTextDTC.AppendText(text);
 				}
 			}
 			else
 			{
 				richTextDTC.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
-				Color green = Color.Green;
-				richTextDTC.SelectionColor = green;
+				richTextDTC.SelectionColor = Color.Green;
 				richTextDTC.AppendText("No stored trouble codes found.");
 			}
-			if (arrayListPending.Count > 0)
+
+			if (m_ListPending.Count > 0)
 			{
-				int num2 = 1;
-				if (1 <= arrayListPending.Count)
+				for (idx = 1; idx <= m_ListPending.Count; idx++)
 				{
-					do
+					DTC dtc = m_ListPending[idx - 1];
+					richTextPending.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+					richTextPending.SelectionColor = Color.Red;
+					richTextPending.AppendText(string.Format("{0}. {1}\r\n", idx, dtc.Name));
+
+					if (string.IsNullOrEmpty(dtc.Description))
 					{
-						DTC dtc2 = (DTC)arrayListPending[num2 - 1];
-						string str4 = string.Format("{0}. {1}\r\n", num2, dtc2.Name);
-						richTextPending.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
-						Color color15 = Color.Red;
-						richTextPending.SelectionColor = color15;
-						richTextPending.AppendText(str4);
-						if (string.Compare(dtc2.Description, "") == 0)
-						{
-							richTextPending.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
-							Color color13 = Color.Black;
-							richTextPending.SelectionColor = color13;
-							richTextPending.AppendText("    No definition found.\r\n\r\n");
-						}
-						else
-						{
-							string str3 = string.Format("    {0}: {1}\r\n\r\n", dtc2.Category, dtc2.Description);
-							richTextPending.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
-							Color color11 = Color.Black;
-							richTextPending.SelectionColor = color11;
-							richTextPending.AppendText(str3);
-						}
-						num2++;
+						richTextPending.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
+						richTextPending.SelectionColor = Color.Black;
+						text = "    No definition found.\r\n\r\n";
 					}
-					while (num2 <= arrayListPending.Count);
+					else
+					{
+						richTextPending.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
+						richTextPending.SelectionColor = Color.Black;
+						text = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
+					}
+					richTextPending.AppendText(text);
 				}
 			}
 			else
 			{
 				richTextPending.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
-				Color color9 = Color.Green;
-				richTextPending.SelectionColor = color9;
+				richTextPending.SelectionColor = Color.Green;
 				richTextPending.AppendText("No pending trouble codes found.");
 			}
-			if (arrayListPermanent.Count > 0)
+
+			if (m_ListPermanent.Count > 0)
 			{
-				int num = 1;
-				if (1 <= arrayListPermanent.Count)
+				for (idx = 1; idx <= m_ListPermanent.Count; idx++)
 				{
-					do
+					DTC dtc = (DTC)m_ListPermanent[idx - 1];
+					richTextPermanent.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+					richTextPermanent.SelectionColor = Color.Red;
+					richTextPermanent.AppendText(string.Format("{0}. {1}\r\n", idx, dtc.Name));
+
+					if (string.IsNullOrEmpty(dtc.Description))
 					{
-						DTC dtc = (DTC)arrayListPermanent[num - 1];
-						string str2 = string.Format("{0}. {1}\r\n", num, dtc.Name);
-						richTextPermanent.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
-						Color color7 = Color.Red;
-						richTextPermanent.SelectionColor = color7;
-						richTextPermanent.AppendText(str2);
-						if (string.Compare(dtc.Description, "") == 0)
-						{
-							richTextPermanent.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
-							Color color5 = Color.Black;
-							richTextPermanent.SelectionColor = color5;
-							richTextPermanent.AppendText("    No definition found.\r\n\r\n");
-						}
-						else
-						{
-							string str = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
-							richTextPermanent.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
-							Color color3 = Color.Black;
-							richTextPermanent.SelectionColor = color3;
-							richTextPermanent.AppendText(str);
-						}
-						num++;
+						richTextPermanent.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
+						richTextPermanent.SelectionColor = Color.Black;
+						text = "    No definition found.\r\n\r\n";
 					}
-					while (num <= arrayListPermanent.Count);
+					else
+					{
+						richTextPermanent.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
+						richTextPermanent.SelectionColor = Color.Black;
+						text = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
+					}
+					richTextPermanent.AppendText(text);
 				}
 			}
 			else
 			{
 				richTextPermanent.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
-				Color color = Color.Green;
-				richTextPermanent.SelectionColor = color;
+				richTextPermanent.SelectionColor = Color.Green;
 				richTextPermanent.AppendText("No permanent trouble codes found.");
 			}
 		}
@@ -572,7 +481,7 @@ namespace ProScan
 
 		private void btnErase_Click(object sender, EventArgs e)
 		{
-			if (!m_obdInterface.getConnectedStatus())
+			if (!m_obdInterface.ConnectedStatus)
 			{
 				MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				m_obdInterface.logItem("Error. DTC Form. Attempted to erase codes without vehicle connection.");

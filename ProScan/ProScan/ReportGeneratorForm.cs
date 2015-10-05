@@ -45,7 +45,6 @@ namespace ProScan
 		private Button btnOpen;
 		private Button btnGenerate;
 		private Panel panel;
-		private Container components;
 
 		public ReportGeneratorForm(OBDInterface obd2)
 		{
@@ -55,383 +54,381 @@ namespace ProScan
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
 		private void InitializeComponent()
 		{
-			groupPreparedBy = new System.Windows.Forms.GroupBox();
-			txtByTelephone = new System.Windows.Forms.TextBox();
-			lblByTelephone = new System.Windows.Forms.Label();
-			txtByAddress2 = new System.Windows.Forms.TextBox();
-			lblByAddress2 = new System.Windows.Forms.Label();
-			txtByAddress1 = new System.Windows.Forms.TextBox();
-			lblByAddress1 = new System.Windows.Forms.Label();
-			txtByName = new System.Windows.Forms.TextBox();
-			lblByName = new System.Windows.Forms.Label();
-			groupPreparedFor = new System.Windows.Forms.GroupBox();
-			txtForTelephone = new System.Windows.Forms.TextBox();
-			lblForTelephone = new System.Windows.Forms.Label();
-			txtForAddress2 = new System.Windows.Forms.TextBox();
-			lblForAddress2 = new System.Windows.Forms.Label();
-			txtForAddress1 = new System.Windows.Forms.TextBox();
-			lblForAddress1 = new System.Windows.Forms.Label();
-			txtForName = new System.Windows.Forms.TextBox();
-			lblForName = new System.Windows.Forms.Label();
-			groupStatus = new System.Windows.Forms.GroupBox();
-			progressBar = new System.Windows.Forms.ProgressBar();
-			richTextStatus = new System.Windows.Forms.RichTextBox();
-			groupVehicle = new System.Windows.Forms.GroupBox();
-			txtVehicleModel = new System.Windows.Forms.TextBox();
-			lblVehicleModel = new System.Windows.Forms.Label();
-			txtVehicleMake = new System.Windows.Forms.TextBox();
-			lblVehicleMake = new System.Windows.Forms.Label();
-			txtVehicleYear = new System.Windows.Forms.TextBox();
-			lblVehicleYear = new System.Windows.Forms.Label();
-			btnOpen = new System.Windows.Forms.Button();
-			btnGenerate = new System.Windows.Forms.Button();
-			panel = new System.Windows.Forms.Panel();
-			groupPreparedBy.SuspendLayout();
-			groupPreparedFor.SuspendLayout();
-			groupStatus.SuspendLayout();
-			groupVehicle.SuspendLayout();
-			panel.SuspendLayout();
-			SuspendLayout();
+			this.groupPreparedBy = new System.Windows.Forms.GroupBox();
+			this.txtByTelephone = new System.Windows.Forms.TextBox();
+			this.lblByTelephone = new System.Windows.Forms.Label();
+			this.txtByAddress2 = new System.Windows.Forms.TextBox();
+			this.lblByAddress2 = new System.Windows.Forms.Label();
+			this.txtByAddress1 = new System.Windows.Forms.TextBox();
+			this.lblByAddress1 = new System.Windows.Forms.Label();
+			this.txtByName = new System.Windows.Forms.TextBox();
+			this.lblByName = new System.Windows.Forms.Label();
+			this.groupPreparedFor = new System.Windows.Forms.GroupBox();
+			this.txtForTelephone = new System.Windows.Forms.TextBox();
+			this.lblForTelephone = new System.Windows.Forms.Label();
+			this.txtForAddress2 = new System.Windows.Forms.TextBox();
+			this.lblForAddress2 = new System.Windows.Forms.Label();
+			this.txtForAddress1 = new System.Windows.Forms.TextBox();
+			this.lblForAddress1 = new System.Windows.Forms.Label();
+			this.txtForName = new System.Windows.Forms.TextBox();
+			this.lblForName = new System.Windows.Forms.Label();
+			this.groupStatus = new System.Windows.Forms.GroupBox();
+			this.progressBar = new System.Windows.Forms.ProgressBar();
+			this.richTextStatus = new System.Windows.Forms.RichTextBox();
+			this.groupVehicle = new System.Windows.Forms.GroupBox();
+			this.txtVehicleModel = new System.Windows.Forms.TextBox();
+			this.lblVehicleModel = new System.Windows.Forms.Label();
+			this.txtVehicleMake = new System.Windows.Forms.TextBox();
+			this.lblVehicleMake = new System.Windows.Forms.Label();
+			this.txtVehicleYear = new System.Windows.Forms.TextBox();
+			this.lblVehicleYear = new System.Windows.Forms.Label();
+			this.btnOpen = new System.Windows.Forms.Button();
+			this.btnGenerate = new System.Windows.Forms.Button();
+			this.panel = new System.Windows.Forms.Panel();
+			this.groupPreparedBy.SuspendLayout();
+			this.groupPreparedFor.SuspendLayout();
+			this.groupStatus.SuspendLayout();
+			this.groupVehicle.SuspendLayout();
+			this.panel.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// groupPreparedBy
 			// 
-			groupPreparedBy.Controls.Add(txtByTelephone);
-			groupPreparedBy.Controls.Add(lblByTelephone);
-			groupPreparedBy.Controls.Add(txtByAddress2);
-			groupPreparedBy.Controls.Add(lblByAddress2);
-			groupPreparedBy.Controls.Add(txtByAddress1);
-			groupPreparedBy.Controls.Add(lblByAddress1);
-			groupPreparedBy.Controls.Add(txtByName);
-			groupPreparedBy.Controls.Add(lblByName);
-			groupPreparedBy.Location = new System.Drawing.Point(10, 75);
-			groupPreparedBy.Name = "groupPreparedBy";
-			groupPreparedBy.Size = new System.Drawing.Size(265, 125);
-			groupPreparedBy.TabIndex = 0;
-			groupPreparedBy.TabStop = false;
-			groupPreparedBy.Text = "Prepared By";
+			this.groupPreparedBy.Controls.Add(this.txtByTelephone);
+			this.groupPreparedBy.Controls.Add(this.lblByTelephone);
+			this.groupPreparedBy.Controls.Add(this.txtByAddress2);
+			this.groupPreparedBy.Controls.Add(this.lblByAddress2);
+			this.groupPreparedBy.Controls.Add(this.txtByAddress1);
+			this.groupPreparedBy.Controls.Add(this.lblByAddress1);
+			this.groupPreparedBy.Controls.Add(this.txtByName);
+			this.groupPreparedBy.Controls.Add(this.lblByName);
+			this.groupPreparedBy.Location = new System.Drawing.Point(12, 87);
+			this.groupPreparedBy.Name = "groupPreparedBy";
+			this.groupPreparedBy.Size = new System.Drawing.Size(318, 144);
+			this.groupPreparedBy.TabIndex = 0;
+			this.groupPreparedBy.TabStop = false;
+			this.groupPreparedBy.Text = "Prepared By";
 			// 
 			// txtByTelephone
 			// 
-			txtByTelephone.Location = new System.Drawing.Point(105, 95);
-			txtByTelephone.MaxLength = 35;
-			txtByTelephone.Name = "txtByTelephone";
-			txtByTelephone.Size = new System.Drawing.Size(150, 20);
-			txtByTelephone.TabIndex = 7;
+			this.txtByTelephone.Location = new System.Drawing.Point(126, 110);
+			this.txtByTelephone.MaxLength = 35;
+			this.txtByTelephone.Name = "txtByTelephone";
+			this.txtByTelephone.Size = new System.Drawing.Size(180, 22);
+			this.txtByTelephone.TabIndex = 7;
 			// 
 			// lblByTelephone
 			// 
-			lblByTelephone.Location = new System.Drawing.Point(10, 95);
-			lblByTelephone.Name = "lblByTelephone";
-			lblByTelephone.Size = new System.Drawing.Size(90, 20);
-			lblByTelephone.TabIndex = 6;
-			lblByTelephone.Text = "Telephone:";
-			lblByTelephone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblByTelephone.Location = new System.Drawing.Point(12, 110);
+			this.lblByTelephone.Name = "lblByTelephone";
+			this.lblByTelephone.Size = new System.Drawing.Size(108, 23);
+			this.lblByTelephone.TabIndex = 6;
+			this.lblByTelephone.Text = "Telephone:";
+			this.lblByTelephone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtByAddress2
 			// 
-			txtByAddress2.Location = new System.Drawing.Point(105, 70);
-			txtByAddress2.MaxLength = 35;
-			txtByAddress2.Name = "txtByAddress2";
-			txtByAddress2.Size = new System.Drawing.Size(150, 20);
-			txtByAddress2.TabIndex = 5;
+			this.txtByAddress2.Location = new System.Drawing.Point(126, 81);
+			this.txtByAddress2.MaxLength = 35;
+			this.txtByAddress2.Name = "txtByAddress2";
+			this.txtByAddress2.Size = new System.Drawing.Size(180, 22);
+			this.txtByAddress2.TabIndex = 5;
 			// 
 			// lblByAddress2
 			// 
-			lblByAddress2.Location = new System.Drawing.Point(10, 70);
-			lblByAddress2.Name = "lblByAddress2";
-			lblByAddress2.Size = new System.Drawing.Size(90, 20);
-			lblByAddress2.TabIndex = 4;
-			lblByAddress2.Text = "Address Line 2:";
-			lblByAddress2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblByAddress2.Location = new System.Drawing.Point(12, 81);
+			this.lblByAddress2.Name = "lblByAddress2";
+			this.lblByAddress2.Size = new System.Drawing.Size(108, 23);
+			this.lblByAddress2.TabIndex = 4;
+			this.lblByAddress2.Text = "Address Line 2:";
+			this.lblByAddress2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtByAddress1
 			// 
-			txtByAddress1.Location = new System.Drawing.Point(105, 45);
-			txtByAddress1.MaxLength = 35;
-			txtByAddress1.Name = "txtByAddress1";
-			txtByAddress1.Size = new System.Drawing.Size(150, 20);
-			txtByAddress1.TabIndex = 3;
+			this.txtByAddress1.Location = new System.Drawing.Point(126, 52);
+			this.txtByAddress1.MaxLength = 35;
+			this.txtByAddress1.Name = "txtByAddress1";
+			this.txtByAddress1.Size = new System.Drawing.Size(180, 22);
+			this.txtByAddress1.TabIndex = 3;
 			// 
 			// lblByAddress1
 			// 
-			lblByAddress1.Location = new System.Drawing.Point(10, 45);
-			lblByAddress1.Name = "lblByAddress1";
-			lblByAddress1.Size = new System.Drawing.Size(90, 20);
-			lblByAddress1.TabIndex = 2;
-			lblByAddress1.Text = "Address Line 1:";
-			lblByAddress1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblByAddress1.Location = new System.Drawing.Point(12, 52);
+			this.lblByAddress1.Name = "lblByAddress1";
+			this.lblByAddress1.Size = new System.Drawing.Size(108, 23);
+			this.lblByAddress1.TabIndex = 2;
+			this.lblByAddress1.Text = "Address Line 1:";
+			this.lblByAddress1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtByName
 			// 
-			txtByName.Location = new System.Drawing.Point(105, 20);
-			txtByName.MaxLength = 35;
-			txtByName.Name = "txtByName";
-			txtByName.Size = new System.Drawing.Size(150, 20);
-			txtByName.TabIndex = 1;
+			this.txtByName.Location = new System.Drawing.Point(126, 23);
+			this.txtByName.MaxLength = 35;
+			this.txtByName.Name = "txtByName";
+			this.txtByName.Size = new System.Drawing.Size(180, 22);
+			this.txtByName.TabIndex = 1;
 			// 
 			// lblByName
 			// 
-			lblByName.Location = new System.Drawing.Point(10, 20);
-			lblByName.Name = "lblByName";
-			lblByName.Size = new System.Drawing.Size(90, 20);
-			lblByName.TabIndex = 0;
-			lblByName.Text = "Name:";
-			lblByName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblByName.Location = new System.Drawing.Point(12, 23);
+			this.lblByName.Name = "lblByName";
+			this.lblByName.Size = new System.Drawing.Size(108, 23);
+			this.lblByName.TabIndex = 0;
+			this.lblByName.Text = "Name:";
+			this.lblByName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// groupPreparedFor
 			// 
-			groupPreparedFor.Controls.Add(txtForTelephone);
-			groupPreparedFor.Controls.Add(lblForTelephone);
-			groupPreparedFor.Controls.Add(txtForAddress2);
-			groupPreparedFor.Controls.Add(lblForAddress2);
-			groupPreparedFor.Controls.Add(txtForAddress1);
-			groupPreparedFor.Controls.Add(lblForAddress1);
-			groupPreparedFor.Controls.Add(txtForName);
-			groupPreparedFor.Controls.Add(lblForName);
-			groupPreparedFor.Location = new System.Drawing.Point(10, 210);
-			groupPreparedFor.Name = "groupPreparedFor";
-			groupPreparedFor.Size = new System.Drawing.Size(265, 125);
-			groupPreparedFor.TabIndex = 1;
-			groupPreparedFor.TabStop = false;
-			groupPreparedFor.Text = "Prepared For";
+			this.groupPreparedFor.Controls.Add(this.txtForTelephone);
+			this.groupPreparedFor.Controls.Add(this.lblForTelephone);
+			this.groupPreparedFor.Controls.Add(this.txtForAddress2);
+			this.groupPreparedFor.Controls.Add(this.lblForAddress2);
+			this.groupPreparedFor.Controls.Add(this.txtForAddress1);
+			this.groupPreparedFor.Controls.Add(this.lblForAddress1);
+			this.groupPreparedFor.Controls.Add(this.txtForName);
+			this.groupPreparedFor.Controls.Add(this.lblForName);
+			this.groupPreparedFor.Location = new System.Drawing.Point(12, 242);
+			this.groupPreparedFor.Name = "groupPreparedFor";
+			this.groupPreparedFor.Size = new System.Drawing.Size(318, 145);
+			this.groupPreparedFor.TabIndex = 1;
+			this.groupPreparedFor.TabStop = false;
+			this.groupPreparedFor.Text = "Prepared For";
 			// 
 			// txtForTelephone
 			// 
-			txtForTelephone.Location = new System.Drawing.Point(105, 95);
-			txtForTelephone.MaxLength = 35;
-			txtForTelephone.Name = "txtForTelephone";
-			txtForTelephone.Size = new System.Drawing.Size(150, 20);
-			txtForTelephone.TabIndex = 7;
+			this.txtForTelephone.Location = new System.Drawing.Point(126, 110);
+			this.txtForTelephone.MaxLength = 35;
+			this.txtForTelephone.Name = "txtForTelephone";
+			this.txtForTelephone.Size = new System.Drawing.Size(180, 22);
+			this.txtForTelephone.TabIndex = 7;
 			// 
 			// lblForTelephone
 			// 
-			lblForTelephone.Location = new System.Drawing.Point(10, 95);
-			lblForTelephone.Name = "lblForTelephone";
-			lblForTelephone.Size = new System.Drawing.Size(90, 20);
-			lblForTelephone.TabIndex = 6;
-			lblForTelephone.Text = "Telephone:";
-			lblForTelephone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblForTelephone.Location = new System.Drawing.Point(12, 110);
+			this.lblForTelephone.Name = "lblForTelephone";
+			this.lblForTelephone.Size = new System.Drawing.Size(108, 23);
+			this.lblForTelephone.TabIndex = 6;
+			this.lblForTelephone.Text = "Telephone:";
+			this.lblForTelephone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtForAddress2
 			// 
-			txtForAddress2.Location = new System.Drawing.Point(105, 70);
-			txtForAddress2.MaxLength = 35;
-			txtForAddress2.Name = "txtForAddress2";
-			txtForAddress2.Size = new System.Drawing.Size(150, 20);
-			txtForAddress2.TabIndex = 5;
+			this.txtForAddress2.Location = new System.Drawing.Point(126, 81);
+			this.txtForAddress2.MaxLength = 35;
+			this.txtForAddress2.Name = "txtForAddress2";
+			this.txtForAddress2.Size = new System.Drawing.Size(180, 22);
+			this.txtForAddress2.TabIndex = 5;
 			// 
 			// lblForAddress2
 			// 
-			lblForAddress2.Location = new System.Drawing.Point(10, 70);
-			lblForAddress2.Name = "lblForAddress2";
-			lblForAddress2.Size = new System.Drawing.Size(90, 20);
-			lblForAddress2.TabIndex = 4;
-			lblForAddress2.Text = "Address Line 2:";
-			lblForAddress2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblForAddress2.Location = new System.Drawing.Point(12, 81);
+			this.lblForAddress2.Name = "lblForAddress2";
+			this.lblForAddress2.Size = new System.Drawing.Size(108, 23);
+			this.lblForAddress2.TabIndex = 4;
+			this.lblForAddress2.Text = "Address Line 2:";
+			this.lblForAddress2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtForAddress1
 			// 
-			txtForAddress1.Location = new System.Drawing.Point(105, 45);
-			txtForAddress1.MaxLength = 35;
-			txtForAddress1.Name = "txtForAddress1";
-			txtForAddress1.Size = new System.Drawing.Size(150, 20);
-			txtForAddress1.TabIndex = 3;
+			this.txtForAddress1.Location = new System.Drawing.Point(126, 52);
+			this.txtForAddress1.MaxLength = 35;
+			this.txtForAddress1.Name = "txtForAddress1";
+			this.txtForAddress1.Size = new System.Drawing.Size(180, 22);
+			this.txtForAddress1.TabIndex = 3;
 			// 
 			// lblForAddress1
 			// 
-			lblForAddress1.Location = new System.Drawing.Point(10, 45);
-			lblForAddress1.Name = "lblForAddress1";
-			lblForAddress1.Size = new System.Drawing.Size(90, 20);
-			lblForAddress1.TabIndex = 2;
-			lblForAddress1.Text = "Address Line 1:";
-			lblForAddress1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblForAddress1.Location = new System.Drawing.Point(12, 52);
+			this.lblForAddress1.Name = "lblForAddress1";
+			this.lblForAddress1.Size = new System.Drawing.Size(108, 23);
+			this.lblForAddress1.TabIndex = 2;
+			this.lblForAddress1.Text = "Address Line 1:";
+			this.lblForAddress1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtForName
 			// 
-			txtForName.Location = new System.Drawing.Point(105, 20);
-			txtForName.MaxLength = 35;
-			txtForName.Name = "txtForName";
-			txtForName.Size = new System.Drawing.Size(150, 20);
-			txtForName.TabIndex = 1;
+			this.txtForName.Location = new System.Drawing.Point(126, 23);
+			this.txtForName.MaxLength = 35;
+			this.txtForName.Name = "txtForName";
+			this.txtForName.Size = new System.Drawing.Size(180, 22);
+			this.txtForName.TabIndex = 1;
 			// 
 			// lblForName
 			// 
-			lblForName.Location = new System.Drawing.Point(10, 20);
-			lblForName.Name = "lblForName";
-			lblForName.Size = new System.Drawing.Size(90, 20);
-			lblForName.TabIndex = 0;
-			lblForName.Text = "Name:";
-			lblForName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblForName.Location = new System.Drawing.Point(12, 23);
+			this.lblForName.Name = "lblForName";
+			this.lblForName.Size = new System.Drawing.Size(108, 23);
+			this.lblForName.TabIndex = 0;
+			this.lblForName.Text = "Name:";
+			this.lblForName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// groupStatus
 			// 
-			groupStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.groupStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			groupStatus.Controls.Add(progressBar);
-			groupStatus.Controls.Add(richTextStatus);
-			groupStatus.Location = new System.Drawing.Point(284, 10);
-			groupStatus.Name = "groupStatus";
-			groupStatus.Size = new System.Drawing.Size(465, 438);
-			groupStatus.TabIndex = 4;
-			groupStatus.TabStop = false;
-			groupStatus.Text = "Status";
+			this.groupStatus.Controls.Add(this.progressBar);
+			this.groupStatus.Controls.Add(this.richTextStatus);
+			this.groupStatus.Location = new System.Drawing.Point(341, 12);
+			this.groupStatus.Name = "groupStatus";
+			this.groupStatus.Size = new System.Drawing.Size(557, 515);
+			this.groupStatus.TabIndex = 4;
+			this.groupStatus.TabStop = false;
+			this.groupStatus.Text = "Status";
 			// 
 			// progressBar
 			// 
-			progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			progressBar.Location = new System.Drawing.Point(10, 20);
-			progressBar.Name = "progressBar";
-			progressBar.Size = new System.Drawing.Size(444, 23);
-			progressBar.TabIndex = 0;
+			this.progressBar.Location = new System.Drawing.Point(12, 23);
+			this.progressBar.Name = "progressBar";
+			this.progressBar.Size = new System.Drawing.Size(532, 27);
+			this.progressBar.TabIndex = 0;
 			// 
 			// richTextStatus
 			// 
-			richTextStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.richTextStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			richTextStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			richTextStatus.Location = new System.Drawing.Point(10, 48);
-			richTextStatus.Name = "richTextStatus";
-			richTextStatus.ReadOnly = true;
-			richTextStatus.Size = new System.Drawing.Size(444, 381);
-			richTextStatus.TabIndex = 1;
-			richTextStatus.Text = "";
+			this.richTextStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.richTextStatus.Location = new System.Drawing.Point(12, 55);
+			this.richTextStatus.Name = "richTextStatus";
+			this.richTextStatus.ReadOnly = true;
+			this.richTextStatus.Size = new System.Drawing.Size(532, 450);
+			this.richTextStatus.TabIndex = 1;
+			this.richTextStatus.Text = "";
 			// 
 			// groupVehicle
 			// 
-			groupVehicle.Controls.Add(txtVehicleModel);
-			groupVehicle.Controls.Add(lblVehicleModel);
-			groupVehicle.Controls.Add(txtVehicleMake);
-			groupVehicle.Controls.Add(lblVehicleMake);
-			groupVehicle.Controls.Add(txtVehicleYear);
-			groupVehicle.Controls.Add(lblVehicleYear);
-			groupVehicle.Location = new System.Drawing.Point(10, 345);
-			groupVehicle.Name = "groupVehicle";
-			groupVehicle.Size = new System.Drawing.Size(265, 103);
-			groupVehicle.TabIndex = 2;
-			groupVehicle.TabStop = false;
-			groupVehicle.Text = "Vehicle";
+			this.groupVehicle.Controls.Add(this.txtVehicleModel);
+			this.groupVehicle.Controls.Add(this.lblVehicleModel);
+			this.groupVehicle.Controls.Add(this.txtVehicleMake);
+			this.groupVehicle.Controls.Add(this.lblVehicleMake);
+			this.groupVehicle.Controls.Add(this.txtVehicleYear);
+			this.groupVehicle.Controls.Add(this.lblVehicleYear);
+			this.groupVehicle.Location = new System.Drawing.Point(12, 398);
+			this.groupVehicle.Name = "groupVehicle";
+			this.groupVehicle.Size = new System.Drawing.Size(318, 119);
+			this.groupVehicle.TabIndex = 2;
+			this.groupVehicle.TabStop = false;
+			this.groupVehicle.Text = "Vehicle";
 			// 
 			// txtVehicleModel
 			// 
-			txtVehicleModel.Location = new System.Drawing.Point(105, 70);
-			txtVehicleModel.MaxLength = 35;
-			txtVehicleModel.Name = "txtVehicleModel";
-			txtVehicleModel.Size = new System.Drawing.Size(150, 20);
-			txtVehicleModel.TabIndex = 5;
+			this.txtVehicleModel.Location = new System.Drawing.Point(126, 81);
+			this.txtVehicleModel.MaxLength = 35;
+			this.txtVehicleModel.Name = "txtVehicleModel";
+			this.txtVehicleModel.Size = new System.Drawing.Size(180, 22);
+			this.txtVehicleModel.TabIndex = 5;
 			// 
 			// lblVehicleModel
 			// 
-			lblVehicleModel.Location = new System.Drawing.Point(10, 70);
-			lblVehicleModel.Name = "lblVehicleModel";
-			lblVehicleModel.Size = new System.Drawing.Size(90, 20);
-			lblVehicleModel.TabIndex = 4;
-			lblVehicleModel.Text = "Model:";
-			lblVehicleModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblVehicleModel.Location = new System.Drawing.Point(12, 81);
+			this.lblVehicleModel.Name = "lblVehicleModel";
+			this.lblVehicleModel.Size = new System.Drawing.Size(108, 23);
+			this.lblVehicleModel.TabIndex = 4;
+			this.lblVehicleModel.Text = "Model:";
+			this.lblVehicleModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtVehicleMake
 			// 
-			txtVehicleMake.Location = new System.Drawing.Point(105, 45);
-			txtVehicleMake.MaxLength = 35;
-			txtVehicleMake.Name = "txtVehicleMake";
-			txtVehicleMake.Size = new System.Drawing.Size(150, 20);
-			txtVehicleMake.TabIndex = 3;
+			this.txtVehicleMake.Location = new System.Drawing.Point(126, 52);
+			this.txtVehicleMake.MaxLength = 35;
+			this.txtVehicleMake.Name = "txtVehicleMake";
+			this.txtVehicleMake.Size = new System.Drawing.Size(180, 22);
+			this.txtVehicleMake.TabIndex = 3;
 			// 
 			// lblVehicleMake
 			// 
-			lblVehicleMake.Location = new System.Drawing.Point(10, 45);
-			lblVehicleMake.Name = "lblVehicleMake";
-			lblVehicleMake.Size = new System.Drawing.Size(90, 20);
-			lblVehicleMake.TabIndex = 2;
-			lblVehicleMake.Text = "Make:";
-			lblVehicleMake.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblVehicleMake.Location = new System.Drawing.Point(12, 52);
+			this.lblVehicleMake.Name = "lblVehicleMake";
+			this.lblVehicleMake.Size = new System.Drawing.Size(108, 23);
+			this.lblVehicleMake.TabIndex = 2;
+			this.lblVehicleMake.Text = "Make:";
+			this.lblVehicleMake.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// txtVehicleYear
 			// 
-			txtVehicleYear.Location = new System.Drawing.Point(105, 20);
-			txtVehicleYear.MaxLength = 4;
-			txtVehicleYear.Name = "txtVehicleYear";
-			txtVehicleYear.Size = new System.Drawing.Size(150, 20);
-			txtVehicleYear.TabIndex = 1;
+			this.txtVehicleYear.Location = new System.Drawing.Point(126, 23);
+			this.txtVehicleYear.MaxLength = 4;
+			this.txtVehicleYear.Name = "txtVehicleYear";
+			this.txtVehicleYear.Size = new System.Drawing.Size(180, 22);
+			this.txtVehicleYear.TabIndex = 1;
 			// 
 			// lblVehicleYear
 			// 
-			lblVehicleYear.Location = new System.Drawing.Point(10, 20);
-			lblVehicleYear.Name = "lblVehicleYear";
-			lblVehicleYear.Size = new System.Drawing.Size(90, 20);
-			lblVehicleYear.TabIndex = 0;
-			lblVehicleYear.Text = "Year:";
-			lblVehicleYear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblVehicleYear.Location = new System.Drawing.Point(12, 23);
+			this.lblVehicleYear.Name = "lblVehicleYear";
+			this.lblVehicleYear.Size = new System.Drawing.Size(108, 23);
+			this.lblVehicleYear.TabIndex = 0;
+			this.lblVehicleYear.Text = "Year:";
+			this.lblVehicleYear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// btnOpen
 			// 
-			btnOpen.Location = new System.Drawing.Point(10, 45);
-			btnOpen.Name = "btnOpen";
-			btnOpen.Size = new System.Drawing.Size(265, 23);
-			btnOpen.TabIndex = 3;
-			btnOpen.Text = "&Open a Saved Report";
-			btnOpen.Click += new System.EventHandler(btnOpen_Click);
+			this.btnOpen.Location = new System.Drawing.Point(12, 52);
+			this.btnOpen.Name = "btnOpen";
+			this.btnOpen.Size = new System.Drawing.Size(318, 26);
+			this.btnOpen.TabIndex = 3;
+			this.btnOpen.Text = "&Open a Saved Report";
+			this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
 			// 
 			// btnGenerate
 			// 
-			btnGenerate.Location = new System.Drawing.Point(10, 15);
-			btnGenerate.Name = "btnGenerate";
-			btnGenerate.Size = new System.Drawing.Size(265, 23);
-			btnGenerate.TabIndex = 5;
-			btnGenerate.Text = "&Generate a New Report";
-			btnGenerate.Click += new System.EventHandler(btnGenerate_Click);
+			this.btnGenerate.Location = new System.Drawing.Point(12, 17);
+			this.btnGenerate.Name = "btnGenerate";
+			this.btnGenerate.Size = new System.Drawing.Size(318, 27);
+			this.btnGenerate.TabIndex = 5;
+			this.btnGenerate.Text = "&Generate a New Report";
+			this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
 			// 
 			// panel
 			// 
-			panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			panel.AutoScroll = true;
-			panel.Controls.Add(btnGenerate);
-			panel.Controls.Add(btnOpen);
-			panel.Controls.Add(groupVehicle);
-			panel.Controls.Add(groupPreparedFor);
-			panel.Controls.Add(groupPreparedBy);
-			panel.Controls.Add(groupStatus);
-			panel.Location = new System.Drawing.Point(0, 0);
-			panel.Name = "panel";
-			panel.Size = new System.Drawing.Size(755, 450);
-			panel.TabIndex = 6;
+			this.panel.AutoScroll = true;
+			this.panel.Controls.Add(this.btnGenerate);
+			this.panel.Controls.Add(this.btnOpen);
+			this.panel.Controls.Add(this.groupVehicle);
+			this.panel.Controls.Add(this.groupPreparedFor);
+			this.panel.Controls.Add(this.groupPreparedBy);
+			this.panel.Controls.Add(this.groupStatus);
+			this.panel.Location = new System.Drawing.Point(0, 0);
+			this.panel.Name = "panel";
+			this.panel.Size = new System.Drawing.Size(905, 529);
+			this.panel.TabIndex = 6;
 			// 
 			// ReportGeneratorForm
 			// 
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			ClientSize = new System.Drawing.Size(756, 453);
-			ControlBox = false;
-			Controls.Add(panel);
-			Name = "ReportGeneratorForm";
-			Text = "Diagnostic Report Generator";
-			Activated += new System.EventHandler(ReportGeneratorForm_Activated);
-			Load += new System.EventHandler(ReportGeneratorForm_Load);
-			groupPreparedBy.ResumeLayout(false);
-			groupPreparedBy.PerformLayout();
-			groupPreparedFor.ResumeLayout(false);
-			groupPreparedFor.PerformLayout();
-			groupStatus.ResumeLayout(false);
-			groupVehicle.ResumeLayout(false);
-			groupVehicle.PerformLayout();
-			panel.ResumeLayout(false);
-			ResumeLayout(false);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(906, 533);
+			this.ControlBox = false;
+			this.Controls.Add(this.panel);
+			this.Name = "ReportGeneratorForm";
+			this.Text = "Diagnostic Report Generator";
+			this.Activated += new System.EventHandler(this.ReportGeneratorForm_Activated);
+			this.Load += new System.EventHandler(this.ReportGeneratorForm_Load);
+			this.groupPreparedBy.ResumeLayout(false);
+			this.groupPreparedBy.PerformLayout();
+			this.groupPreparedFor.ResumeLayout(false);
+			this.groupPreparedFor.PerformLayout();
+			this.groupStatus.ResumeLayout(false);
+			this.groupVehicle.ResumeLayout(false);
+			this.groupVehicle.PerformLayout();
+			this.panel.ResumeLayout(false);
+			this.ResumeLayout(false);
 
 		}
 
 		private void btnGenerate_Click(object sender, EventArgs e)
 		{
-			if (!m_obdInterface.getConnectedStatus())
+			if (!m_obdInterface.ConnectedStatus)
 			{
 				MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
@@ -504,7 +501,7 @@ namespace ProScan
 					{
 						m_bReportForm.ReportPage1.DTCList.Add(enumerator2.Current);
 						DisplayDetailMessage("Stored DTC: " + enumerator2.Current);
-						DTC dtc2 = m_obdInterface.getDTC(enumerator2.Current);
+						DTC dtc2 = m_obdInterface.GetDTC(enumerator2.Current);
 						if (dtc2 != null)
 						{
 							m_bReportForm.ReportPage1.DTCDefinitionList.Add(dtc2.Description);
@@ -527,7 +524,7 @@ namespace ProScan
 					{
 						m_bReportForm.ReportPage1.PendingList.Add(enumerator.Current);
 						DisplayDetailMessage("Pending DTC: " + enumerator.Current);
-						DTC dtc = m_obdInterface.getDTC(enumerator.Current);
+						DTC dtc = m_obdInterface.GetDTC(enumerator.Current);
 						if (dtc != null)
 						{
 							m_bReportForm.ReportPage1.PendingDefinitionList.Add(dtc.Description);
@@ -538,7 +535,7 @@ namespace ProScan
 			}
 
 			DisplayStatusMessage("Checking for Freeze Frame Data");
-			OBDParameter parameter = m_obdInterface.lookupParameter("SAE.FF_DTC");
+			OBDParameter parameter = m_obdInterface.LookupParameter("SAE.FF_DTC");
 			if (parameter != null)
 			{
 				OBDParameter freezeFrameCopy = parameter.GetFreezeFrameCopy(0);
@@ -566,7 +563,7 @@ namespace ProScan
 
 		private void CollectFreezeFrameData()
 		{
-			OBDParameter param = m_obdInterface.lookupParameter("SAE.FUEL1_STATUS");
+			OBDParameter param = m_obdInterface.LookupParameter("SAE.FUEL1_STATUS");
 			int num16 = progressBar.Value;
 			progressBar.Value = num16 + 1;
 			m_bReportForm.ReportPage1.ShowFuelSystemStatus = false;
@@ -581,7 +578,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.FuelSystem1Status = value17.StringValue;
 				}
 			}
-			OBDParameter freezeFrameCopy = m_obdInterface.lookupParameter("SAE.FUEL2_STATUS");
+			OBDParameter freezeFrameCopy = m_obdInterface.LookupParameter("SAE.FUEL2_STATUS");
 			int num2 = progressBar.Value;
 			progressBar.Value = num2 + 1;
 			m_bReportForm.ReportPage1.ShowFuelSystemStatus = false;
@@ -596,7 +593,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.FuelSystem2Status = value3.StringValue;
 				}
 			}
-			OBDParameter parameter16 = m_obdInterface.lookupParameter("SAE.LOAD_CALC");
+			OBDParameter parameter16 = m_obdInterface.LookupParameter("SAE.LOAD_CALC");
 			int num = progressBar.Value;
 			progressBar.Value = num + 1;
 			m_bReportForm.ReportPage1.ShowCalculatedLoad = false;
@@ -611,7 +608,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.CalculatedLoad = value2.DoubleValue;
 				}
 			}
-			OBDParameter parameter14 = m_obdInterface.lookupParameter("SAE.ECT");
+			OBDParameter parameter14 = m_obdInterface.LookupParameter("SAE.ECT");
 			int num15 = progressBar.Value;
 			progressBar.Value = num15 + 1;
 			m_bReportForm.ReportPage1.ShowEngineCoolantTemp = false;
@@ -626,7 +623,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.EngineCoolantTemp = value16.DoubleValue;
 				}
 			}
-			OBDParameter parameter13 = m_obdInterface.lookupParameter("SAE.STFT1");
+			OBDParameter parameter13 = m_obdInterface.LookupParameter("SAE.STFT1");
 			int num14 = progressBar.Value;
 			progressBar.Value = num14 + 1;
 			m_bReportForm.ReportPage1.ShowSTFT13 = false;
@@ -641,7 +638,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.STFT1 = value15.DoubleValue;
 				}
 			}
-			OBDParameter parameter12 = m_obdInterface.lookupParameter("SAE.STFT3");
+			OBDParameter parameter12 = m_obdInterface.LookupParameter("SAE.STFT3");
 			int num13 = progressBar.Value;
 			progressBar.Value = num13 + 1;
 			m_bReportForm.ReportPage1.ShowSTFT13 = false;
@@ -656,7 +653,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.STFT3 = value14.DoubleValue;
 				}
 			}
-			OBDParameter parameter11 = m_obdInterface.lookupParameter("SAE.LTFT1");
+			OBDParameter parameter11 = m_obdInterface.LookupParameter("SAE.LTFT1");
 			int num12 = progressBar.Value;
 			progressBar.Value = num12 + 1;
 			m_bReportForm.ReportPage1.ShowLTFT13 = false;
@@ -671,7 +668,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.LTFT1 = value13.DoubleValue;
 				}
 			}
-			OBDParameter parameter10 = m_obdInterface.lookupParameter("SAE.LTFT3");
+			OBDParameter parameter10 = m_obdInterface.LookupParameter("SAE.LTFT3");
 			int num11 = progressBar.Value;
 			progressBar.Value = num11 + 1;
 			m_bReportForm.ReportPage1.ShowLTFT13 = false;
@@ -686,7 +683,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.LTFT3 = value12.DoubleValue;
 				}
 			}
-			OBDParameter parameter9 = m_obdInterface.lookupParameter("SAE.STFT2");
+			OBDParameter parameter9 = m_obdInterface.LookupParameter("SAE.STFT2");
 			int num10 = progressBar.Value;
 			progressBar.Value = num10 + 1;
 			m_bReportForm.ReportPage1.ShowSTFT24 = false;
@@ -701,7 +698,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.STFT2 = value11.DoubleValue;
 				}
 			}
-			OBDParameter parameter8 = m_obdInterface.lookupParameter("SAE.STFT4");
+			OBDParameter parameter8 = m_obdInterface.LookupParameter("SAE.STFT4");
 			int num9 = progressBar.Value;
 			progressBar.Value = num9 + 1;
 			m_bReportForm.ReportPage1.ShowSTFT24 = false;
@@ -716,7 +713,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.STFT4 = value10.DoubleValue;
 				}
 			}
-			OBDParameter parameter7 = m_obdInterface.lookupParameter("SAE.LTFT2");
+			OBDParameter parameter7 = m_obdInterface.LookupParameter("SAE.LTFT2");
 			int num8 = progressBar.Value;
 			progressBar.Value = num8 + 1;
 			m_bReportForm.ReportPage1.ShowLTFT24 = false;
@@ -731,7 +728,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.LTFT2 = value9.DoubleValue;
 				}
 			}
-			OBDParameter parameter6 = m_obdInterface.lookupParameter("SAE.LTFT4");
+			OBDParameter parameter6 = m_obdInterface.LookupParameter("SAE.LTFT4");
 			int num7 = progressBar.Value;
 			progressBar.Value = num7 + 1;
 			m_bReportForm.ReportPage1.ShowLTFT24 = false;
@@ -746,7 +743,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.LTFT4 = value8.DoubleValue;
 				}
 			}
-			OBDParameter parameter5 = m_obdInterface.lookupParameter("SAE.MAP");
+			OBDParameter parameter5 = m_obdInterface.LookupParameter("SAE.MAP");
 			int num6 = progressBar.Value;
 			progressBar.Value = num6 + 1;
 			m_bReportForm.ReportPage1.ShowIntakePressure = false;
@@ -761,7 +758,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.IntakePressure = value7.DoubleValue;
 				}
 			}
-			OBDParameter parameter4 = m_obdInterface.lookupParameter("SAE.RPM");
+			OBDParameter parameter4 = m_obdInterface.LookupParameter("SAE.RPM");
 			int num5 = progressBar.Value;
 			progressBar.Value = num5 + 1;
 			m_bReportForm.ReportPage1.ShowEngineRPM = false;
@@ -776,7 +773,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.EngineRPM = value6.DoubleValue;
 				}
 			}
-			OBDParameter parameter3 = m_obdInterface.lookupParameter("SAE.VSS");
+			OBDParameter parameter3 = m_obdInterface.LookupParameter("SAE.VSS");
 			int num4 = progressBar.Value;
 			progressBar.Value = num4 + 1;
 			m_bReportForm.ReportPage1.ShowVehicleSpeed = false;
@@ -791,7 +788,7 @@ namespace ProScan
 					m_bReportForm.ReportPage1.VehicleSpeed = value5.DoubleValue;
 				}
 			}
-			OBDParameter parameter2 = m_obdInterface.lookupParameter("SAE.SPARKADV");
+			OBDParameter parameter2 = m_obdInterface.LookupParameter("SAE.SPARKADV");
 			int num3 = progressBar.Value;
 			progressBar.Value = num3 + 1;
 			m_bReportForm.ReportPage1.ShowSparkAdvance = false;
@@ -1304,18 +1301,18 @@ namespace ProScan
 
 		private void ReportGeneratorForm_Load(object sender, EventArgs e)
 		{
-			txtByName.Text = m_obdInterface.GetUserPreferences().Name;
-			txtByAddress1.Text = m_obdInterface.GetUserPreferences().Address1;
-			txtByAddress2.Text = m_obdInterface.GetUserPreferences().Address2;
-			txtByTelephone.Text = m_obdInterface.GetUserPreferences().Telephone;
+			txtByName.Text = m_obdInterface.UserPreferences.Name;
+			txtByAddress1.Text = m_obdInterface.UserPreferences.Address1;
+			txtByAddress2.Text = m_obdInterface.UserPreferences.Address2;
+			txtByTelephone.Text = m_obdInterface.UserPreferences.Telephone;
 		}
 
 		private void ReportGeneratorForm_Activated(object sender, EventArgs e)
 		{
-			txtByName.Text = m_obdInterface.GetUserPreferences().Name;
-			txtByAddress1.Text = m_obdInterface.GetUserPreferences().Address1;
-			txtByAddress2.Text = m_obdInterface.GetUserPreferences().Address2;
-			txtByTelephone.Text = m_obdInterface.GetUserPreferences().Telephone;
+			txtByName.Text = m_obdInterface.UserPreferences.Name;
+			txtByAddress1.Text = m_obdInterface.UserPreferences.Address1;
+			txtByAddress2.Text = m_obdInterface.UserPreferences.Address2;
+			txtByTelephone.Text = m_obdInterface.UserPreferences.Telephone;
 		}
 	}
 }

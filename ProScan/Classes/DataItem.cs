@@ -1,19 +1,22 @@
 ﻿using System;
 
-internal class DataItem
+namespace ProScan
 {
-	public double Value;
-	public long Ticks;
-
-	public DataItem(double value, long iTicks)
+	internal class DataItem
 	{
-		Value = value;
-		Ticks = iTicks;
-	}
+		public double Value;
+		public long Ticks;
 
-	public DataItem(double value)
-	{
-		Value = value;
-		Ticks = DateTime.Now.Ticks;
+		public DataItem(double value, long iTicks)
+		{
+			Value = value;
+			Ticks = iTicks;
+		}
+
+		public DataItem(double value)
+		{
+			Value = value;
+			Ticks = DateTime.Now.Ticks;
+		}
 	}
 }

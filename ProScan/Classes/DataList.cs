@@ -1,143 +1,146 @@
-﻿internal class DataList
+﻿namespace ProScan
 {
-	private DataNode pHead;
-	private DataNode pTail;
-	private int iTotalNodes;
-
-	public DataList()
+	internal class DataList
 	{
-		pHead = (DataNode)null;
-		pTail = (DataNode)null;
-		iTotalNodes = 0;
-	}
+		private DataNode pHead;
+		private DataNode pTail;
+		private int iTotalNodes;
 
-	public void Insert(double value, long iTicks)
-	{
-		DataNode dataNode = new DataNode();
-		dataNode.pData = new DataItem(value, iTicks);
-		if (pHead == null)
+		public DataList()
 		{
-			pHead = dataNode;
-			dataNode.pPrev = (DataNode)null;
+			pHead = (DataNode)null;
+			pTail = (DataNode)null;
+			iTotalNodes = 0;
 		}
-		else
-		{
-			pTail.pNext = dataNode;
-			dataNode.pPrev = pTail;
-		}
-		pTail = dataNode;
-		dataNode.pNext = (DataNode)null;
-		iTotalNodes = iTotalNodes + 1;
-	}
 
-	public void Insert(double value)
-	{
-		DataNode dataNode = new DataNode();
-		dataNode.pData = new DataItem(value);
-		if (pHead == null)
+		public void Insert(double value, long iTicks)
 		{
-			pHead = dataNode;
-			dataNode.pPrev = (DataNode)null;
-		}
-		else
-		{
-			pTail.pNext = dataNode;
-			dataNode.pPrev = pTail;
-		}
-		pTail = dataNode;
-		dataNode.pNext = (DataNode)null;
-		iTotalNodes = iTotalNodes + 1;
-	}
-
-	public DataItem GetItem(int index)
-	{
-		if (index >= iTotalNodes)
-			return (DataItem)null;
-		DataNode dataNode = pHead;
-		if (0 < index)
-		{
-			uint num = (uint)index;
-			do
+			DataNode dataNode = new DataNode();
+			dataNode.pData = new DataItem(value, iTicks);
+			if (pHead == null)
 			{
-				dataNode = dataNode.pNext;
-				--num;
+				pHead = dataNode;
+				dataNode.pPrev = (DataNode)null;
 			}
-			while (num > 0U);
-		}
-		return dataNode.pData;
-	}
-
-	public double GetValue(int index)
-	{
-		if (index >= iTotalNodes)
-			return -1.0;
-		DataNode dataNode = pHead;
-		if (0 < index)
-		{
-			uint num = (uint)index;
-			do
+			else
 			{
-				dataNode = dataNode.pNext;
-				--num;
+				pTail.pNext = dataNode;
+				dataNode.pPrev = pTail;
 			}
-			while (num > 0U);
+			pTail = dataNode;
+			dataNode.pNext = (DataNode)null;
+			iTotalNodes = iTotalNodes + 1;
 		}
-		return dataNode.pData.Value;
-	}
 
-	public long GetTicks(int index)
-	{
-		if (index >= iTotalNodes)
-			return -1L;
-		DataNode dataNode = pHead;
-		if (0 < index)
+		public void Insert(double value)
 		{
-			uint num = (uint)index;
-			do
+			DataNode dataNode = new DataNode();
+			dataNode.pData = new DataItem(value);
+			if (pHead == null)
 			{
-				dataNode = dataNode.pNext;
-				--num;
+				pHead = dataNode;
+				dataNode.pPrev = (DataNode)null;
 			}
-			while (num > 0U);
+			else
+			{
+				pTail.pNext = dataNode;
+				dataNode.pPrev = pTail;
+			}
+			pTail = dataNode;
+			dataNode.pNext = (DataNode)null;
+			iTotalNodes = iTotalNodes + 1;
 		}
-		return dataNode.pData.Ticks;
-	}
 
-	public double GetSeconds(int index)
-	{
-		if (index >= iTotalNodes)
-			return -1.0;
-		DataNode dataNode = pHead;
-		if (0 < index)
+		public DataItem GetItem(int index)
 		{
-			uint num = (uint)index;
-			do
+			if (index >= iTotalNodes)
+				return (DataItem)null;
+			DataNode dataNode = pHead;
+			if (0 < index)
 			{
-				dataNode = dataNode.pNext;
-				--num;
+				uint num = (uint)index;
+				do
+				{
+					dataNode = dataNode.pNext;
+					--num;
+				}
+				while (num > 0U);
 			}
-			while (num > 0U);
+			return dataNode.pData;
 		}
-		return (double)(dataNode.pData.Ticks - pHead.pData.Ticks) * 1E-07;
-	}
 
-	public int TotalItems()
-	{
-		return iTotalNodes;
-	}
-
-	public void Reset()
-	{
-		if (pTail != null)
+		public double GetValue(int index)
 		{
-			do
+			if (index >= iTotalNodes)
+				return -1.0;
+			DataNode dataNode = pHead;
+			if (0 < index)
 			{
-				pTail = pTail.pPrev;
+				uint num = (uint)index;
+				do
+				{
+					dataNode = dataNode.pNext;
+					--num;
+				}
+				while (num > 0U);
 			}
-			while (pTail != null);
+			return dataNode.pData.Value;
 		}
-		pHead = (DataNode)null;
-		pTail = (DataNode)null;
-		iTotalNodes = 0;
+
+		public long GetTicks(int index)
+		{
+			if (index >= iTotalNodes)
+				return -1L;
+			DataNode dataNode = pHead;
+			if (0 < index)
+			{
+				uint num = (uint)index;
+				do
+				{
+					dataNode = dataNode.pNext;
+					--num;
+				}
+				while (num > 0U);
+			}
+			return dataNode.pData.Ticks;
+		}
+
+		public double GetSeconds(int index)
+		{
+			if (index >= iTotalNodes)
+				return -1.0;
+			DataNode dataNode = pHead;
+			if (0 < index)
+			{
+				uint num = (uint)index;
+				do
+				{
+					dataNode = dataNode.pNext;
+					--num;
+				}
+				while (num > 0U);
+			}
+			return (double)(dataNode.pData.Ticks - pHead.pData.Ticks) * 1E-07;
+		}
+
+		public int TotalItems()
+		{
+			return iTotalNodes;
+		}
+
+		public void Reset()
+		{
+			if (pTail != null)
+			{
+				do
+				{
+					pTail = pTail.pPrev;
+				}
+				while (pTail != null);
+			}
+			pHead = (DataNode)null;
+			pTail = (DataNode)null;
+			iTotalNodes = 0;
+		}
 	}
 }

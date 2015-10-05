@@ -1,5 +1,4 @@
-﻿using DiagnosticReport;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -21,7 +20,6 @@ namespace ProScan
 		private Panel panel;
 		public DiagnosticReportControl ReportPage1;
 		private Button btnSave;
-		private Container components;
 
 		public ReportForm()
 		{
@@ -34,179 +32,178 @@ namespace ProScan
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
 		private void InitializeComponent()
     {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportForm));
-			printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
-			printDocument1 = new System.Drawing.Printing.PrintDocument();
-			printDialog1 = new System.Windows.Forms.PrintDialog();
-			btnPrint = new System.Windows.Forms.Button();
-			btnPreview = new System.Windows.Forms.Button();
-			btnSave = new System.Windows.Forms.Button();
-			printDialog2 = new System.Windows.Forms.PrintDialog();
-			panel = new System.Windows.Forms.Panel();
-			ReportPage1 = new DiagnosticReport.DiagnosticReportControl();
-			panel.SuspendLayout();
-			SuspendLayout();
+			this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+			this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+			this.printDialog1 = new System.Windows.Forms.PrintDialog();
+			this.btnPrint = new System.Windows.Forms.Button();
+			this.btnPreview = new System.Windows.Forms.Button();
+			this.btnSave = new System.Windows.Forms.Button();
+			this.printDialog2 = new System.Windows.Forms.PrintDialog();
+			this.panel = new System.Windows.Forms.Panel();
+			this.ReportPage1 = new ProScan.DiagnosticReportControl();
+			this.panel.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// printPreviewDialog1
 			// 
-			printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
-			printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
-			printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
-			printPreviewDialog1.Document = printDocument1;
-			printPreviewDialog1.Enabled = true;
-			printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
-			printPreviewDialog1.Name = "printPreviewDialog1";
-			printPreviewDialog1.Visible = false;
+			this.printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
+			this.printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+			this.printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
+			this.printPreviewDialog1.Document = this.printDocument1;
+			this.printPreviewDialog1.Enabled = true;
+			this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
+			this.printPreviewDialog1.Name = "printPreviewDialog1";
+			this.printPreviewDialog1.Visible = false;
 			// 
 			// printDocument1
 			// 
-			printDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(printDocument1_BeginPrint);
-			printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(printDocument1_PrintPage);
+			this.printDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.printDocument1_BeginPrint);
+			this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
 			// 
 			// printDialog1
 			// 
-			printDialog1.Document = printDocument1;
+			this.printDialog1.Document = this.printDocument1;
 			// 
 			// btnPrint
 			// 
-			btnPrint.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			btnPrint.Location = new System.Drawing.Point(347, 5);
-			btnPrint.Name = "btnPrint";
-			btnPrint.Size = new System.Drawing.Size(75, 23);
-			btnPrint.TabIndex = 1;
-			btnPrint.Text = "&Print";
-			btnPrint.Click += new System.EventHandler(btnPrint_Click);
+			this.btnPrint.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.btnPrint.Location = new System.Drawing.Point(552, 6);
+			this.btnPrint.Name = "btnPrint";
+			this.btnPrint.Size = new System.Drawing.Size(90, 26);
+			this.btnPrint.TabIndex = 1;
+			this.btnPrint.Text = "&Print";
+			this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
 			// 
 			// btnPreview
 			// 
-			btnPreview.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			btnPreview.Location = new System.Drawing.Point(263, 5);
-			btnPreview.Name = "btnPreview";
-			btnPreview.Size = new System.Drawing.Size(75, 23);
-			btnPreview.TabIndex = 2;
-			btnPreview.Text = "P&review";
-			btnPreview.Click += new System.EventHandler(btnPreview_Click);
+			this.btnPreview.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.btnPreview.Location = new System.Drawing.Point(452, 6);
+			this.btnPreview.Name = "btnPreview";
+			this.btnPreview.Size = new System.Drawing.Size(90, 26);
+			this.btnPreview.TabIndex = 2;
+			this.btnPreview.Text = "P&review";
+			this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
 			// 
 			// btnSave
 			// 
-			btnSave.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			btnSave.Location = new System.Drawing.Point(431, 5);
-			btnSave.Name = "btnSave";
-			btnSave.Size = new System.Drawing.Size(75, 23);
-			btnSave.TabIndex = 3;
-			btnSave.Text = "&Save";
-			btnSave.Click += new System.EventHandler(btnSave_Click);
+			this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.btnSave.Location = new System.Drawing.Point(653, 6);
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(90, 26);
+			this.btnSave.TabIndex = 3;
+			this.btnSave.Text = "&Save";
+			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 			// 
 			// panel
 			// 
-			panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			panel.AutoScroll = true;
-			panel.BackColor = System.Drawing.Color.White;
-			panel.Controls.Add(ReportPage1);
-			panel.Location = new System.Drawing.Point(0, 32);
-			panel.Name = "panel";
-			panel.Size = new System.Drawing.Size(768, 474);
-			panel.TabIndex = 5;
+			this.panel.AutoScroll = true;
+			this.panel.BackColor = System.Drawing.Color.White;
+			this.panel.Controls.Add(this.ReportPage1);
+			this.panel.Location = new System.Drawing.Point(0, 37);
+			this.panel.Name = "panel";
+			this.panel.Size = new System.Drawing.Size(1194, 670);
+			this.panel.TabIndex = 5;
 			// 
 			// ReportPage1
 			// 
-			ReportPage1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			ReportPage1.BackColor = System.Drawing.Color.White;
-			ReportPage1.BorderColor = System.Drawing.Color.Blue;
-			ReportPage1.CalculatedLoad = 0D;
-			ReportPage1.CatalystMonitorCompleted = false;
-			ReportPage1.CatalystMonitorSupported = false;
-			ReportPage1.ClientAddress1 = " ";
-			ReportPage1.ClientAddress2 = " ";
-			ReportPage1.ClientName = " ";
-			ReportPage1.ClientTelephone = " ";
-			ReportPage1.ComprehensiveMonitorCompleted = false;
-			ReportPage1.ComprehensiveMonitorSupported = false;
-			ReportPage1.DTCDefinitionList = null;
-			ReportPage1.DTCList = null;
-			ReportPage1.EGRSystemMonitorCompleted = false;
-			ReportPage1.EGRSystemMonitorSupported = false;
-			ReportPage1.EngineCoolantTemp = 0D;
-			ReportPage1.EngineRPM = 0D;
-			ReportPage1.EvapSystemMonitorCompleted = false;
-			ReportPage1.EvapSystemMonitorSupported = false;
-			ReportPage1.FreezeFrameDTC = "P0000";
-			ReportPage1.FuelSystem1Status = "0";
-			ReportPage1.FuelSystem2Status = "0";
-			ReportPage1.FuelSystemMonitorCompleted = false;
-			ReportPage1.FuelSystemMonitorSupported = false;
-			ReportPage1.GenerationDate = " ";
-			ReportPage1.HeatedCatalystMonitorCompleted = false;
-			ReportPage1.HeatedCatalystMonitorSupported = false;
-			ReportPage1.IntakePressure = 0D;
-			ReportPage1.Location = new System.Drawing.Point(-13, 5);
-			ReportPage1.LTFT1 = 0D;
-			ReportPage1.LTFT2 = 0D;
-			ReportPage1.LTFT3 = 0D;
-			ReportPage1.LTFT4 = 0D;
-			ReportPage1.MilOffImage = ((System.Drawing.Image)(resources.GetObject("ReportPage1.MilOffImage")));
-			ReportPage1.MilOnImage = ((System.Drawing.Image)(resources.GetObject("ReportPage1.MilOnImage")));
-			ReportPage1.MilStatus = false;
-			ReportPage1.MisfireMonitorCompleted = false;
-			ReportPage1.MisfireMonitorSupported = false;
-			ReportPage1.Name = "ReportPage1";
-			ReportPage1.OxygenSensorHeaterMonitorCompleted = false;
-			ReportPage1.OxygenSensorHeaterMonitorSupported = false;
-			ReportPage1.OxygenSensorMonitorCompleted = false;
-			ReportPage1.OxygenSensorMonitorSupported = false;
-			ReportPage1.PendingDefinitionList = null;
-			ReportPage1.PendingList = null;
-			ReportPage1.RefrigerantMonitorCompleted = false;
-			ReportPage1.RefrigerantMonitorSupported = false;
-			ReportPage1.SecondaryAirMonitorCompleted = false;
-			ReportPage1.SecondaryAirMonitorSupported = false;
-			ReportPage1.ShopAddress1 = " ";
-			ReportPage1.ShopAddress2 = " ";
-			ReportPage1.ShopName = " ";
-			ReportPage1.ShopTelephone = " ";
-			ReportPage1.ShowCalculatedLoad = false;
-			ReportPage1.ShowEngineCoolantTemp = false;
-			ReportPage1.ShowEngineRPM = false;
-			ReportPage1.ShowFuelSystemStatus = false;
-			ReportPage1.ShowIntakePressure = false;
-			ReportPage1.ShowLTFT13 = false;
-			ReportPage1.ShowLTFT24 = false;
-			ReportPage1.ShowSparkAdvance = false;
-			ReportPage1.ShowSTFT13 = false;
-			ReportPage1.ShowSTFT24 = false;
-			ReportPage1.ShowVehicleSpeed = false;
-			ReportPage1.Size = new System.Drawing.Size(750, 1000);
-			ReportPage1.SparkAdvance = 0D;
-			ReportPage1.STFT1 = 0D;
-			ReportPage1.STFT2 = 0D;
-			ReportPage1.STFT3 = 0D;
-			ReportPage1.STFT4 = 0D;
-			ReportPage1.TabIndex = 0;
-			ReportPage1.TotalCodes = 0;
-			ReportPage1.Vehicle = " ";
-			ReportPage1.VehicleSpeed = 0D;
+			this.ReportPage1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.ReportPage1.BackColor = System.Drawing.Color.White;
+			this.ReportPage1.BorderColor = System.Drawing.Color.Blue;
+			this.ReportPage1.CalculatedLoad = 0D;
+			this.ReportPage1.CatalystMonitorCompleted = false;
+			this.ReportPage1.CatalystMonitorSupported = false;
+			this.ReportPage1.ClientAddress1 = " ";
+			this.ReportPage1.ClientAddress2 = " ";
+			this.ReportPage1.ClientName = " ";
+			this.ReportPage1.ClientTelephone = " ";
+			this.ReportPage1.ComprehensiveMonitorCompleted = false;
+			this.ReportPage1.ComprehensiveMonitorSupported = false;
+			this.ReportPage1.DTCDefinitionList = null;
+			this.ReportPage1.DTCList = null;
+			this.ReportPage1.EGRSystemMonitorCompleted = false;
+			this.ReportPage1.EGRSystemMonitorSupported = false;
+			this.ReportPage1.EngineCoolantTemp = 0D;
+			this.ReportPage1.EngineRPM = 0D;
+			this.ReportPage1.EvapSystemMonitorCompleted = false;
+			this.ReportPage1.EvapSystemMonitorSupported = false;
+			this.ReportPage1.FreezeFrameDTC = "P0000";
+			this.ReportPage1.FuelSystem1Status = "0";
+			this.ReportPage1.FuelSystem2Status = "0";
+			this.ReportPage1.FuelSystemMonitorCompleted = false;
+			this.ReportPage1.FuelSystemMonitorSupported = false;
+			this.ReportPage1.GenerationDate = " ";
+			this.ReportPage1.HeatedCatalystMonitorCompleted = false;
+			this.ReportPage1.HeatedCatalystMonitorSupported = false;
+			this.ReportPage1.IntakePressure = 0D;
+			this.ReportPage1.Location = new System.Drawing.Point(96, 6);
+			this.ReportPage1.Logo = null;
+			this.ReportPage1.LTFT1 = 0D;
+			this.ReportPage1.LTFT2 = 0D;
+			this.ReportPage1.LTFT3 = 0D;
+			this.ReportPage1.LTFT4 = 0D;
+			this.ReportPage1.MilOffImage = ((System.Drawing.Image)(resources.GetObject("ReportPage1.MilOffImage")));
+			this.ReportPage1.MilOnImage = ((System.Drawing.Image)(resources.GetObject("ReportPage1.MilOnImage")));
+			this.ReportPage1.MilStatus = false;
+			this.ReportPage1.MisfireMonitorCompleted = false;
+			this.ReportPage1.MisfireMonitorSupported = false;
+			this.ReportPage1.Name = "ReportPage1";
+			this.ReportPage1.OxygenSensorHeaterMonitorCompleted = false;
+			this.ReportPage1.OxygenSensorHeaterMonitorSupported = false;
+			this.ReportPage1.OxygenSensorMonitorCompleted = false;
+			this.ReportPage1.OxygenSensorMonitorSupported = false;
+			this.ReportPage1.PendingDefinitionList = null;
+			this.ReportPage1.PendingList = null;
+			this.ReportPage1.RefrigerantMonitorCompleted = false;
+			this.ReportPage1.RefrigerantMonitorSupported = false;
+			this.ReportPage1.SecondaryAirMonitorCompleted = false;
+			this.ReportPage1.SecondaryAirMonitorSupported = false;
+			this.ReportPage1.ShopAddress1 = " ";
+			this.ReportPage1.ShopAddress2 = " ";
+			this.ReportPage1.ShopName = " ";
+			this.ReportPage1.ShopTelephone = " ";
+			this.ReportPage1.ShowCalculatedLoad = false;
+			this.ReportPage1.ShowEngineCoolantTemp = false;
+			this.ReportPage1.ShowEngineRPM = false;
+			this.ReportPage1.ShowFuelSystemStatus = false;
+			this.ReportPage1.ShowIntakePressure = false;
+			this.ReportPage1.ShowLTFT13 = false;
+			this.ReportPage1.ShowLTFT24 = false;
+			this.ReportPage1.ShowSparkAdvance = false;
+			this.ReportPage1.ShowSTFT13 = false;
+			this.ReportPage1.ShowSTFT24 = false;
+			this.ReportPage1.ShowVehicleSpeed = false;
+			this.ReportPage1.Size = new System.Drawing.Size(900, 1154);
+			this.ReportPage1.SparkAdvance = 0D;
+			this.ReportPage1.STFT1 = 0D;
+			this.ReportPage1.STFT2 = 0D;
+			this.ReportPage1.STFT3 = 0D;
+			this.ReportPage1.STFT4 = 0D;
+			this.ReportPage1.TabIndex = 0;
+			this.ReportPage1.TotalCodes = 0;
+			this.ReportPage1.Vehicle = " ";
+			this.ReportPage1.VehicleSpeed = 0D;
 			// 
 			// ReportForm
 			// 
-			AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			ClientSize = new System.Drawing.Size(768, 510);
-			Controls.Add(panel);
-			Controls.Add(btnSave);
-			Controls.Add(btnPreview);
-			Controls.Add(btnPrint);
-			Name = "ReportForm";
-			Text = "OBD-II Diagnostic Report";
-			panel.ResumeLayout(false);
-			ResumeLayout(false);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+			this.ClientSize = new System.Drawing.Size(1194, 711);
+			this.Controls.Add(this.panel);
+			this.Controls.Add(this.btnSave);
+			this.Controls.Add(this.btnPreview);
+			this.Controls.Add(this.btnPrint);
+			this.Name = "ReportForm";
+			this.Text = "OBD-II Diagnostic Report";
+			this.panel.ResumeLayout(false);
+			this.ResumeLayout(false);
 
     }
 

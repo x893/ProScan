@@ -1,41 +1,44 @@
 ﻿using System;
 using System.Globalization;
 
-public class OBDCommLogItem
+namespace ProScan
 {
-	private DateTime m_dtTime;
-	private string m_strMsg;
-
-	public string Message
+	public class OBDCommLogItem
 	{
-		get { return m_strMsg; }
-		set { m_strMsg = value; }
-	}
+		private DateTime m_dtTime;
+		private string m_strMsg;
 
-	public DateTime Timestamp
-	{
-		get { return m_dtTime; }
-		set { m_dtTime = value; }
-	}
+		public string Message
+		{
+			get { return m_strMsg; }
+			set { m_strMsg = value; }
+		}
 
-	public OBDCommLogItem(DateTime dt, string strMsg)
-	{
-		m_dtTime = dt;
-		m_strMsg = strMsg;
-	}
+		public DateTime Timestamp
+		{
+			get { return m_dtTime; }
+			set { m_dtTime = value; }
+		}
 
-	public OBDCommLogItem(string strMsg)
-	{
-		m_dtTime = DateTime.Now;
-		m_strMsg = strMsg;
-	}
+		public OBDCommLogItem(DateTime dt, string strMsg)
+		{
+			m_dtTime = dt;
+			m_strMsg = strMsg;
+		}
 
-	public OBDCommLogItem()
-	{
-	}
+		public OBDCommLogItem(string strMsg)
+		{
+			m_dtTime = DateTime.Now;
+			m_strMsg = strMsg;
+		}
 
-	public override string ToString()
-	{
-		return string.Format("{0}: {1}", m_dtTime.ToString("MM-dd-yyyy hh:mm:ss.fff", DateTimeFormatInfo.InvariantInfo), m_strMsg);
+		public OBDCommLogItem()
+		{
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0}: {1}", m_dtTime.ToString("MM-dd-yyyy hh:mm:ss.fff", DateTimeFormatInfo.InvariantInfo), m_strMsg);
+		}
 	}
 }

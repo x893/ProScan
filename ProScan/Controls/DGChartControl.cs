@@ -50,7 +50,6 @@ namespace DGChart
 		private double[] yData4;
 		private double[] xData5;
 		private double[] yData5;
-		private Container components;
 
 		public DGChartControl()
 		{
@@ -587,8 +586,6 @@ namespace DGChart
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 

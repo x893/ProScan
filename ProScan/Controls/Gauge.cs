@@ -24,7 +24,6 @@ namespace ProScan
 		private Color colorNeedle;
 		private double dNeedleSweepAngle;
 		private double dValue;
-		private Container components;
 
 		public Gauge()
 		{
@@ -47,6 +46,7 @@ namespace ProScan
 			SetStyle(ControlStyles.DoubleBuffer, true);
 			SetStyle(ControlStyles.UserPaint, true);
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
 			UpdateStyles();
 		}
 
@@ -133,10 +133,7 @@ namespace ProScan
 		[Description("The color of the tick marks.")]
 		public Color TickColor
 		{
-			get
-			{
-				return colorTick;
-			}
+			get { return colorTick; }
 			set
 			{
 				colorTick = value;
@@ -149,10 +146,7 @@ namespace ProScan
 		[DefaultValue("8")]
 		public int TickCount
 		{
-			get
-			{
-				return iTickCount;
-			}
+			get { return iTickCount; }
 			set
 			{
 				iTickCount = value;
@@ -165,10 +159,7 @@ namespace ProScan
 		[Description("The ending value of the gauge's range.")]
 		public double RangeEnd
 		{
-			get
-			{
-				return dRangeEnd;
-			}
+			get { return dRangeEnd; }
 			set
 			{
 				dRangeEnd = value;
@@ -181,10 +172,7 @@ namespace ProScan
 		[DefaultValue("0")]
 		public double RangeStart
 		{
-			get
-			{
-				return dRangeStart;
-			}
+			get { return dRangeStart; }
 			set
 			{
 				dRangeStart = value;
@@ -197,10 +185,7 @@ namespace ProScan
 		[Description("The sweeping range of the needle.")]
 		public double NeedleSweepAngle
 		{
-			get
-			{
-				return dNeedleSweepAngle;
-			}
+			get { return dNeedleSweepAngle; }
 			set
 			{
 				dNeedleSweepAngle = value;
@@ -213,10 +198,7 @@ namespace ProScan
 		[DefaultValue("AntiqueWhite")]
 		public Color FaceColor
 		{
-			get
-			{
-				return colorFace;
-			}
+			get { return colorFace; }
 			set
 			{
 				colorFace = value;
@@ -229,10 +211,7 @@ namespace ProScan
 		[Description("The color of the bezel.")]
 		public Color BezelColor
 		{
-			get
-			{
-				return colorBezel;
-			}
+			get { return colorBezel; }
 			set
 			{
 				colorBezel = value;
@@ -245,10 +224,7 @@ namespace ProScan
 		[Category("Gauge")]
 		public string Units
 		{
-			get
-			{
-				return strUnits;
-			}
+			get { return strUnits; }
 			set
 			{
 				strUnits = value;
@@ -261,10 +237,7 @@ namespace ProScan
 		[Category("Gauge")]
 		public override string Text
 		{
-			get
-			{
-				return strName;
-			}
+			get { return strName; }
 			set
 			{
 				strName = value;
@@ -274,8 +247,6 @@ namespace ProScan
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
@@ -302,7 +273,7 @@ namespace ProScan
 			}
 			catch (Exception ex)
 			{
-				int num = (int)MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message);
 			}
 		}
 

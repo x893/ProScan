@@ -1,3 +1,4 @@
+# PID,Name,OBDRequest,Service,Parameter,SubParameter,Category,Type,Manufacturer,Priority,EnglishUnitLabel,MetricUnitLabel,EnglishMinValue,EnglishMaxValue,MetricMinValue,MetricMaxValue,ValueTypes(Double,Bool,String,StringCollection)
 SAE.MIL,Malfunction Indicator Lamp (MIL) Status,0101,1,1,0,DTC,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.DTC_COUNT,Number of Emission-Related DTCs,0101,1,1,1,DTC,Generic,SAE,3,,,0,128,0,128,1,0,0,0
 SAE.STORED_DTCS,List of Stored DTCs,03,3,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1

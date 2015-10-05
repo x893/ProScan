@@ -1,30 +1,33 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace ProScan
 {
 	public class OBDInterface
 	{
+		private const string m_vehicles_db = "vehicles.db";
+		private const string m_settings_xml = "settings.xml";
+		private const string m_preferences_xml = "preferences.xml";
+
 		public delegate void __Delegate_OnConnect();
 		public delegate void __Delegate_OnDisconnect();
 
-		private int m_iDevice;
+		private HardwareType m_iDevice;
 		private OBDDevice m_obdDevice;
-		private ArrayList m_listDTC;
-		private ArrayList m_listAllParameters;
-		private ArrayList m_listSupportedParameters;
+		private List<DTC> m_listDTC;
+		private List<OBDParameter> m_listAllParameters;
+		private List<OBDParameter> m_listSupportedParameters;
 		private OBDCommLog m_commLog;
 		private UserPreferences m_userpreferences;
 		private Preferences m_settings;
-		private ArrayList m_listVehicleProfiles;
+		private List<VehicleProfile> m_VehicleProfiles;
 
 		public event OBDInterface.__Delegate_OnDisconnect OnDisconnect;
 		public event OBDInterface.__Delegate_OnConnect OnConnect;
@@ -33,36 +36,35 @@ namespace ProScan
 		{
 			m_commLog = new OBDCommLog();
 			m_commLog.Delete();
-			setDevice(1);
-			m_listAllParameters = new ArrayList();
-			m_listSupportedParameters = new ArrayList();
+			setDevice(HardwareType.ELM327);
+			m_listAllParameters = new List<OBDParameter>();
+			m_listSupportedParameters = new List<OBDParameter>();
 			m_userpreferences = LoadUserPreferences();
 			m_settings = LoadCommSettings();
-			m_listVehicleProfiles = LoadVehicleProfiles();
+			m_VehicleProfiles = LoadVehicleProfiles();
 		}
 
-		public int getDevice()
+		public HardwareType getDevice()
 		{
 			return m_iDevice;
 		}
 
 		public string getDeviceIDString()
 		{
-			return m_obdDevice.getDeviceIDString();
+			return m_obdDevice.DeviceIDString();
 		}
 
-
-		public bool initDevice(int device, int port, int baud, int protocol)
+		public bool initDevice(HardwareType device, int port, int baud, ProtocolType protocol)
 		{
 			m_commLog.AddItem(string.Format("Attempting initialization on port {0}", port.ToString()));
-			bool flag = false;
+
 			setDevice(device);
-			if (m_obdDevice.initialize(port, baud, protocol) && initOBD())
+			if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD())
 			{
-				flag = true;
 				OnConnect();
+				return true;
 			}
-			return flag;
+			return false;
 		}
 
 
@@ -70,8 +72,8 @@ namespace ProScan
 		{
 			m_commLog.AddItem("Beginning AUTO initialization...");
 			bool flag = false;
-			setDevice(1);
-			if (m_obdDevice.initialize() && initOBD())
+			setDevice(HardwareType.ELM327);
+			if (m_obdDevice.Initialize() && InitOBD())
 			{
 				flag = true;
 				OnConnect();
@@ -80,79 +82,41 @@ namespace ProScan
 		}
 
 
-		public bool initOBD()
+		public bool InitOBD()
 		{
-			OBDParameter obdParameter1 = new OBDParameter(1, 0, 0);
-			obdParameter1.ValueTypes = 32;
-			OBDParameterValue obdParameterValue1 = getValue(obdParameter1, true);
-			if (obdParameterValue1.ErrorDetected)
+			OBDParameter param = new OBDParameter(1, 0, 0);
+			param.ValueTypes = 32;
+			OBDParameterValue value = getValue(param, true);
+			if (value.ErrorDetected)
 				return false;
-			IEnumerator enumerator1 = m_listAllParameters.GetEnumerator();
-			if (enumerator1.MoveNext())
-			{
-				do
-				{
-					OBDParameter obdParameter2 = (OBDParameter)enumerator1.Current;
-					if (obdParameter2.Parameter > 0 && obdParameter2.Parameter <= 32 && obdParameterValue1.getBitFlag(obdParameter2.Parameter - 1))
-						m_listSupportedParameters.Add((object)obdParameter2);
-				}
-				while (enumerator1.MoveNext());
-			}
-			if (!obdParameterValue1.getBitFlag(31))
+
+			foreach (OBDParameter param2 in m_listAllParameters)
+				if (param2.Parameter > 0 && param2.Parameter <= 32 && value.getBitFlag(param2.Parameter - 1))
+					m_listSupportedParameters.Add(param2);
+			if (!value.getBitFlag(31))
 				return true;
-			obdParameter1.Parameter = 32;
-			OBDParameterValue obdParameterValue2 = getValue(obdParameter1, true);
-			if (obdParameterValue2.ErrorDetected)
+
+			param.Parameter = 32;
+			value = getValue(param, true);
+			if (value.ErrorDetected)
 				return false;
-			IEnumerator enumerator2 = m_listAllParameters.GetEnumerator();
-			if (enumerator2.MoveNext())
-			{
-				do
-				{
-					OBDParameter obdParameter2 = (OBDParameter)enumerator2.Current;
-					if (obdParameter2.Parameter > 32 && obdParameter2.Parameter <= 64 && obdParameterValue2.getBitFlag(obdParameter2.Parameter - 33))
-						m_listSupportedParameters.Add((object)obdParameter2);
-				}
-				while (enumerator2.MoveNext());
-			}
+			foreach (OBDParameter param2 in m_listAllParameters)
+				if (param2.Parameter > 32 && param2.Parameter <= 64 && value.getBitFlag(param2.Parameter - 33))
+					m_listSupportedParameters.Add(param2);
 			return true;
 		}
 
-
 		public bool isParameterSupported(string strPID)
 		{
-			IEnumerator enumerator = m_listSupportedParameters.GetEnumerator();
-			if (enumerator.MoveNext())
-			{
-				while (((OBDParameter)enumerator.Current).PID.CompareTo(strPID) != 0)
-				{
-					if (!enumerator.MoveNext())
-						return false;
-				}
-				return true;
-			}
-			return false;
-		}
-
-
-		public bool isParameterSupported(OBDParameter param)
-		{
-			IEnumerator enumerator = m_listSupportedParameters.GetEnumerator();
-			if (enumerator.MoveNext())
-			{
-				while ((OBDParameter)enumerator.Current != param)
-				{
-					if (!enumerator.MoveNext())
-						return false;
-				}
-				return true;
-			}
+			foreach (OBDParameter param in m_listSupportedParameters)
+				if (param.PID.CompareTo(strPID) == 0)
+					return true;
 			return false;
 		}
 
 		public OBDParameterValue getValue(string strPID, bool bEnglishUnits)
 		{
-			OBDParameter obdParameter = lookupParameter(strPID);
+			OBDParameter obdParameter = LookupParameter(strPID);
 			if (obdParameter != null)
 				return getValue(obdParameter, bEnglishUnits);
 
@@ -169,19 +133,19 @@ namespace ProScan
 				m_commLog.AddItem("Requesting " + param.OBDRequest);
 
 			if (param.Service == 0)
-				return getSpecialValue(param, bEnglishUnits);
+				return SpecialValue(param, bEnglishUnits);
 
-			OBDResponseList responses = m_obdDevice.query(param);
+			OBDResponseList responses = m_obdDevice.Query(param);
 			string strItem1 = "Responses: ";
-			int index1 = 0;
-			if (0 < responses.ResponseCount)
+			if (responses.ResponseCount > 0)
 			{
+				int count = 0;
 				do
 				{
-					strItem1 = strItem1 + string.Format("[{0}] ", responses.GetOBDResponse(index1).Data);
-					++index1;
+					strItem1 = strItem1 + string.Format("[{0}] ", responses.GetOBDResponse(count).Data);
+					++count;
 				}
-				while (index1 < responses.ResponseCount);
+				while (count < responses.ResponseCount);
 			}
 			m_commLog.AddItem(strItem1);
 			OBDParameterValue obdParameterValue = OBDInterpretter.getValue(param, responses, bEnglishUnits);
@@ -192,179 +156,178 @@ namespace ProScan
 			}
 			else
 			{
-				string strItem2 = "Values: ";
-				if ((param.ValueTypes & 2) == 2)
+				string values = "Values: ";
+				if ((param.ValueTypes & 0x01) == 0x01)
+					values = values + string.Format("[Double: {0}] ", obdParameterValue.DoubleValue.ToString());
+				if ((param.ValueTypes & 0x02) == 0x02)
+					values = values + string.Format("[Bool: {0}] ", obdParameterValue.BoolValue.ToString());
+				if ((param.ValueTypes & 0x04) == 0x04)
+					values += string.Format("[String: {0} / {1}] ", obdParameterValue.StringValue, obdParameterValue.ShortStringValue);
+				if ((param.ValueTypes & 0x08) == 0x08)
 				{
-					bool num = obdParameterValue.BoolValue;
-					strItem2 = strItem2 + string.Format("[Bool: {0}] ", num.ToString());
+					values += "[StringCollection: ";
+					foreach (string strx in obdParameterValue.StringCollectionValue)
+						values = string.Concat(values, strx + ", ");
+					values += "]";
 				}
-				if ((param.ValueTypes & 1) == 1)
+				if ((param.ValueTypes & 0x20) == 0x20)
 				{
-					double num = obdParameterValue.DoubleValue;
-					strItem2 = strItem2 + string.Format("[Double: {0}] ", num.ToString());
+					values += "[BitFlags: ";
+					for(int idx = 0; idx < 32; idx++)
+						values += (obdParameterValue.getBitFlag(idx) ? "T" : "F");
+					values += " ]";
 				}
-				if ((param.ValueTypes & 4) == 4)
-					strItem2 += string.Format("[String: {0} / {1}] ", obdParameterValue.StringValue, obdParameterValue.ShortStringValue);
-				if ((param.ValueTypes & 8) == 8)
-				{
-					string str = strItem2 + "[StringCollection: ";
-					StringEnumerator enumerator = obdParameterValue.StringCollectionValue.GetEnumerator();
-					if (enumerator.MoveNext())
-					{
-						do
-						{
-							str = str + enumerator.Current + ", ";
-						}
-						while (enumerator.MoveNext());
-					}
-					strItem2 = str + "]";
-				}
-				if ((param.ValueTypes & 32) == 32)
-				{
-					string str = strItem2 + "[BitFlags: ";
-					int index2 = 0;
-					do
-					{
-						str += obdParameterValue.getBitFlag(index2) ? "T" : "F";
-						++index2;
-					}
-					while (index2 < 32);
-					strItem2 = str + " ]";
-				}
-				m_commLog.AddItem(strItem2);
+				m_commLog.AddItem(values);
 				return obdParameterValue;
 			}
 		}
 
-		public OBDParameterValue getSpecialValue(OBDParameter param, bool bEnglishUnits)
+		public OBDParameterValue SpecialValue(OBDParameter param, bool bEnglishUnits)
 		{
-			OBDParameterValue value = new OBDParameterValue();
 			if (param.Parameter != 0)
 				return null;
 
-			string s = getRawResponse("ATRV");
-			m_commLog.AddItem("Response: " + s);
-			if (s != null)
+			OBDParameterValue value = new OBDParameterValue();
+			string respopnse = getRawResponse("ATRV");
+			m_commLog.AddItem("Response: " + respopnse);
+			if (respopnse != null)
 			{
-				s = s.Replace("V", "");
-				value.DoubleValue = double.Parse(s);
+				respopnse = respopnse.Replace("V", "");
+				value.DoubleValue = Utility.Text2Double(respopnse);
 			}
 			return value;
 		}
 
 		public string getRawResponse(string strCmd)
 		{
-			return m_obdDevice.query(strCmd);
+			return m_obdDevice.Query(strCmd);
 		}
 
 
 		public bool clearCodes()
 		{
-			return (m_obdDevice.query("04").IndexOf("44") >= 0);
+			return (m_obdDevice.Query("04").IndexOf("44") >= 0);
 
 		}
 
-		public void disconnect()
+		public void Disconnect()
 		{
 			OnDisconnect();
-			m_obdDevice.disconnect();
+			m_obdDevice.Disconnect();
 		}
 
-		public void enableLogFile(bool status)
+		public void EnableLogFile(bool status)
 		{
 			m_commLog.SetLogFileStatus(status);
 		}
 
-		public void logItem(string strMsg)
+		public void logItem(string text)
 		{
-			m_commLog.AddItem(strMsg);
+			m_commLog.AddItem(text);
 		}
 
-
-		public bool loadParameters(string fileName)
+		public bool LoadParameters(string fileName)
 		{
+			int lineNo = 0;
+			string line;
+			OBDParameter param;
+			string[] tokens;
+			char[] comma = new char[] { ',' };
+
 			try
 			{
-				int lineNo = 0;
-				string line;
-				char[] chArray = new char[] { ',' };
-
 				using (StreamReader streamReader = new StreamReader(fileName))
+				{
 					while ((line = streamReader.ReadLine()) != null)
 					{
+						++lineNo;
+						line = line.Trim();
+						// Ignore empty and comment lines
+						if (line.Length == 0 || line[0] == '#')
+							continue;
+
 						try
 						{
-							string[] strArray = line.Split(chArray);
+							tokens = line.Split(comma);
+							for (int idx = 0; idx < tokens.Length; idx++)
+								tokens[idx] = (tokens[idx] ?? "").Trim();
 
-							OBDParameter obdParameter = new OBDParameter();
-							obdParameter.PID = strArray[0];
-							obdParameter.Name = strArray[1];
-							obdParameter.OBDRequest = strArray[2];
-							obdParameter.Service = int.Parse(strArray[3]);
-							obdParameter.Parameter = int.Parse(strArray[4]);
-							obdParameter.SubParameter = int.Parse(strArray[5]);
+							param = new OBDParameter();
+							param.PID = tokens[0];
+							param.Name = tokens[1];
+							param.OBDRequest = tokens[2];
+							param.Service = int.Parse(tokens[3]);
+							param.Parameter = int.Parse(tokens[4]);
+							param.SubParameter = int.Parse(tokens[5]);
 
-							if (strArray[6].CompareTo("Airflow") == 0)
-								obdParameter.Category = 0;
-							else if (strArray[6].CompareTo("DTC") == 0)
-								obdParameter.Category = 1;
-							else if (strArray[6].CompareTo("Emissions") == 0)
-								obdParameter.Category = 2;
-							else if (strArray[6].CompareTo("Fuel") == 0)
-								obdParameter.Category = 3;
-							else if (strArray[6].CompareTo("General") == 0)
-								obdParameter.Category = 4;
-							else if (strArray[6].CompareTo("O2") == 0)
-								obdParameter.Category = 5;
-							else if (strArray[6].CompareTo("Powertrain") == 0)
-								obdParameter.Category = 6;
-							else if (strArray[6].CompareTo("Speed") == 0)
-								obdParameter.Category = 7;
-							else if (strArray[6].CompareTo("Temperature") == 0)
-								obdParameter.Category = 8;
+							switch (tokens[6])
+							{
+								case "Airflow":
+									param.Category = 0; break;
+								case "DTC":
+									param.Category = 1; break;
+								case "Emissions":
+									param.Category = 2; break;
+								case "Fuel":
+									param.Category = 3; break;
+								case "General":
+									param.Category = 4; break;
+								case "O2":
+									param.Category = 5; break;
+								case "Powertrain":
+									param.Category = 6; break;
+								case "Speed":
+									param.Category = 7; break;
+								case "Temperature":
+									param.Category = 8; break;
+							}
+							switch (tokens[7])
+							{
+								case "Generic":
+									param.Type = 0; break;
+								case "Manufacturer":
+									param.Type = 1; break;
+								case "Scripted":
+									param.Type = 2; break;
+							}
 
-							if (strArray[7].CompareTo("Generic") == 0)
-								obdParameter.Type = 0;
-							else if (strArray[7].CompareTo("Manufacturer") == 0)
-								obdParameter.Type = 1;
-							else if (strArray[7].CompareTo("Scripted") == 0)
-								obdParameter.Type = 2;
+							switch (tokens[8])
+							{
+								case "SAE":
+									param.Manufacturer = 0; break;
+								case "GM":
+									param.Manufacturer = 1; break;
+								case "Ford":
+									param.Manufacturer = 2; break;
+								case "ProScan":
+									param.Manufacturer = 3; break;
+							}
 
-							if (strArray[8].CompareTo("SAE") == 0)
-								obdParameter.Manufacturer = 0;
-							else if (strArray[8].CompareTo("GM") == 0)
-								obdParameter.Manufacturer = 1;
-							else if (strArray[8].CompareTo("Ford") == 0)
-								obdParameter.Manufacturer = 2;
-							else if (strArray[8].CompareTo("ProScan") == 0)
-								obdParameter.Manufacturer = 3;
-
-							obdParameter.Priority = int.Parse(strArray[9]);
-							obdParameter.EnglishUnitLabel = strArray[10];
-							obdParameter.MetricUnitLabel = strArray[11];
+							param.Priority = int.Parse(tokens[9]);
+							param.EnglishUnitLabel = tokens[10];
+							param.MetricUnitLabel = tokens[11];
 
 							try
 							{
-								obdParameter.EnglishMinValue = double.Parse(strArray[12]);
-								obdParameter.EnglishMaxValue = double.Parse(strArray[13]);
-								obdParameter.MetricMinValue = double.Parse(strArray[14]);
-								obdParameter.MetricMaxValue = double.Parse(strArray[15]);
+								param.EnglishMinValue = Utility.Text2Double(tokens[12]);
+								param.EnglishMaxValue = Utility.Text2Double(tokens[13]);
+								param.MetricMinValue = Utility.Text2Double(tokens[14]);
+								param.MetricMaxValue = Utility.Text2Double(tokens[15]);
 							}
 							catch { }
 
-							int valueType = 0;
-							if (int.Parse(strArray[16]) > 0)
-								valueType = 1;
-							if (int.Parse(strArray[17]) > 0)
-								valueType |= 2;
-							if (int.Parse(strArray[18]) > 0)
-								valueType |= 4;
-							if (int.Parse(strArray[19]) > 0)
-								valueType |= 8;
+							int valueType = 0x00;
+							if (int.Parse(tokens[16]) > 0)
+								valueType = 0x01;
+							if (int.Parse(tokens[17]) > 0)
+								valueType |= 0x02;
+							if (int.Parse(tokens[18]) > 0)
+								valueType |= 0x04;
+							if (int.Parse(tokens[19]) > 0)
+								valueType |= 0x08;
 
-							obdParameter.ValueTypes = valueType;
-							m_listAllParameters.Add(obdParameter);
-							++lineNo;
+							param.ValueTypes = valueType;
+							m_listAllParameters.Add(param);
 						}
 						catch (Exception)
 						{
@@ -372,7 +335,8 @@ namespace ProScan
 							return false;
 						}
 					}
-				m_commLog.AddItem(string.Format("Loaded {0} parameters from {1}", lineNo.ToString(), fileName));
+				}
+				m_commLog.AddItem(string.Format("Loaded {0} parameters from {1}", lineNo, fileName));
 				return true;
 			}
 			catch (Exception)
@@ -382,156 +346,109 @@ namespace ProScan
 			}
 		}
 
-
-		public bool loadTroubleCodes(string strFile)
+		public DTC GetDTC(string code)
 		{
-			if (!File.Exists(strFile))
-				return false;
-			Type[] extraTypes = new Type[1]
-    {
-      typeof (DTC)
-    };
-			try
-			{
-				m_listDTC = new XmlSerializer(typeof(ArrayList), extraTypes).Deserialize((Stream)new FileStream(strFile, FileMode.Open)) as ArrayList;
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
-
-		public DTC getDTC(string code)
-		{
-			IEnumerator enumerator = m_listDTC.GetEnumerator();
-			if (enumerator.MoveNext())
-			{
-				DTC dtc;
-				do
-				{
-					dtc = (DTC)enumerator.Current;
-					if (dtc.Name.CompareTo(code) == 0)
-						return dtc;
-				}
-				while (enumerator.MoveNext());
-			}
+			foreach(DTC dtc in m_listDTC)
+				if (dtc.Name.CompareTo(code) == 0)
+					return dtc;
 			return new DTC(code, "", "");
 		}
 
-		public OBDParameter lookupParameter(string pid)
+		public OBDParameter LookupParameter(string pid)
 		{
-			IEnumerator enumerator = m_listAllParameters.GetEnumerator();
-			if (enumerator.MoveNext())
-			{
-				OBDParameter obdParameter;
-				do
-				{
-					obdParameter = (OBDParameter)enumerator.Current;
-					if (obdParameter.PID.CompareTo(pid) == 0)
-						return obdParameter;
-				}
-				while (enumerator.MoveNext());
-			}
-			return (OBDParameter)null;
+			foreach (OBDParameter param in m_listAllParameters)
+				if (param.PID.CompareTo(pid) == 0)
+					return param;
+			return null;
 		}
 
-		public ArrayList getSupportedParameterList(int valueTypes)
+		public List<OBDParameter> SupportedParameterList(int valueTypes)
 		{
-			ArrayList arrayList = new ArrayList();
-			IEnumerator enumerator = m_listSupportedParameters.GetEnumerator();
-			if (enumerator.MoveNext())
-			{
-				do
-				{
-					OBDParameter obdParameter = (OBDParameter)enumerator.Current;
-					if ((obdParameter.ValueTypes & valueTypes) == valueTypes)
-						arrayList.Add((object)obdParameter);
-				}
-				while (enumerator.MoveNext());
-			}
-			return arrayList;
+			List<OBDParameter> list = new List<OBDParameter>(m_listSupportedParameters.Count);
+			foreach (OBDParameter param in m_listSupportedParameters)
+				if ((param.ValueTypes & valueTypes) == valueTypes)
+					list.Add(param);
+			return list;
 		}
 
-		private void setDevice(int device)
+		private void setDevice(HardwareType device)
 		{
 			m_iDevice = device;
 			switch (device)
 			{
-				case 1:
+				case HardwareType.ELM327:
 					m_commLog.AddItem("Set device to ELM327");
-					m_obdDevice = (OBDDevice)new OBDDeviceELM327(m_commLog);
+					m_obdDevice = new OBDDeviceELM327(m_commLog);
 					break;
-				case 2:
+				case HardwareType.ELM320:
 					m_commLog.AddItem("Set device to ELM320");
-					m_obdDevice = (OBDDevice)new OBDDeviceELM320(m_commLog);
+					m_obdDevice = new OBDDeviceELM320(m_commLog);
 					break;
-				case 3:
+				case HardwareType.ELM322:
 					m_commLog.AddItem("Set device to ELM322");
-					m_obdDevice = (OBDDevice)new OBDDeviceELM322(m_commLog);
+					m_obdDevice = new OBDDeviceELM322(m_commLog);
 					break;
-				case 4:
+				case HardwareType.ELM323:
 					m_commLog.AddItem("Set device to ELM323");
-					m_obdDevice = (OBDDevice)new OBDDeviceELM323(m_commLog);
+					m_obdDevice = new OBDDeviceELM323(m_commLog);
 					break;
 				default:
 					m_commLog.AddItem("Set device to ELM327");
-					m_obdDevice = (OBDDevice)new OBDDeviceELM327(m_commLog);
+					m_obdDevice = new OBDDeviceELM327(m_commLog);
 					break;
 			}
 		}
 
-		public bool getConnectedStatus()
+		public bool ConnectedStatus
 		{
-			return m_obdDevice.connected();
+			get { return m_obdDevice.Connected(); }
 		}
 
-		public int loadDTCDefinitions(string fileName)
+		public int LoadDTCDefinitions(string fileName)
 		{
-			if (!File.Exists(fileName))
-				return 0;
-			Type[] extraTypes = new Type[] { typeof(DTC) };
-			try
+			if (File.Exists(fileName))
 			{
-				m_listDTC = new XmlSerializer(typeof(ArrayList), extraTypes).Deserialize((Stream)new FileStream(fileName, FileMode.Open)) as ArrayList;
-				return m_listDTC.Count;
+				Type[] extraTypes = new Type[] { typeof(DTC) };
+				try
+				{
+					m_listDTC = new XmlSerializer(typeof(List<DTC>), extraTypes).Deserialize(new FileStream(fileName, FileMode.Open)) as List<DTC>;
+					return m_listDTC.Count;
+				}
+				catch { }
 			}
-			catch
-			{
-				return 0;
-			}
+			return 0;
 		}
 
 		public void SaveCommSettings(Preferences settings)
 		{
 			m_settings = settings;
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(Preferences));
-			TextWriter textWriter1 = (TextWriter)new StreamWriter("settings.dat");
-			TextWriter textWriter2 = textWriter1;
-			Preferences preferences = m_settings;
-			xmlSerializer.Serialize(textWriter2, (object)preferences);
-			textWriter1.Close();
+			using (TextWriter writer = new StreamWriter(m_settings_xml))
+			{
+				xmlSerializer.Serialize(writer, m_settings);
+				writer.Close();
+			}
 		}
 
 		public void SaveUserPreferences(UserPreferences prefs)
 		{
 			m_userpreferences = prefs;
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserPreferences));
-			TextWriter textWriter1 = (TextWriter)new StreamWriter("preferences.dat");
-			TextWriter textWriter2 = textWriter1;
-			UserPreferences userPreferences = m_userpreferences;
-			xmlSerializer.Serialize(textWriter2, (object)userPreferences);
-			textWriter1.Close();
+			using (TextWriter writer = (TextWriter)new StreamWriter(m_preferences_xml))
+			{
+				xmlSerializer.Serialize(writer, m_userpreferences);
+				writer.Close();
+			}
 		}
 
-		public UserPreferences GetUserPreferences()
+		public UserPreferences UserPreferences
 		{
-			return m_userpreferences;
+			get { return m_userpreferences; }
 		}
 
-		public Preferences GetCommSettings()
+		public Preferences CommSettings
 		{
-			return m_settings;
+			get { return m_settings; }
 		}
 
 		public Preferences LoadCommSettings()
@@ -539,9 +456,11 @@ namespace ProScan
 			try
 			{
 				XmlSerializer serializer = new XmlSerializer(typeof(Preferences));
-				FileStream file = new FileStream("settings.dat", FileMode.Open);
-				m_settings = (Preferences)serializer.Deserialize((Stream)file);
-				file.Close();
+				using (FileStream reader = new FileStream(m_settings_xml, FileMode.Open))
+				{
+					m_settings = (Preferences)serializer.Deserialize(reader);
+					reader.Close();
+				}
 			}
 			catch
 			{
@@ -555,9 +474,11 @@ namespace ProScan
 			try
 			{
 				XmlSerializer serializer = new XmlSerializer(typeof(UserPreferences));
-				FileStream file = new FileStream("preferences.dat", FileMode.Open);
-				m_userpreferences = (UserPreferences)serializer.Deserialize((Stream)file);
-				file.Close();
+				using (FileStream reader = new FileStream(m_preferences_xml, FileMode.Open))
+				{
+					m_userpreferences = (UserPreferences)serializer.Deserialize(reader);
+					reader.Close();
+				}
 			}
 			catch
 			{
@@ -566,26 +487,26 @@ namespace ProScan
 			return m_userpreferences;
 		}
 
-		public ArrayList LoadVehicleProfiles()
+		public List<VehicleProfile> LoadVehicleProfiles()
 		{
 			FileStream file = null;
 			BinaryFormatter binaryFormatter = new BinaryFormatter();
-			ArrayList profiles = new ArrayList();
+			List<VehicleProfile> profiles = new List<VehicleProfile>();
 			try
 			{
-				if (File.Exists("vehicles.dat"))
-					file = new FileStream("vehicles.dat", FileMode.Open, FileAccess.Read);
+				if (File.Exists(m_vehicles_db))
+					file = new FileStream(m_vehicles_db, FileMode.Open, FileAccess.Read);
 				else
 				{
 					VehicleProfile profile = new VehicleProfile();
-					file = new FileStream("vehicles.dat", FileMode.Create, FileAccess.ReadWrite);
-					binaryFormatter.Serialize((Stream)file, profile);
+					file = new FileStream(m_vehicles_db, FileMode.Create, FileAccess.ReadWrite);
+					binaryFormatter.Serialize(file, profile);
 				}
 				file.Position = 0L;
 				while (true)
 				{
 					VehicleProfile vehicleProfile = binaryFormatter.Deserialize(file) as VehicleProfile;
-					profiles.Add((object)vehicleProfile);
+					profiles.Add(vehicleProfile);
 				}
 			}
 			catch (SerializationException) { }
@@ -598,52 +519,52 @@ namespace ProScan
 			return profiles;
 		}
 
-		public VehicleProfile GetActiveProfile()
+		public VehicleProfile ActiveProfile
 		{
-			try
+			get
 			{
-				if (m_settings.ActiveProfileIndex >= 0 && m_settings.ActiveProfileIndex < m_listVehicleProfiles.Count)
-					return (VehicleProfile)m_listVehicleProfiles[m_settings.ActiveProfileIndex];
-				if (m_listVehicleProfiles.Count == 0)
-					m_listVehicleProfiles.Add((object)new VehicleProfile());
-				m_settings.ActiveProfileIndex = 0;
-				return (VehicleProfile)m_listVehicleProfiles[0];
-			}
-			catch (Exception)
-			{
-				return (VehicleProfile)null;
+				try
+				{
+					if (m_settings.ActiveProfileIndex >= 0 && m_settings.ActiveProfileIndex < m_VehicleProfiles.Count)
+						return m_VehicleProfiles[m_settings.ActiveProfileIndex];
+
+					if (m_VehicleProfiles.Count == 0)
+						m_VehicleProfiles.Add(new VehicleProfile());
+					m_settings.ActiveProfileIndex = 0;
+
+					return m_VehicleProfiles[0];
+				}
+				catch { }
+				return null;
 			}
 		}
 
 		public void SaveActiveProfile(VehicleProfile profile)
 		{
-			Preferences settings = GetCommSettings();
-			settings.ActiveProfileIndex = GetVehicleProfiles().IndexOf((object)profile);
+			Preferences settings = CommSettings;
+			settings.ActiveProfileIndex = VehicleProfiles.IndexOf(profile);
 			SaveCommSettings(settings);
 		}
 
-		public ArrayList GetVehicleProfiles()
+		public List<VehicleProfile> VehicleProfiles
 		{
-			return m_listVehicleProfiles;
+			get { return m_VehicleProfiles; }
 		}
 
-		public void SaveVehicleProfiles(ArrayList profiles)
+		public void SaveVehicleProfiles(List<VehicleProfile> profiles)
 		{
 			FileStream file = null;
-			m_listVehicleProfiles = profiles;
+			m_VehicleProfiles = profiles;
 			try
 			{
-				IEnumerator enumerator = profiles.GetEnumerator();
 				BinaryFormatter binaryFormatter = new BinaryFormatter();
-				if (File.Exists("vehicles.dat"))
-					File.Delete("vehicles.dat");
-				file = new FileStream("vehicles.dat", FileMode.Create, FileAccess.ReadWrite);
-				while (enumerator.MoveNext())
-					binaryFormatter.Serialize((Stream)file, enumerator.Current);
+				if (File.Exists(m_vehicles_db))
+					File.Delete(m_vehicles_db);
+				file = new FileStream(m_vehicles_db, FileMode.Create, FileAccess.ReadWrite);
+				foreach (VehicleProfile profile in profiles)
+					binaryFormatter.Serialize(file, profile);
 			}
-			catch (Exception)
-			{
-			}
+			catch (Exception) { }
 			finally
 			{
 				if (file != null)

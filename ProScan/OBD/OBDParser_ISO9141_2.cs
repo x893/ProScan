@@ -1,145 +1,111 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
-public class OBDParser_ISO9141_2 : OBDParser
+namespace ProScan
 {
-	protected static int HEADER_LENGTH = 6;
-
-	static OBDParser_ISO9141_2()
+	public class OBDParser_ISO9141_2 : OBDParser
 	{
-	}
+		protected static int HEADER_LENGTH = 6;
 
-	~OBDParser_ISO9141_2()
-	{
-	}
-
-	public override OBDResponseList parse(OBDParameter param, string response)
-	{
-		if (response != null)
+		public override OBDResponseList Parse(OBDParameter param, string response)
 		{
-			if (response.Length < 1)
+			if (string.IsNullOrEmpty(response))
 				response = "";
-		}
-		else
-			response = "";
-		OBDResponseList obdResponseList = new OBDResponseList(response);
-		response = strip(response);
-		if (errorCheck(response))
-		{
-			obdResponseList.ErrorDetected = true;
-			return obdResponseList;
-		}
-		else
-		{
-			ArrayList arrayList1 = split(response);
-			arrayList1.Sort();
-			ArrayList arrayList2 = new ArrayList();
-			ArrayList arrayList3 = new ArrayList();
-			arrayList3.Add(arrayList1[0]);
-			arrayList2.Add((object)arrayList3);
-			string str1 = (string)arrayList1[0];
-			if (str1.Length < OBDParser_ISO9141_2.HEADER_LENGTH)
-			{
-				obdResponseList.ErrorDetected = true;
-				return obdResponseList;
-			}
-			else
-			{
-				string strB = str1.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH);
-				int index1 = 1;
-				if (1 < arrayList1.Count)
-				{
-					do
-					{
-						string str2 = (string)arrayList1[index1];
-						if (str2.Length >= OBDParser_ISO9141_2.HEADER_LENGTH)
-						{
-							if (str2.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH).CompareTo(strB) == 0)
-							{
-								arrayList3.Add((object)str2);
-							}
-							else
-							{
-								arrayList3 = new ArrayList();
-								arrayList3.Add(arrayList1[index1]);
-								arrayList2.Add((object)arrayList3);
-								strB = str2.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH);
-							}
-							++index1;
-						}
-						else
-							goto label_14;
-					}
-					while (index1 < arrayList1.Count);
-					goto label_15;
-				label_14:
-					obdResponseList.ErrorDetected = true;
-					return obdResponseList;
-				}
-			label_15:
-				int index2 = 0;
-				if (0 < arrayList2.Count)
-				{
-					do
-					{
-						OBDResponse response1 = new OBDResponse();
-						ArrayList arrayList4 = (ArrayList)arrayList2[index2];
-						int dataStartIndex = getDataStartIndex(param);
-						string str2 = (string)arrayList4[0];
-						int num1 = -2 - dataStartIndex;
-						int length1 = str2.Length + num1;
-						response1.Header = str2.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH);
-						response1.Data = length1 > 0 ? str2.Substring(dataStartIndex, length1) : "";
-						int index3 = 1;
-						if (1 < arrayList4.Count)
-						{
-							int num2 = num1;
-							do
-							{
-								string str3 = (string)arrayList4[index3];
-								int length2 = str3.Length + num2;
-								string str4 = length2 > 0 ? str3.Substring(dataStartIndex, length2) : "";
-								response1.Data = response1.Data + str4;
-								++index3;
-							}
-							while (index3 < arrayList4.Count);
-						}
-						obdResponseList.AddOBDResponse(response1);
-						++index2;
-					}
-					while (index2 < arrayList2.Count);
-				}
-				return obdResponseList;
-			}
-		}
-	}
 
-	protected int getDataStartIndex(OBDParameter param)
-	{
-		switch (param.Service)
-		{
-			case 1:
-				return 10;
-			case 2:
-				return 12;
-			case 3:
-			case 4:
-				return 8;
-			case 5:
-				return 12;
-			case 7:
-				return 8;
-			case 9:
-				if (param.Parameter == 2)
-					return 12;
+			OBDResponseList responseList = new OBDResponseList(response);
+			response = Strip(response);
+			if (ErrorCheck(response))
+			{
+				responseList.ErrorDetected = true;
+				return responseList;
+			}
+
+			List<string> lines = SplitByCR(response);
+			lines.Sort();
+			List<List<string>> groups = new List<List<string>>();
+			List<string> group = new List<string>();
+			string line0 = lines[0];
+			group.Add(line0);
+			groups.Add(group);
+			if (line0.Length < OBDParser_ISO9141_2.HEADER_LENGTH)
+			{
+				responseList.ErrorDetected = true;
+				return responseList;
+			}
+
+			string header = line0.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH);
+			int idx = 1;
+			while (idx < lines.Count)
+			{
+				string str2 = (string)lines[idx];
+				if (str2.Length >= OBDParser_ISO9141_2.HEADER_LENGTH)
+				{
+					if (str2.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH).CompareTo(header) == 0)
+						group.Add(str2);
+					else
+					{
+						group = new List<string>();
+						group.Add(lines[idx]);
+						groups.Add(group);
+						header = str2.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH);
+					}
+					++idx;
+				}
 				else
-					break;
-		}
-		return 10;
-	}
+				{
+					responseList.ErrorDetected = true;
+					return responseList;
+				}
+			}
 
-	public new void __dtor()
-	{
-		GC.SuppressFinalize((object)this);
+			idx = 0;
+			while (idx < groups.Count)
+			{
+				OBDResponse obd_response = new OBDResponse();
+				group = groups[idx];
+				int dataStartIndex = getDataStartIndex(param);
+				string str2 = group[0];
+				int num1 = -2 - dataStartIndex;
+				int length1 = str2.Length + num1;
+				obd_response.Header = str2.Substring(0, OBDParser_ISO9141_2.HEADER_LENGTH);
+				obd_response.Data = length1 > 0 ? str2.Substring(dataStartIndex, length1) : "";
+				int sub_idx = 1;
+				while (sub_idx < group.Count)
+				{
+					string str3 = group[sub_idx];
+					int length2 = str3.Length + num1;
+					obd_response.Data = obd_response.Data + (length2 > 0 ? str3.Substring(dataStartIndex, length2) : "");
+					++sub_idx;
+				}
+				responseList.AddOBDResponse(obd_response);
+				++idx;
+			}
+			return responseList;
+		}
+
+		protected int getDataStartIndex(OBDParameter param)
+		{
+			switch (param.Service)
+			{
+				case 1:
+					return 10;
+				case 2:
+					return 12;
+				case 3:
+				case 4:
+					return 8;
+				case 5:
+					return 12;
+				case 7:
+					return 8;
+				case 9:
+					if (param.Parameter == 2)
+						return 12;
+					else
+						break;
+			}
+			return 10;
+		}
 	}
 }

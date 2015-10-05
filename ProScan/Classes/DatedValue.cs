@@ -1,30 +1,33 @@
 ﻿using System;
 
-[Serializable]
-public class DatedValue
+namespace ProScan
 {
-	private double m_dValue;
-	private DateTime m_dtDate;
-
-	public DatedValue()
+	[Serializable]
+	public class DatedValue
 	{
-	}
+		private double m_dValue;
+		private DateTime m_dtDate;
 
-	public DateTime Date
-	{
-		get { return m_dtDate; }
-		set { m_dtDate = value; }
-	}
+		public DatedValue()
+		{
+		}
 
-	public double Value
-	{
-		get { return m_dValue; }
-		set { m_dValue = value; }
-	}
+		public DateTime Date
+		{
+			get { return m_dtDate; }
+			set { m_dtDate = value; }
+		}
 
-	public DatedValue(double dValue)
-	{
-		m_dValue = dValue;
-		m_dtDate = DateTime.Now;
+		public double Value
+		{
+			get { return m_dValue; }
+			set { m_dValue = value; }
+		}
+
+		public DatedValue(double dValue)
+		{
+			m_dValue = dValue;
+			m_dtDate = DateTime.Now;
+		}
 	}
 }

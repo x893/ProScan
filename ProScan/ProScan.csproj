@@ -52,6 +52,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>ProScan</RootNamespace>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DundasWinGauge, Version=2.1.1.100, Culture=neutral, PublicKeyToken=6f9077f931adcf97">
       <SpecificVersion>False</SpecificVersion>
@@ -63,11 +66,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\DataItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\DataList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Classes\Utility.cs" />
     <Compile Include="CommBase\CommBase.cs" />
     <Compile Include="CommBase\CommLine.cs" />
-    <Compile Include="CommBase\CommPingPong.cs" />
     <Compile Include="CommBase\CommPortException.cs" />
-    <Compile Include="CommBase\Win32Com.cs" />
+    <Compile Include="OBD\Win32Com.cs" />
     <Compile Include="Controls\DGChartControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -95,7 +104,6 @@
     <Compile Include="Controls\SensorDisplayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OBD\OBD2Response.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -103,12 +111,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Classes\SensorValue.cs" />
-    <Compile Include="OBD\OBD2.cs" />
-    <Compile Include="OBD\OBD2Request.cs" />
-    <Compile Include="OBD\OBD2Interface.cs" />
-    <Compile Include="OBD\OBD2Comm.cs" />
-    <Compile Include="Classes\CommLog.cs" />
-    <Compile Include="Classes\CommLogEvent.cs" />
     <Compile Include="OBD\OBDInterface.cs" />
     <Compile Include="OBD\OBDInterpretter.cs" />
     <Compile Include="Classes\Preferences.cs" />
@@ -118,7 +120,6 @@
     <Compile Include="Classes\DTC.cs" />
     <Compile Include="Classes\DatedValue.cs" />
     <Compile Include="Classes\DynoRecord.cs" />
-    <Compile Include="Classes\DataList.cs" />
     <Compile Include="Classes\Timeslip.cs" />
     <Compile Include="Classes\SensorLogItem.cs" />
     <Compile Include="Classes\TestStatus.cs" />
@@ -142,16 +143,8 @@
     <Compile Include="OBD\OBDResponse.cs" />
     <Compile Include="OBD\OBDResponseList.cs" />
     <Compile Include="Classes\Sensor.cs" />
-    <Compile Include="Classes\EventType.cs" />
-    <Compile Include="Classes\DataItem.cs" />
     <Compile Include="Classes\DataNode.cs" />
     <Compile Include="ProScan\DashForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProScan\DiagnosticReportHeader.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProScan\DriveRatioCalcForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ProScan\MainForm.cs">
@@ -211,12 +204,6 @@
     <Compile Include="ProScan\TestForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProScan\OxygenSensorDisplay.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ProScan\WelcomeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -257,12 +244,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProScan\DashForm.resx">
       <DependentUpon>DashForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProScan\DiagnosticReportHeader.resx">
-      <DependentUpon>DiagnosticReportHeader.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProScan\DriveRatioCalcForm.resx">
-      <DependentUpon>DriveRatioCalcForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProScan\DTCForm.resx">
       <DependentUpon>DTCForm.cs</DependentUpon>
@@ -316,9 +297,6 @@
     <EmbeddedResource Include="ProScan\VehicleForm.resx">
       <DependentUpon>VehicleForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProScan\WelcomeForm.resx">
-      <DependentUpon>WelcomeForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -338,18 +316,18 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="dtc.dat">
+    <Content Include="dtc.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="generic.dat">
+    </Content>
+    <Content Include="generic.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="preferences.dat">
+    </Content>
+    <Content Include="preferences.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="settings.dat">
+    </Content>
+    <Content Include="settings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

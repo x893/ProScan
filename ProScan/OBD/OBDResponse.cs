@@ -1,85 +1,54 @@
 ﻿using System;
 
-public class OBDResponse
+namespace ProScan
 {
-	private bool m_bIsValid;
-	private string m_strHeader;
-	private string m_strData;
-	private DateTime m_dtTime;
-
-	public DateTime Timestamp
+	public class OBDResponse
 	{
-		get
+		private bool m_IsValid;
+		private string m_Header;
+		private string m_Data;
+		private DateTime m_Time;
+
+		public OBDResponse()
 		{
-			return m_dtTime;
+			m_Data = "";
 		}
-		set
+
+		public DateTime Timestamp
 		{
-			m_dtTime = value;
+			get { return m_Time; }
+			set { m_Time = value; }
 		}
-	}
 
-	public string Data
-	{
-		get
+		public string Data
 		{
-			return m_strData;
+			get { return m_Data; }
+			set { m_Data = value; }
 		}
-		set
+
+		public string Header
 		{
-			m_strData = value;
+			get { return m_Header; }
+			set { m_Header = value; }
 		}
-	}
 
-	public string Header
-	{
-		get
+		public bool IsValid
 		{
-			return m_strHeader;
+			get { return m_IsValid; }
+			set { m_IsValid = value; }
 		}
-		set
+
+		public string getDataByte(int index)
 		{
-			m_strHeader = value;
+			index *= 2;
+			if (index + 2 > m_Data.Length)
+				return "";
+			return m_Data.Substring(index, 2);
 		}
-	}
 
-	public bool IsValid
-	{
-		get
+		public int getDataByteCount()
 		{
-			return m_bIsValid;
+			return m_Data.Length / 2;
 		}
-		set
-		{
-			m_bIsValid = value;
-		}
-	}
-
-	public OBDResponse()
-	{
-		m_strData = "";
-	}
-
-	~OBDResponse()
-	{
-	}
-
-	public string getDataByte(int index)
-	{
-		int startIndex = index * 2;
-		if (startIndex + 2 > m_strData.Length)
-			return "";
-		else
-			return m_strData.Substring(startIndex, 2);
-	}
-
-	public int getDataByteCount()
-	{
-		return m_strData.Length / 2;
-	}
-
-	public void __dtor()
-	{
-		GC.SuppressFinalize((object)this);
 	}
 }

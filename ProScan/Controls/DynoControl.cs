@@ -13,8 +13,6 @@ namespace DGChart
 		private Color colorGrid;
 		private Color colorBg;
 		private Color colorAxis;
-		private string xLabel;
-		private string yLabel;
 		private Font fontAxis;
 		private int penWidth;
 		private DynoControl.DrawModeType drawMode;
@@ -55,7 +53,6 @@ namespace DGChart
 		private double m_dMaxHpRpm;
 		private double m_dMaxTqValue;
 		private double m_dMaxTqRpm;
-		private Container components;
 
 		[Description("The logo to display in the top left corner.")]
 		[Category("Chart")]
@@ -581,8 +578,6 @@ namespace DGChart
 
 		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
 		{
-			if (disposing && components != null)
-				components.Dispose();
 			base.Dispose(disposing);
 		}
 
